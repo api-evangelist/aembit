@@ -1,0 +1,135 @@
+generated: '2026-09-09'
+method: derived
+source: openapi/aembit-cloud-api-openapi.yml
+note: >-
+  Entity graph derived from the Cloud API's 181 component schemas — $ref links between DTOs and
+  UUID id-reference fields. Aembit's model is a policy graph: an Access Policy is the join row
+  that binds a Client Workload (who is asking) to a Server Workload (what is being reached),
+  through a Trust Provider (how the requester proves identity) and a Credential Provider (what
+  credential is minted), optionally narrowed by Access Conditions and Content Security, with
+  every entity scoped to a Resource Set.
+identifier_conventions:
+  primary: externalId
+  primary_format: uuid
+  primary_note: >-
+    Every addressable entity carries BOTH an int32 `id` and a uuid `externalId`. `externalId`
+    (34 schemas) is the stable public identifier used in path parameters and cross-entity
+    references; the int32 `id` is an internal surrogate that also appears as the response
+    identifier inside the GenericResponseDTO error envelope. An integrator should reference
+    externalId and treat id as non-durable.
+  tenancy: >-
+    Every list and mutate operation accepts an optional X-Aembit-ResourceSet header (uuid). The
+    Resource Set is the tenancy/least-privilege boundary; omitted, the default Resource Set applies.
+  common_audit_fields: [createdAt, modifiedAt, createdBy, modifiedBy, isActive, name, description, tags]
+entities:
+- name: AccessPolicy
+  version: v2 (v1 deprecated)
+  api_base: /api/v2/access-policies
+  schema: AccessPolicyDTO
+  role: The central join entity. Binds a client workload to a server workload with a credential and conditions.
+  operations: [get-access-policies-v2, get-access-policy-v2, post-access-policy-v2, put-access-policy-v2, patch-access-policy-v2, delete-access-policy-v2, get-access-policy-by-workloads-v2, get-access-policy-notes-v2, post-access-policy-note-v2, get-access-policy-credential-mappings-v2]
+- name: ClientWorkload
+  api_base: /api/v1/client-workloads
+  schema: ClientWorkloadDTO
+  role: The access requester — an app, service, CI/CD job, container or AI agent.
+  operations: [get-client-workloads, get-client-workload, post-client-workload, put-client-workload, patch-client-workload, delete-client-workload, get-client-identifiers]
+- name: ServerWorkload
+  api_base: /api/v1/server-workloads
+  schema: ServerWorkloadDTO
+  role: The access target — an API, database, SaaS app, LLM or MCP server.
+  operations: [get-server-workloads, get-server-workload, post-server-workload, put-server-workload, patch-server-workload, delete-server-workload]
+- name: TrustProvider
+  api_base: /api/v1/trust-providers
+  schema: TrustProviderDTO
+  role: Verifies a Client Workload's identity from environment-native attestation evidence.
+  operations: [get-trust-providers, get-trust-provider, post-trust-provider, put-trust-provider, patch-trust-provider, delete-trust-provider]
+- name: TrustProviderSecret
+  api_base: /api/v1/trust-providers/{tpId}/secrets
+  role: Secrets belonging to a Trust Provider. Sub-resource, nested under the provider.
+  operations: [get-trust-providers-secrets, get-trust-provider-secret, post-trust-provider-secret, delete-trust-provider-secret]
+- name: CredentialProvider
+  version: v2 (v1 deprecated)
+  api_base: /api/v2/credential-providers
+  schema: CredentialProviderDTO
+  role: Mints or brokers the short-lived credential delivered to the workload.
+  operations: [get-credential-providers-v2, get-credential-provider2, post-credential-provider2, put-credential-provider2, patch-credential-provider-v2, delete-credential-provider2, get-credential-provider-verification-v2, get-credential-provider-authorization-v2]
+- name: CredentialProviderIntegration
+  api_base: /api/v1/credential-integrations
+  role: Connection to an external credential system a Credential Provider draws from.
+  operations: [get-credential-provider-integrations, get-credential-provider-integration, post-credential-provider-integration, put-credential-provider-integration, patch-credential-provider-integration, delete-credential-provider-integration, get-credential-provider-integration-list]
+- name: AccessCondition
+  version: v2 (v1 still present)
+  api_base: /api/v2/access-conditions
+  schema: AccessConditionDTO
+  role: Context-aware constraint on a policy — posture from CrowdStrike or Wiz, geography, time window.
+  operations: [get-access-conditions2, get-access-condition2, post-access-condition2, put-access-condition2, patch-access-condition2, delete-access-condition2]
+- name: ContentSecurity
+  api_base: /api/v1/content-security
+  role: Inspection configuration applied to traffic (notably MCP traffic through the Identity Gateway).
+  operations: [get-content-security-list, get-content-security, post-content-security, put-content-security, patch-content-security, delete-content-security]
+- name: ResourceSet
+  api_base: /api/v1/resource-sets
+  role: Tenancy and least-privilege boundary carried on the X-Aembit-ResourceSet header.
+  operations: [get-resource-sets, get-resource-set, post-resource-set, put-resource-set, patch-resource-set, delete-resource-set-integration]
+- name: LogStream
+  api_base: /api/v1/log-streams
+  schema: LogStreamDTO
+  role: Outbound event delivery configuration. Destination types AwsS3Bucket, GcsBucket, SplunkHttpEventCollector, CrowdstrikeHttpEventCollector.
+  operations: [get-log-streams, get-log-stream, post-log-stream, put-log-stream, patch-log-stream, delete-log-stream]
+- name: User
+  api_base: /api/v1/users
+  role: Administrative user of the Aembit tenant.
+  operations: [get-users, get-user, post-user, put-user, patch-user, delete-user, post-user-unlock]
+- name: Role
+  api_base: /api/v1/roles
+  role: RBAC role granting administrative permissions.
+  operations: [get-roles, get-role, post-role, put-role, patch-role, delete-role]
+- name: SSOIdentityProvider
+  api_base: /api/v1/sso-idps
+  role: SAML/OIDC identity provider for administrator sign-in.
+  operations: [get-identity-providers, get-identity-provider, post-identity-provider, put-identity-provider, patch-identity-provider, delete-identity-provider, get-identity-provider-verification]
+- name: AgentController
+  api_base: /api/v1/agent-controllers
+  role: Registration and device-code enrollment for Aembit Edge agents.
+  operations: [get-agent-controllers, get-agent-controller, post-agent-controller, put-agent-controller, patch-agent-controller, delete-agent-controller, post-agent-controller-device-code]
+- name: StandaloneCertificateAuthority
+  api_base: /api/v1/certificate-authorities
+  role: CA material for TLS decrypt / standalone deployments.
+  operations: [get-standalone-certificate-authorities, get-standalone-certificate-authority, post-standalone-certificate-authority, put-standalone-certificate-authority, patch-standalone-certificate-authority, delete-standalone-certificate-authority, standalone-root-ca]
+- name: AuditLog
+  api_base: /api/v1/audit-logs
+  role: Read-only administrative audit record. Also exposed as the MCP get_audit_logs tool.
+  operations: [get-audit-logs, get-audit-log]
+  read_only: true
+- name: AccessAuthorizationEvent
+  api_base: /api/v1/authorization-events
+  role: Read-only record of an access decision. Also exposed as the MCP get_auth_events tool.
+  operations: [get-access-authorization-events, get-access-authorization-event]
+  read_only: true
+- name: WorkloadEvent
+  api_base: /api/v1/workload-events
+  role: Read-only record of workload connection activity, classified by app protocol. Also exposed as the MCP get_workload_events tool.
+  operations: [get-workload-events, get-workload-event]
+  read_only: true
+relationships:
+- {from: AccessPolicy, to: ClientWorkload, type: belongs_to, via: clientWorkload, evidence: 'clientWorkload uuid field; get-access-policy-by-workloads-v2 resolves a policy from the workload pair'}
+- {from: AccessPolicy, to: ServerWorkload, type: belongs_to, via: serverWorkload, evidence: 'serverWorkload uuid field; same lookup operation'}
+- {from: AccessPolicy, to: TrustProvider, type: has_one, via: trustProviderId}
+- {from: AccessPolicy, to: CredentialProvider, type: has_many, via: credentialProviderId, evidence: get-access-policy-credential-mappings-v2 returns the credential mappings for a policy}
+- {from: AccessPolicy, to: AccessCondition, type: has_many, via: accessConditions}
+- {from: AccessPolicy, to: ContentSecurity, type: has_one, via: contentSecurity}
+- {from: AccessPolicy, to: PolicyNote, type: has_many, via: '/api/v2/access-policies/{id}/notes'}
+- {from: ClientWorkload, to: TrustProvider, type: belongs_to, via: trustProviderId}
+- {from: TrustProvider, to: TrustProviderSecret, type: has_many, via: '/api/v1/trust-providers/{tpId}/secrets'}
+- {from: CredentialProvider, to: CredentialProviderIntegration, type: belongs_to, via: credentialProviderIntegrationExternalId}
+- {from: ResourceSet, to: '*', type: has_many, via: 'X-Aembit-ResourceSet header / resourceSet field', evidence: 'resourceSet appears on 20 schemas; every list and mutate operation accepts the header'}
+- {from: User, to: Role, type: has_many, via: roleId}
+- {from: AccessAuthorizationEvent, to: ClientWorkload, type: belongs_to, via: clientWorkload}
+- {from: AccessAuthorizationEvent, to: ServerWorkload, type: belongs_to, via: serverWorkload}
+- {from: WorkloadEvent, to: ClientWorkload, type: belongs_to, via: sourceWorkload}
+- {from: WorkloadEvent, to: ServerWorkload, type: belongs_to, via: targetWorkload}
+edge_api_model:
+  note: The Edge API has no persistent entities; it is a two-step runtime exchange.
+  flow:
+  - {step: 1, operation: edge-api-auth, input: AuthRequest (attestation evidence for a Trust Provider), output: TokenDTO (OAuth2-style short-lived bearer)}
+  - {step: 2, operation: edge-api-get-credentials, input: Edge bearer token + Server Workload host/port, output: credential for the target Server Workload}

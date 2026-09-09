@@ -1,0 +1,103 @@
+generated: '2026-09-09'
+method: searched
+source: openapi/aembit-cloud-api-openapi.yml, openapi/aembit-edge-api-openapi.yml
+docs: https://docs.aembit.io/dev-guide/api/
+note: >-
+  Upgraded from the mechanical derivation, which deduplicated the two schemes into one because
+  both are http/bearer. They are NOT the same credential and must not be interchanged: the Cloud
+  API takes a long-lived opaque token a human generates in the console, and the Edge API takes a
+  short-lived JWT a workload earns by proving its identity. That distinction is the entire
+  product.
+summary:
+  types: [http]
+  http_schemes: [bearer]
+  api_key_in: []
+  oauth2_flows: []
+  mutual_tls: false
+  openid_connect: false
+  scopes_published: false
+  scopes_note: >-
+    No OAuth 2.0 scopes exist on either API, so no scopes/ artifact is emitted. Authorization is
+    enforced by RBAC Roles plus the Resource Set boundary, not by token scopes.
+schemes:
+- name: bearerAuth
+  api: Aembit Cloud API
+  type: http
+  scheme: bearer
+  bearerFormat: Reference
+  description: Authorization header using the Bearer scheme.
+  sources: [openapi/aembit-cloud-api-openapi.yml]
+  credential: Aembit API Token
+  issued_by: Aembit Admin UI, Profile screen
+  token_shape: >-
+    Opaque reference token — bearerFormat is declared as "Reference", not JWT, so a client must
+    not attempt to parse or introspect it.
+  lifetime: Not published.
+  rotation: Not published; no token-rotation or revocation endpoint appears in the contract.
+  top_level_security: >-
+    The Cloud API declares `security: [{}]` at the document root — an EMPTY requirement object,
+    which in OpenAPI means security is OPTIONAL for every operation that does not override it.
+    No operation overrides it. Read literally the contract states that all 165 operations may be
+    called anonymously, which contradicts the documented bearer requirement and the 401 "Not
+    Authenticated" response declared on 161 of them. Treated here as a contract defect, not as a
+    real anonymous surface.
+- name: EdgeApiAuth
+  api: Aembit Edge API
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  description: Use Aembit Edge API access token obtained via the /edge/v1/auth endpoint.
+  sources: [openapi/aembit-edge-api-openapi.yml]
+  credential: Short-lived Edge access token
+  issued_by: 'POST /edge/v1/auth (operationId edge-api-auth)'
+  token_shape: OAuth2-style TokenDTO carrying the access token and expiry details.
+  applies_to: 'POST /edge/v1/credentials (edge-api-get-credentials)'
+  top_level_security: 'security: [{EdgeApiAuth: []}] — correctly declared and applied.'
+  bootstrap: >-
+    The auth operation itself is unauthenticated by design. A Client Workload presents attestation
+    evidence in an AuthRequest body and Aembit verifies it against a configured Trust Provider.
+    This is the secretless bootstrap: the workload holds no credential before the call.
+  supported_trust_providers:
+  - AWS Metadata Service
+  - AWS Role
+  - GCP Identity Token
+  - GitHub Action ID Token
+  - GitLab Job ID Token
+  - Kubernetes Service Account
+  - OIDC ID Token
+  - Terraform Cloud Identity Token
+  additional_trust_providers_documented:
+  - AWS ALB JWT (added 2026-08-05)
+  - GCP IAP JWT (added 2026-08-19)
+  - Azure managed identity
+  - SPIFFE
+  - Kerberos
+  trust_provider_note: >-
+    The eight in supported_trust_providers are the set the Edge API's own operation description
+    enumerates. The additional list is documented elsewhere in the platform docs and in the
+    changelog; recorded separately so the contract's own statement stays distinguishable from
+    the wider product surface.
+authorization:
+  model: RBAC + Resource Sets
+  roles_api: /api/v1/roles
+  resource_set_header: X-Aembit-ResourceSet
+  resource_set_type: uuid
+  note: >-
+    Authorization is two-dimensional: a Role grants permissions to an administrative user, and a
+    Resource Set partitions which entities a request may touch. The Resource Set is carried as an
+    optional request header on effectively every operation and on the MCP Server; omitting it
+    falls back to the default Resource Set. An automated client should always set it explicitly.
+  sso:
+    api: /api/v1/sso-idps
+    signon_policies: [/api/v1/signin-policies, /api/v1/signin-policies/mfa, /api/v1/signin-policies/sso]
+    note: SAML/OIDC SSO and MFA sign-on policy are configurable for console users; they do not apply to API token auth.
+mcp_server_auth:
+  scheme: bearer
+  header: 'Authorization: Bearer <apiToken>'
+  credential: Same Aembit API Token as the Cloud API.
+  scoping: X-Aembit-ResourceSet (optional uuid)
+  cross_link: mcp/aembit-mcp.yml
+gaps:
+- 'security: [{}] at the Cloud API root makes authentication read as optional for all 165 operations.'
+- No published API token lifetime, rotation guidance, or revocation endpoint.
+- No OAuth 2.0 authorization-code or client-credentials flow for third-party integrations against the Cloud API.

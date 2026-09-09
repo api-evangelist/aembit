@@ -1,0 +1,120 @@
+generated: '2026-09-09'
+method: searched
+source: https://docs.aembit.io/ai-guide/mcp/mcp-server/reference-mcp-server/
+status: published
+deployment:
+  mode: remote
+  endpoint: https://{tenantId}.mcp.useast2.aembit.io/mcp
+  install: null
+  package: null
+  auth: api-key
+  verified: searched
+  note: >-
+    A hosted, first-party MCP endpoint an MCP client POSTs to directly — no local process to
+    install, so this is a remote server and not a stdio package. The URL is TENANT-TEMPLATED and
+    stack-scoped: {tenantId} comes from the Aembit Admin UI Profile screen and useast2 is the
+    stack hosting the tenant. It was NOT probed live, because every reachable form of the URL
+    requires a real tenant plus an Aembit API token, and the bare stack host answers 502 to
+    unauthenticated requests. verified is therefore `searched` — read verbatim from Aembit's own
+    reference page — not `probed`. An administrator must enable the MCP Server per tenant before
+    the endpoint answers at all.
+server:
+  name: Aembit MCP Server
+  transport: http
+  url: https://{tenantId}.mcp.useast2.aembit.io/mcp
+  read_only: true
+  docs: https://docs.aembit.io/ai-guide/mcp/mcp-server/
+  reference: https://docs.aembit.io/ai-guide/mcp/mcp-server/reference-mcp-server/
+  prompt_library: https://docs.aembit.io/ai-guide/prompt-library/
+authentication:
+  scheme: bearer
+  header: 'Authorization: Bearer <apiToken>'
+  token_source: Aembit Admin UI Profile page (Aembit API Token)
+  scoping_header: X-Aembit-ResourceSet
+  scoping_note: >-
+    Optional UUID header that scopes every query to one Resource Set, which is how Aembit applies
+    least-privilege separation to agent access. Omitted, the default Resource Set is used.
+constraints:
+  read_only: >-
+    "You can't create, update, or delete data through the MCP Server." The server is a query
+    layer over event logs only; the mutating surface stays on the Cloud API.
+  max_page_size: 100
+  page_size_behavior: Requests above perPage=100 are silently capped to 100.
+  rate_limiting: >-
+    The reference page states the MCP Server doesn't enforce application-level rate limiting.
+    The overview page notes rate limiting per source IP and per tenant to prevent abuse; no
+    numeric limit, window or response header is published for either statement.
+  enablement: An Aembit administrator must enable the MCP Server for the tenant.
+tools:
+- name: get_audit_logs
+  description: Retrieve tenant audit logs with filtering, ordering and pagination.
+  source_operation: openapi/aembit-cloud-api-openapi.yml#get-audit-logs
+  parameters:
+    page: {type: integer, default: 1}
+    perPage: {type: integer, default: 100, maximum: 100}
+    orderBy: {type: string, enum: [CreatedAt, Category, ActorDisplayName, Activity, Target, OutcomeResult, Severity]}
+    descending: {type: boolean, default: true}
+    category: {type: string, enum: [Unknown, Tenant, Users, Authentication, Workloads, AccessPolicies, Agents, CredentialProvider, TrustProvider]}
+    severity: {type: string, enum: [Info, Warn, Alert]}
+    startDate: {type: string, format: date-time}
+    endDate: {type: string, format: date-time}
+    spanLastDays: {type: integer, default: 30}
+    spanLastMinutes: {type: integer}
+  note: >-
+    Enum lists are transcribed from the published reference. The category enum is documented as
+    a partial list ("and others"), so it is recorded as published rather than as a closed set.
+- name: get_auth_events
+  description: Retrieve access authorization events with filtering, ordering and pagination.
+  source_operation: openapi/aembit-cloud-api-openapi.yml#get-access-authorization-events
+  parameters:
+    page: {type: integer, default: 1}
+    perPage: {type: integer, maximum: 100}
+    orderBy: {type: string, enum: [Timestamp, ClientIp, ContextId, ClientWorkload, ServerWorkload, Severity]}
+    descending: {type: boolean, default: true}
+    severity: {type: string, enum: [Error, Alert, Warn, Info]}
+    eventType: {type: string, enum: [Request, Authorization, Credential]}
+    startDate: {type: string, format: date-time}
+    endDate: {type: string, format: date-time}
+    spanLastMinutes: {type: integer}
+    spanLastHours: {type: integer, default: 24}
+- name: get_workload_events
+  description: Retrieve workload events with filtering, ordering and pagination.
+  source_operation: openapi/aembit-cloud-api-openapi.yml#get-workload-events
+  parameters:
+    page: {type: integer, default: 1}
+    perPage: {type: integer, maximum: 100}
+    orderBy: {type: string, enum: [Timestamp, ConnectionId, EventType, ClientWorkload, ServerWorkload, Severity]}
+    descending: {type: boolean, default: true}
+    severity: {type: string, enum: [Error, Alert, Warn, Info]}
+    appProtocol: {type: string, enum: [Redshift, HTTP, MySQL, Postgres, Redis, Snowflake, TCP, OracleDatabase, MCP]}
+    sourceWorkload: {type: array, items: {type: string, format: uuid}}
+    targetWorkload: {type: array, items: {type: string, format: uuid}}
+    startDate: {type: string, format: date-time}
+    endDate: {type: string, format: date-time}
+    spanLastMinutes: {type: integer}
+    spanLastHours: {type: integer, default: 24}
+resources:
+- Audit Log Severities
+- Audit Log Categories
+- Authorization Event Types
+- Authorization Event Severities
+- Workload Event Types
+- Workload Event Severities
+clients_documented:
+- {client: Claude Desktop / Claude on the web, docs: https://docs.aembit.io/ai-guide/mcp/mcp-server/connect/claude-desktop/}
+- {client: GitHub Copilot, docs: https://docs.aembit.io/ai-guide/mcp/mcp-server/connect/github-copilot/}
+- {client: Visual Studio, docs: https://docs.aembit.io/ai-guide/mcp/mcp-server/connect/visual-studio/}
+- {client: MCP Inspector, docs: https://docs.aembit.io/ai-guide/mcp/mcp-server/connect/mcp-inspector/}
+related_mcp_products:
+  note: >-
+    These are Aembit PRODUCTS that govern OTHER parties' MCP traffic. They are not the Aembit
+    MCP Server catalogued above and they do not expose Aembit's own API as tools — recorded here
+    so the distinction is explicit rather than collapsed into one MCP claim.
+  products:
+  - name: MCP Identity Gateway
+    role: Identity federation and policy enforcement for MCP clients reaching third-party MCP servers; managed or self-hosted.
+    docs: https://docs.aembit.io/ai-guide/mcp/identity-gateway/
+    supported_servers: [Atlassian, BigQuery, Databricks, FactSet, GitHub, Google Workspace, Kensho, Microsoft Enterprise, Notion]
+  - name: MCP Authorization Server
+    role: OAuth 2.1 authorization for MCP clients and servers, driven by Aembit Access Policies.
+    docs: https://docs.aembit.io/ai-guide/mcp/authorization-server/

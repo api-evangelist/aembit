@@ -1,0 +1,112 @@
+generated: '2026-09-09'
+method: derived
+source: mcp/aembit-mcp.yml, openapi/aembit-cloud-api-openapi.yml, openapi/aembit-edge-api-openapi.yml
+note: >-
+  Binds each published Aembit MCP Server tool to the Cloud API operation that backs it. The
+  mapping is unusually clean: all three tools are read-only projections of the three reporting
+  resource families, and each tool's real input contract is that operation's query parameters.
+  Where the tool and the operation disagree on parameter naming or on the closed set of allowed
+  values, that divergence is recorded rather than smoothed over — it is the thing an integrator
+  needs to know.
+surfaces:
+  openapi:
+  - {file: openapi/aembit-cloud-api-openapi.yml, title: Aembit Cloud API, operations: 165, gated: false, note: 'Contract is public at https://docs.aembit.io/cloud.yaml; calling it needs a tenant + API token.'}
+  - {file: openapi/aembit-edge-api-openapi.yml, title: Aembit Edge API, operations: 2, gated: false, note: 'Contract is public at https://docs.aembit.io/edge.yaml.'}
+  graphql: null
+  mcp:
+    url: https://{tenantId}.mcp.useast2.aembit.io/mcp
+    gated: true
+    gated_note: >-
+      tools/list was NOT called. The endpoint is tenant-templated and stack-scoped, requires an
+      Aembit API token, and must be enabled per tenant by an administrator, so no anonymous
+      introspection is possible. The tool set and parameters below are transcribed from Aembit's
+      published MCP Server reference, not from a live tools/list response. Input schemas would
+      need authenticated introspection to confirm types exactly.
+crosswalk:
+- tool: get_audit_logs
+  category: audit
+  rest: [get-audit-logs]
+  rest_paths: [GET /api/v1/audit-logs]
+  binding: rest
+  confidence: high
+  inherits_input_schema_from: openapi/aembit-cloud-api-openapi.yml#get-audit-logs
+  note: >-
+    Same audit-log resource. PARAMETER NAMING DIVERGES: the REST operation takes page / per-page /
+    filter / order / group-by (all free-text strings with no published grammar), while the MCP
+    tool takes page / perPage / orderBy / descending / category / severity plus explicit date
+    filters (startDate, endDate, spanLastDays, spanLastMinutes) with CLOSED ENUMS. The MCP tool
+    is the better-specified of the two surfaces — it publishes the allowed orderBy, category and
+    severity values that the REST contract leaves as bare strings.
+- tool: get_auth_events
+  category: authorization-events
+  rest: [get-access-authorization-events]
+  rest_paths: [GET /api/v1/authorization-events]
+  binding: rest
+  confidence: high
+  inherits_input_schema_from: openapi/aembit-cloud-api-openapi.yml#get-access-authorization-events
+  note: >-
+    Same access-authorization-event resource. The MCP tool publishes eventType (Request,
+    Authorization, Credential) and severity (Error, Alert, Warn, Info) enums plus spanLastHours
+    (default 24); the REST operation exposes only the generic filter/order strings.
+- tool: get_workload_events
+  category: workload-events
+  rest: [get-workload-events]
+  rest_paths: [GET /api/v1/workload-events]
+  binding: rest
+  confidence: high
+  inherits_input_schema_from: openapi/aembit-cloud-api-openapi.yml#get-workload-events
+  note: >-
+    Same workload-event resource. The MCP tool adds appProtocol (Redshift, HTTP, MySQL, Postgres,
+    Redis, Snowflake, TCP, OracleDatabase, MCP) and sourceWorkload/targetWorkload UUID arrays as
+    first-class filters. Note that MCP appears in the appProtocol enum — Aembit classifies
+    agent-to-MCP-server traffic as a protocol it observes, so an agent using this tool can query
+    other agents' MCP activity.
+mcp_only: []
+mcp_only_note: >-
+  Every published tool binds to a real REST operation. There is no MCP-only capability and no
+  server-side composite — the MCP Server is a strict read-only subset, not a superset.
+rest_only:
+- capability: Single-record reads for the reporting families
+  operations: [get-audit-log, get-access-authorization-event, get-workload-event]
+  note: 'GET .../{id} for one record. The MCP tools are list-only; an agent that finds an interesting event cannot fetch it by id through MCP.'
+- capability: Access Policy management (v2)
+  operations: [get-access-policies-v2, get-access-policy-v2, post-access-policy-v2, put-access-policy-v2, patch-access-policy-v2, delete-access-policy-v2, get-access-policy-by-workloads-v2, get-access-policy-notes-v2, post-access-policy-note-v2, get-access-policy-credential-mappings-v2]
+- capability: Access Policy management (v1, deprecated)
+  operations: [get-access-policies, get-access-policy, post-access-policy, put-access-policy, patch-access-policy, delete-access-policy, get-access-policy-by-workloads, post-access-policy-note]
+- capability: Client and Server Workload management
+  operations: [get-client-workloads, get-client-workload, post-client-workload, put-client-workload, patch-client-workload, delete-client-workload, get-client-identifiers, get-server-workloads, get-server-workload, post-server-workload, put-server-workload, patch-server-workload, delete-server-workload]
+- capability: Trust Providers and their secrets
+  operations: [get-trust-providers, get-trust-provider, post-trust-provider, put-trust-provider, patch-trust-provider, delete-trust-provider, get-trust-providers-secrets, get-trust-provider-secret, post-trust-provider-secret, delete-trust-provider-secret]
+- capability: Credential Providers and integrations
+  operations: [get-credential-providers-v2, get-credential-provider2, post-credential-provider2, put-credential-provider2, patch-credential-provider-v2, delete-credential-provider2, get-credential-provider-verification-v2, get-credential-provider-authorization-v2, get-credential-provider-integrations, get-credential-provider-integration, post-credential-provider-integration, put-credential-provider-integration, patch-credential-provider-integration, delete-credential-provider-integration, get-credential-provider-integration-list]
+- capability: Access Conditions and Content Security
+  operations: [get-access-conditions2, get-access-condition2, post-access-condition2, put-access-condition2, patch-access-condition2, delete-access-condition2, get-content-security-list, get-content-security, post-content-security, put-content-security, patch-content-security, delete-content-security]
+- capability: Tenant administration (users, roles, SSO, sign-on policies, resource sets)
+  operations: [get-users, get-user, post-user, put-user, patch-user, delete-user, post-user-unlock, get-roles, get-role, post-role, put-role, patch-role, delete-role, get-identity-providers, get-identity-provider, post-identity-provider, put-identity-provider, patch-identity-provider, delete-identity-provider, get-identity-provider-verification, get-signon-policy, put-mfa-signon Policy, put-SSO-signon Policy, get-resource-sets, get-resource-set, post-resource-set, put-resource-set, patch-resource-set, delete-resource-set-integration]
+- capability: Log Streams (outbound event delivery)
+  operations: [get-log-streams, get-log-stream, post-log-stream, put-log-stream, patch-log-stream, delete-log-stream]
+- capability: Agent Controllers, certificate authorities, routing, integrations, discovery, compliance, health
+  operations: [get-agent-controllers, get-agent-controller, post-agent-controller, put-agent-controller, patch-agent-controller, delete-agent-controller, post-agent-controller-device-code, get-standalone-certificate-authorities, get-standalone-certificate-authority, post-standalone-certificate-authority, put-standalone-certificate-authority, patch-standalone-certificate-authority, delete-standalone-certificate-authority, standalone-root-ca, root-ca, get-routings, get-routing, post-routing, put-routing, patch-routing, get-integrations, get-integration, post-integration, put-integration, patch-integration, delete-integration, get-integrations2, get-integration2, post-integration2, put-integration2, patch-integration2, delete-integration2, get-discovery-integrations, get-discovery-integration, post-discovery-integration, put-discovery-integration, patch-discovery-integration, delete-discovery-integration, get-compliance-settings, update-compliance-setting, get-health]
+- capability: Edge API runtime credential exchange
+  operations: [edge-api-auth, edge-api-get-credentials]
+  note: A different API entirely, and correctly absent from a read-only reporting MCP server.
+coverage:
+  tools_named: 3
+  tools_bound: 3
+  tools_unbound: 0
+  mcp_only: 0
+  rest_operations_total: 167
+  rest_operations_with_a_tool: 3
+  rest_coverage_percent: 1.8
+  read_operations_total: 69
+  write_operations_total: 98
+  write_operations_with_a_tool: 0
+finding: >-
+  THE MCP SURFACE IS DELIBERATELY 1.8% OF THE REST SURFACE, AND THAT IS A DESIGN POSITION, NOT A
+  GAP. Aembit exposes exactly three read-only observability tools and zero of its 98 mutating
+  operations to agents. For a company whose product is governing what non-human identities may
+  do, shipping an agent interface that cannot change a policy, create a workload or mint a
+  credential is a coherent stance rather than an incomplete implementation — and it is worth
+  recording as such rather than scoring it as thin coverage. The counterpart observation is that
+  the MCP tools publish CLOSED PARAMETER ENUMS the REST contract does not, so on the three
+  resources they share, the agent-facing surface is the better-specified one.

@@ -1,0 +1,54 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Aembit Cloud API
+  version: 1.0.0
+extends: openapi/aembit-cloud-api-openapi.yml
+x-generated: '2026-09-09'
+x-method: generated
+x-source: >-
+  API Evangelist enrichment pass. Captures OUR annotations over the provider's contract,
+  harvested verbatim from https://docs.aembit.io/cloud.yaml. The original document is never mutated.
+actions:
+- target: $.info
+  update:
+    x-apievangelist-profile: https://apis.io/provider/aembit/
+    x-apievangelist-harvested-from: https://docs.aembit.io/cloud.yaml
+    x-apievangelist-harvested-on: '2026-09-09'
+    x-apievangelist-artifacts:
+      authentication: authentication/aembit-authentication.yml
+      conventions: conventions/aembit-conventions.yml
+      errors: errors/aembit-problem-types.yml
+      lifecycle: lifecycle/aembit-lifecycle.yml
+      data_model: data-model/aembit-data-model.yml
+      rate_limits: rate-limits/aembit-rate-limits.yml
+      conformance: conformance/aembit-conformance.yml
+      mcp: mcp/aembit-mcp.yml
+      skills: skills/_index.yml
+- target: $.info
+  update:
+    contact:
+      name: Aembit Support
+      url: https://support.aembit.io/hc/en-us
+      email: security@aembit.io
+    description: >-
+      NOTE (API Evangelist, not provider text): the harvested contract carries only `title` and
+      `version` in info — no description, contact, license or termsOfService. This overlay adds a
+      contact block sourced from Aembit's own published pages so a generated client has somewhere
+      to point a user. It does not appear in the provider's original document.
+    x-apievangelist-idempotency: none
+    x-apievangelist-idempotency-note: >-
+      No Idempotency-Key mechanism exists on any of the 96 mutating operations. A retried POST
+      after an ambiguous timeout creates a duplicate entity.
+    x-apievangelist-error-format: vendor-envelope (GenericResponseDTO), not RFC 9457
+- target: $.tags
+  update:
+    x-apievangelist-deprecation-note: >-
+      The tags "Access Policy (Deprecated)" and "Credential Provider (Deprecated)" mark 16
+      operations as superseded by their v2 counterparts, but `deprecated: true` is set on ZERO
+      operations in this document, so no code generator or linter will surface it. See
+      lifecycle/aembit-lifecycle.yml for the enumerated list.
+- target: $.paths['/api/alpha/server-workload-drafts/{id}'].get
+  update:
+    x-apievangelist-note: >-
+      The only operation in this contract with no operationId and no summary, and the only
+      /api/alpha/ path. Published with no stability statement.

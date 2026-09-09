@@ -1,0 +1,68 @@
+generated: '2026-09-09'
+method: searched
+source: https://docs.aembit.io/dev-guide/cli/
+name: Aembit CLI
+binary: aembit
+full_name: Aembit Agent CLI
+version: 1.34.5772
+docs: https://docs.aembit.io/dev-guide/cli/
+reference: https://docs.aembit.io/dev-guide/cli/reference/aembit/
+changelog: https://docs.aembit.io/dev-guide/cli/changelog/
+troubleshooting: https://docs.aembit.io/dev-guide/cli/troubleshooting/
+purpose: >-
+  Retrieves Aembit-managed credentials on hosts that cannot run Agent Proxy — scripts, CI/CD
+  jobs, virtual machines and Windows IoT Enterprise devices. It is a thin client over the Edge
+  API: it presents Trust Provider attestation evidence and returns a short-lived credential.
+platforms: [Linux amd64, Linux arm64, Windows Server, Windows IoT Enterprise]
+install:
+- method: archive
+  platform: Linux amd64 (musl, default)
+  command: curl -O "https://releases.aembit.io/agent/1.34.5772/linux/amd64/aembit_agent_cli_linux_amd64_1.34.5772.tar.gz"
+  extract: tar -xf aembit_agent_cli_linux_amd64_1.34.5772.tar.gz
+  note: Statically linked; no dependency on the host C library. Runs on Alpine and distroless images.
+- method: archive
+  platform: Linux amd64 (glibc)
+  archive: aembit_agent_cli_linux_amd64_glibc_1.34.5772.tar.gz
+  note: >-
+    Dynamically linked, requires glibc 2.28+. Use only when the musl build fails to resolve the
+    tenant hostname with "failed to lookup address information" — a resolver response musl
+    rejects and glibc tolerates. No arm64 archive; does not run on Alpine or distroless.
+- method: archive
+  platform: Linux arm64
+  note: musl build only.
+verification:
+  checksum: Each archive ships a .sha256 file in the same directory.
+  signature: Each archive ships a .sha256.sig detached signature file.
+commands:
+- command: aembit
+  description: Base command for the Aembit CLI.
+  options:
+  - {flag: '-h, --help', description: Print help for the command or a subcommand.}
+  - {flag: '-V, --version', description: Print the CLI version.}
+- command: aembit credentials get
+  description: Retrieve credentials for a specific Client Workload.
+  docs: https://docs.aembit.io/dev-guide/cli/reference/credentials-get/
+  usage: |
+    aembit credentials get [OPTIONS] \
+      --client-id <CLIENT_ID> \
+      --server-workload-host <HOST> \
+      --server-workload-port <PORT>
+  required_options:
+  - flag: --client-id
+    description: >-
+      The Edge SDK Client ID from the Trust Provider in your Aembit Tenant, formatted
+      aembit:<stack>:<tenantId>:identity:<identityType>:<trustProviderId>. Retrieved from the
+      Aembit console (see the Find your Edge SDK Client ID guide).
+  - {flag: --server-workload-host, description: Hostname of the Server Workload to get a credential for.}
+  - {flag: --server-workload-port, description: Port of the Server Workload.}
+  backing_api: openapi/aembit-edge-api-openapi.yml#edge-api-get-credentials
+command_surface_note: >-
+  Deliberately narrow. The CLI is a credential-retrieval tool, NOT a management client — there is
+  no `aembit policy`, `aembit workload` or `aembit apply`. Configuration management is done
+  through the Cloud API, the Terraform provider, or the console.
+ci_cd_usage:
+- {platform: GitHub Actions, docs: 'https://docs.aembit.io/user-guide/deploy-install/ci-cd/github/github-edge-cli/', alternative: 'the Aembit/get-credentials Action'}
+- {platform: GitLab Jobs, docs: 'https://docs.aembit.io/user-guide/deploy-install/ci-cd/gitlab/gitlab-jobs-cli/'}
+related:
+  packages: packages/aembit-packages.yml
+  testing_guide: https://docs.aembit.io/dev-guide/integration/testing/

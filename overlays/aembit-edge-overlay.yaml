@@ -1,0 +1,46 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Aembit Edge API
+  version: 1.0.0
+extends: openapi/aembit-edge-api-openapi.yml
+x-generated: '2026-09-09'
+x-method: generated
+x-source: >-
+  API Evangelist enrichment pass. Captures OUR annotations over the provider's contract,
+  harvested verbatim from https://docs.aembit.io/edge.yaml. The original document is never mutated.
+actions:
+- target: $.info
+  update:
+    x-apievangelist-profile: https://apis.io/provider/aembit/
+    x-apievangelist-harvested-from: https://docs.aembit.io/edge.yaml
+    x-apievangelist-harvested-on: '2026-09-09'
+    x-apievangelist-artifacts:
+      authentication: authentication/aembit-authentication.yml
+      conventions: conventions/aembit-conventions.yml
+      errors: errors/aembit-problem-types.yml
+      lifecycle: lifecycle/aembit-lifecycle.yml
+      data_model: data-model/aembit-data-model.yml
+      rate_limits: rate-limits/aembit-rate-limits.yml
+      conformance: conformance/aembit-conformance.yml
+      mcp: mcp/aembit-mcp.yml
+      skills: skills/_index.yml
+- target: $.info
+  update:
+    x-apievangelist-role: >-
+      Runtime credential-exchange contract. Two operations implement the secretless bootstrap:
+      attest to a Trust Provider, then retrieve a credential for a Server Workload.
+    x-apievangelist-wrapped-by:
+    - '@aembit/edge-sdk (npm, TypeScript)'
+    - aembit-edge-sdk (Python, source-only as of 2026-09-09)
+    - Aembit CLI (aembit credentials get)
+    - Aembit/get-credentials (GitHub Action)
+    x-apievangelist-pinned-snapshot: https://github.com/Aembit/edge-sdks/blob/main/spec/openapi/edge-sdk-v1.yaml
+    x-apievangelist-pinned-snapshot-note: >-
+      Aembit pins an OpenAPI snapshot of this contract inside its SDK repository at
+      spec/openapi/edge-sdk-v1.yaml so cross-language SDKs generate against a fixed version.
+      Notable practice: the contract is versioned as an SDK build input, not only as docs.
+- target: $.paths['/edge/v1/auth'].post
+  update:
+    x-apievangelist-note: >-
+      Token-exchange-shaped, but not RFC 8693. Uses a bespoke AuthRequest/TokenDTO pair rather
+      than urn:ietf:params:oauth:grant-type:token-exchange. Declares a 429 with no Retry-After.

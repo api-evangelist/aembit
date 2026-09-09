@@ -1,0 +1,172 @@
+generated: '2026-09-09'
+method: derived
+source: openapi/aembit-cloud-api-openapi.yml, openapi/aembit-edge-api-openapi.yml
+format: vendor-envelope
+format_note: 'NOT RFC 9457. Neither contract uses application/problem+json anywhere. Every documented
+  error body is the same bespoke GenericResponseDTO envelope served as application/json: {success: boolean,
+  message: string|null, id: integer}. `message` carries the human-readable reason and `id` is described
+  as a ''Unique identifier of the API response'' — an int32, not a stable, documented error CODE, so there
+  is no enumerable machine-readable error taxonomy to catalogue. An agent can branch on HTTP status and
+  on the free-text `message` string only.'
+envelope:
+  schema: GenericResponseDTO
+  media_type: application/json
+  fields:
+    success: boolean — False on failure
+    message: string|null — why the call failed
+    id: int32 — response identifier
+error_code_registry:
+  published: false
+  note: No numbered or symbolic error-code registry is published for the Cloud or Edge API. The only documented
+    error-code list on the docs site belongs to the MCP Authorization Server product (https://docs.aembit.io/ai-guide/mcp/authorization-server/reference-mcp-auth-server/),
+    which governs customer MCP traffic rather than Aembit's own REST surface.
+problems:
+- status: 400
+  title: Bad Request
+  media_type: null
+  schema: null
+  occurrences: 160
+  examples: null
+  example_operations:
+  - openapi/aembit-cloud-api-openapi.yml#delete-access-condition
+  - openapi/aembit-cloud-api-openapi.yml#delete-access-condition2
+  - openapi/aembit-cloud-api-openapi.yml#delete-access-policy
+- status: 400
+  title: Invalid request or missing parameters
+  media_type: application/json
+  schema: GenericResponseDTO
+  occurrences: 2
+  examples:
+  - success: false
+    message: Invalid client ID.
+    id: 0
+  - success: false
+    message: The credentials request is invalid.
+    id: 0
+  example_operations:
+  - openapi/aembit-edge-api-openapi.yml#edge-api-auth
+  - openapi/aembit-edge-api-openapi.yml#edge-api-get-credentials
+- status: 401
+  title: Not Authenticated
+  media_type: null
+  schema: null
+  occurrences: 161
+  examples: null
+  example_operations:
+  - openapi/aembit-cloud-api-openapi.yml#delete-access-condition
+  - openapi/aembit-cloud-api-openapi.yml#delete-access-condition2
+  - openapi/aembit-cloud-api-openapi.yml#delete-access-policy
+- status: 401
+  title: Unauthorized
+  media_type: application/json
+  schema: GenericResponseDTO
+  occurrences: 1
+  examples:
+  - success: false
+    message: Unauthorized.
+    id: 0
+  example_operations:
+  - openapi/aembit-edge-api-openapi.yml#edge-api-auth
+- status: 401
+  title: Unauthorized access
+  media_type: application/json
+  schema: GenericResponseDTO
+  occurrences: 1
+  examples:
+  - success: false
+    message: Unauthorized access.
+    id: 0
+  example_operations:
+  - openapi/aembit-edge-api-openapi.yml#edge-api-get-credentials
+- status: 403
+  title: Forbidden
+  media_type: application/json
+  schema: GenericResponseDTO
+  occurrences: 3
+  examples: null
+  example_operations:
+  - openapi/aembit-cloud-api-openapi.yml#get-routing
+  - openapi/aembit-cloud-api-openapi.yml#post-routing
+  - openapi/aembit-cloud-api-openapi.yml#put-mfa-signon Policy
+- status: 403
+  title: Not applicable for this request
+  media_type: application/json
+  schema: GenericResponseDTO
+  occurrences: 1
+  examples:
+  - success: false
+    message: Not applicable for this request.
+    id: 0
+  example_operations:
+  - openapi/aembit-edge-api-openapi.yml#edge-api-get-credentials
+- status: 404
+  title: No client/server workload or access policy was found. Response will be of type ApiCredentialsResponse
+    with credential type set to Unknown
+  media_type: application/json
+  schema: ApiCredentialsResponse
+  occurrences: 1
+  examples: null
+  example_operations:
+  - openapi/aembit-edge-api-openapi.yml#edge-api-get-credentials
+- status: 404
+  title: Not Found
+  media_type: null
+  schema: null
+  occurrences: 11
+  examples: null
+  example_operations:
+  - openapi/aembit-cloud-api-openapi.yml#delete-access-condition
+  - openapi/aembit-cloud-api-openapi.yml#delete-access-condition2
+  - openapi/aembit-cloud-api-openapi.yml#delete-access-policy-v2
+- status: 429
+  title: Too many authentication requests
+  media_type: application/json
+  schema: GenericResponseDTO
+  occurrences: 1
+  examples:
+  - success: false
+    message: Too many requests. Please try again later.
+    id: 0
+  example_operations:
+  - openapi/aembit-edge-api-openapi.yml#edge-api-auth
+- status: 429
+  title: Too many credential requests
+  media_type: application/json
+  schema: GenericResponseDTO
+  occurrences: 1
+  examples:
+  - success: false
+    message: Too many requests. Please try again later.
+    id: 0
+  example_operations:
+  - openapi/aembit-edge-api-openapi.yml#edge-api-get-credentials
+- status: 500
+  title: Internal Server Error
+  media_type: application/json
+  schema: GenericResponseDTO
+  occurrences: 160
+  examples: null
+  example_operations:
+  - openapi/aembit-cloud-api-openapi.yml#delete-access-condition
+  - openapi/aembit-cloud-api-openapi.yml#delete-access-condition2
+  - openapi/aembit-cloud-api-openapi.yml#delete-access-policy
+- status: 500
+  title: Internal server error
+  media_type: application/json
+  schema: GenericResponseDTO
+  occurrences: 2
+  examples:
+  - success: false
+    message: Authentication failed due to an internal error.
+    id: 0
+  - success: false
+    message: Failed to retrieve credentials due to an internal error.
+    id: 0
+  example_operations:
+  - openapi/aembit-edge-api-openapi.yml#edge-api-auth
+  - openapi/aembit-edge-api-openapi.yml#edge-api-get-credentials
+coverage:
+  distinct_status_shapes: 13
+  note: 400/401/500 are declared on effectively every Cloud API operation (160/161/160 of 165). 404 appears
+    on only 11 of 165 operations even though 40+ take a path {id}, and 403 on 3 — so a not-found or forbidden
+    response is under-declared relative to the surface.

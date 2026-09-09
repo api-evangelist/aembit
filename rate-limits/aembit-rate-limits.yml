@@ -1,0 +1,81 @@
+generated: '2026-09-09'
+method: searched
+source: >-
+  openapi/aembit-cloud-api-openapi.yml, openapi/aembit-edge-api-openapi.yml,
+  https://docs.aembit.io/ai-guide/mcp/mcp-server/reference-mcp-server/,
+  https://docs.aembit.io/ai-guide/mcp/mcp-server/about-mcp-server/
+limit_count: 0
+note: >-
+  AN HONEST ZERO. Aembit publishes no numeric rate limit — no requests-per-second,
+  requests-per-minute or daily quota — for the Cloud API, the Edge API or the MCP Server, and no
+  quota is attached to any pricing tier. Throttling demonstrably EXISTS (the Edge API declares a
+  429 on both of its operations, and the MCP Server overview says the service rate-limits per
+  source IP and per tenant), but the number, the window and the recovery signal are all absent.
+  An automated client cannot compute a safe call rate from anything Aembit publishes, and when it
+  is throttled it gets no retry hint.
+response_headers:
+  published: []
+  checked: [X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, RateLimit-Limit, RateLimit-Remaining, RateLimit-Reset, RateLimit-Policy, Retry-After]
+  finding: >-
+    NONE. A case-insensitive search of both OpenAPI contracts for "ratelimit", "rate limit" and
+    "retry-after" returns zero matches. No 429 response in either contract declares a headers
+    block. This is the single most consequential runtime gap for an agent integration: the
+    provider throttles but emits no machine-readable signal about it.
+  probe_note: >-
+    Not observed live either. Both APIs are tenant-scoped and require a bearer token, so there is
+    no unauthenticated response whose headers could be inspected without an Aembit tenant.
+limits:
+- surface: Aembit Edge API
+  scope: per client workload / per authentication attempt
+  window: null
+  limit: null
+  burst: null
+  status_code_on_exhaustion: 429
+  response_body: '{success: false, message: "Too many requests. Please try again later.", id: 0}'
+  response_headers: []
+  operations: [edge-api-auth, edge-api-get-credentials]
+  evidence: >-
+    Both Edge operations declare a 429 response. POST /edge/v1/auth documents it as "Too many
+    authentication requests" with a GenericResponseDTO body and a worked example. No Retry-After
+    header is declared, so a throttled workload has no published backoff interval.
+  method: derived
+  source: openapi/aembit-edge-api-openapi.yml
+- surface: Aembit MCP Server
+  scope: per source IP and per tenant
+  window: null
+  limit: null
+  status_code_on_exhaustion: null
+  response_headers: []
+  evidence: >-
+    CONTRADICTORY DOCUMENTATION, RECORDED AS FOUND. The overview page states the service
+    "enforces rate limiting to prevent abuse" per source IP and per tenant; the technical
+    reference page states "The MCP Server doesn't enforce application-level rate limiting."
+    Both are published by Aembit. The reconciliation is most likely infrastructure-level
+    throttling with no application-level quota, but Aembit does not say so, so both statements
+    are recorded rather than resolved.
+  method: searched
+  source: https://docs.aembit.io/ai-guide/mcp/mcp-server/reference-mcp-server/
+- surface: Aembit Cloud API
+  scope: null
+  window: null
+  limit: null
+  status_code_on_exhaustion: null
+  response_headers: []
+  evidence: >-
+    No 429 response is declared on ANY of the 165 Cloud API operations, and no rate limit is
+    documented. Whether the management plane throttles at all is unstated.
+  method: derived
+  source: openapi/aembit-cloud-api-openapi.yml
+pagination_caps:
+  note: Not a rate limit, but the only published quantitative ceiling on either surface.
+  cloud_api: {param: per-page, default: 100, max_published: null}
+  mcp_server: {param: perPage, default: 100, max: 100, behavior: Values above 100 are silently capped to 100.}
+tier_quotas:
+  published: false
+  note: >-
+    The pricing page attaches entity caps to tiers (10 workloads, 10 access policies, 3 AI
+    agents) and retention windows, but no API call quota. See plans/aembit-plans-pricing.yml.
+gap: >-
+  Declaring RateLimit-Limit / RateLimit-Remaining / RateLimit-Reset (RFC 9331 draft shape) or at
+  minimum Retry-After on the Edge API's 429, and publishing one number for the Cloud API, would
+  close the largest runtime-semantics gap in this profile.

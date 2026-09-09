@@ -1,0 +1,99 @@
+generated: '2026-09-09'
+method: searched
+source: https://docs.aembit.io/changelog/
+scheme: date-based entries with component semver (train.build, e.g. 1.34.5755)
+current_version: 1.34.x
+secondary_changelog:
+  name: Aembit CLI changelog
+  url: https://docs.aembit.io/dev-guide/cli/changelog/
+window: '2026-08-05 to 2026-08-27 (recent window only; the live changelog is the source of truth)'
+entries:
+- date: '2026-08-27'
+  title: Developer Guide consolidation
+  type: docs
+  breaking: false
+  highlights:
+  - Single unified Developer Guide replaces the separate API and CLI guides.
+  - Consolidates SDKs, APIs, CLI and Agent Proxy documentation.
+  - All previous URL paths redirect to the new locations (e.g. /api-guide/cloud/ to /dev-guide/api/cloud).
+- date: '2026-08-27'
+  title: Edge SDKs release
+  type: feature
+  breaking: false
+  highlights:
+  - TypeScript and Python SDKs published for the Aembit Edge API.
+  - Seven Trust Providers supported including AWS, Azure, GCP, GitHub, GitLab and OIDC.
+  - Integration guides for AWS EC2, AWS Lambda, GCP Cloud Run and Vercel OIDC.
+  note: >-
+    The TypeScript SDK reached npm as @aembit/edge-sdk. As of 2026-09-09 the Python SDK is still
+    source-only — pypi.org returns 404 for aembit-edge-sdk. See packages/aembit-packages.yml.
+- date: '2026-08-27'
+  title: CLI glibc build option
+  type: feature
+  breaking: false
+  highlights:
+  - Alternative Linux amd64 binary linked dynamically against glibc 2.28+.
+  - Default musl build remains recommended; addresses DNS resolution failures on some hosts.
+- date: '2026-08-27'
+  title: Edge Components 1.34 release
+  type: enhancement
+  breaking: false
+  highlights:
+  - Agent Proxy 1.34.5755, AWS Lambda Extension 1.34.175, Agent Injector 1.34.433.
+  - Workload events now include authorization chain tracking.
+  - Windows installer honors gRPC keep-alive properties.
+- date: '2026-08-27'
+  title: Security updates
+  type: security
+  breaking: false
+  highlights:
+  - Fixes RUSTSEC-2026-0190 and RUSTSEC-2026-0204 in bundled Rust libraries.
+  - Agent Injector fixes RUSTSEC-2026-0185.
+- date: '2026-08-19'
+  title: GCP IAP JWT Trust Provider
+  type: feature
+  breaking: false
+  highlights:
+  - Validates Google Cloud Identity-Aware Proxy tokens for GKE, Cloud Run and App Engine workloads.
+  - Terraform support included.
+- date: '2026-08-18'
+  title: MCP Identity Gateway 1.34.5733
+  type: enhancement
+  breaking: false
+  highlights:
+  - Higher fanout timeout defaults for slower-starting MCP servers.
+  - Nine new Prometheus metrics; all 20 MCP metrics now documented.
+- date: '2026-08-07'
+  title: Content Security
+  type: feature
+  breaking: false
+  highlights:
+  - Inspects MCP traffic passing through the MCP Identity Gateway.
+  - CrowdStrike AIDR integration returning allow, block or transform verdicts.
+  - Inspection decisions recorded as events.
+  note: Corresponds to the /api/v1/content-security resource family in the Cloud API contract.
+- date: '2026-08-07'
+  title: MCP Identity Gateway 1.33.5654
+  type: enhancement
+  breaking: false
+  highlights:
+  - Records a single event per Content Security decision.
+  - Broadens MCP traffic inspection coverage.
+- date: '2026-08-05'
+  title: AWS ALB JWT Trust Provider
+  type: feature
+  breaking: false
+  highlights:
+  - Validates tokens issued by AWS Application Load Balancer OIDC authentication.
+  - Retrieves and caches signing keys automatically.
+  - Terraform support included.
+observations:
+  breaking_changes_in_window: 0
+  deprecations_in_window: 0
+  note: >-
+    No breaking change or deprecation notice appears in the 2026-08 window, even though the
+    Cloud API contract carries two deprecated resource families ("Access Policy (Deprecated)",
+    "Credential Provider (Deprecated)"). The v1-to-v2 migration is visible in the contract's tag
+    names but is not announced in the changelog and has no published sunset date.
+  cadence: Multiple dated entries per month; new Trust Providers ship roughly fortnightly.
+  terraform_parity: New Trust Providers ship with Terraform provider support in the same entry — parity is treated as part of the feature, not a follow-up.

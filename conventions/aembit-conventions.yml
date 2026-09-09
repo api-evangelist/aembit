@@ -1,0 +1,167 @@
+generated: '2026-09-09'
+method: searched
+source: >-
+  openapi/aembit-cloud-api-openapi.yml, openapi/aembit-edge-api-openapi.yml,
+  https://docs.aembit.io/dev-guide/api/
+authentication:
+  style: bearer-token
+  header: 'Authorization: Bearer <token>'
+  cloud_api: >-
+    Aembit API Token generated from the Admin UI Profile page. securityScheme `bearerAuth`,
+    type http, scheme bearer, bearerFormat "Reference" — an opaque reference token, not a JWT.
+  edge_api: >-
+    securityScheme `EdgeApiAuth`, type http, scheme bearer, bearerFormat JWT. The token is not
+    issued from the console: a Client Workload obtains it by POSTing attestation evidence to
+    /edge/v1/auth, which returns an OAuth2-style TokenDTO with an expiry. This is the secretless
+    bootstrap the whole platform exists to provide.
+  cross_link: authentication/aembit-authentication.yml
+tenancy:
+  header: X-Aembit-ResourceSet
+  type: uuid
+  required: false
+  behavior: Scopes the request to one Resource Set; omitted, the default Resource Set is used.
+  coverage: Present on 78 occurrences across both contracts — effectively every list and mutate operation, plus the MCP Server.
+  note: This is the least-privilege boundary an agent integration should always set explicitly rather than inherit.
+host_model:
+  shape: tenant-templated
+  server: https://{tenant}.aembit.io
+  note: >-
+    Both contracts declare a single templated server with a `tenant` variable. The tenant id
+    comes from the Admin UI Profile screen. The MCP Server additionally embeds the stack:
+    https://{tenantId}.mcp.useast2.aembit.io/mcp. There is no shared multi-tenant host, so a
+    client MUST resolve the tenant before it can construct a single URL.
+idempotency:
+  supported: false
+  coverage: none
+  mechanism: null
+  header: null
+  scope: []
+  retention: null
+  evidence: >-
+    MACHINE VERDICT: none. A case-insensitive search for "idempoten" across both published
+    contracts returns ZERO matches — no Idempotency-Key header, no idempotency query parameter,
+    no request-id-based replay window, and no documented replay semantics anywhere in the
+    developer guide. The Cloud API has 96 mutating operations (27 POST, 25 PUT, 22 PATCH, 22
+    DELETE) and none of them declares replay protection.
+  practical_effect: >-
+    PUT and PATCH on a known externalId are naturally idempotent by HTTP semantics, and DELETE is
+    idempotent in effect. The exposure is POST: a retried post-access-policy-v2,
+    post-client-workload, post-trust-provider or post-log-stream after an ambiguous timeout will
+    create a DUPLICATE entity, and there is no key an agent can present to make the retry safe.
+    An automated caller must reconcile by listing and matching on `name` before retrying.
+  gap: >-
+    For a platform whose buyers automate policy provisioning through Terraform and CI/CD, an
+    Idempotency-Key header on the POST surface would be a high-value, low-cost addition.
+pagination:
+  style: offset
+  params:
+    page: {in: query, type: int32, default: 1}
+    per-page: {in: query, type: int32, default: 100}
+    filter: {in: query, type: string, default: ''}
+    order: {in: query, type: string, default: ''}
+    group-by: {in: query, type: string, default: ''}
+  response_fields: [page, perPage, order, recordsTotal, statusCode]
+  note: >-
+    Uniform across every Cloud API list operation. There is no cursor and no next-page link, so a
+    client paginates by incrementing `page` until it has seen recordsTotal items. The MCP Server
+    mirrors this with page/perPage and hard-caps perPage at 100.
+  max_page_size: 100
+filtering_and_sorting:
+  filter: Free-text `filter` query parameter; no grammar is published in the contract or the docs.
+  order: Free-text `order` query parameter; no allowed-value list is published for the REST API.
+  group_by: Free-text `group-by` query parameter; undocumented grammar.
+  note: >-
+    A real gap for an agent: three query parameters are exposed on nearly every list operation
+    with `type: string` and no enum, pattern or example. By contrast the MCP Server DOES publish
+    closed orderBy enums per tool (see mcp/aembit-mcp.yml) — the agent surface is better
+    specified than the REST surface it wraps.
+error_envelope:
+  format: vendor
+  media_type: application/json
+  schema: GenericResponseDTO
+  shape: '{success: boolean, message: string|null, id: int32}'
+  rfc9457: false
+  cross_link: errors/aembit-problem-types.yml
+request_tracing:
+  request_id_header: null
+  note: >-
+    No request-id or correlation-id header is documented on either API. Server-side, the
+    authorization event stream carries a `ContextId` and workload events carry a `ConnectionId`
+    that correlate an access decision to a connection, but neither is returned to the API caller
+    as a response header, so a client cannot join its own call to a later event without
+    matching on timestamp and workload.
+versioning:
+  scheme: uri-path
+  current: v2 for Access Policies, Access Conditions, Credential Providers and Integrations; v1 elsewhere
+  note: >-
+    Mixed. The Cloud API declares info.version "v1" while serving both /api/v1/ and /api/v2/
+    paths, and one alpha path (/api/alpha/server-workload-drafts/{id}) is present and is the only
+    operation in the contract with NO operationId. Version is carried in the path, never in a
+    header or media type.
+  cross_link: lifecycle/aembit-lifecycle.yml
+rate_limit_signaling:
+  headers: []
+  documented: false
+  note: >-
+    No X-RateLimit-*, RateLimit-* or Retry-After header appears in either contract. The Edge API
+    declares a 429 "Too many authentication requests" on both operations with a
+    GenericResponseDTO body ("Too many requests. Please try again later.") but no retry hint, so
+    a client that is throttled has no published backoff signal.
+  cross_link: rate-limits/aembit-rate-limits.yml
+dry_run_mode:
+  supported: false
+  status: na
+  note: >-
+    No dry-run, preview, validate or simulate parameter exists on any operation. The nearest
+    published rehearsal affordances are read-only verification endpoints —
+    get-credential-provider-verification-v2 and get-identity-provider-verification — which test
+    that a configured provider works, not what a pending write would do.
+reversibility:
+  grade: documented
+  coverage: partial
+  summary: >-
+    The Cloud API is a configuration surface, and configuration is restorable by re-creating it
+    — but Aembit publishes NO undo, restore, soft-delete or trash operation, and NO recovery
+    window for anything it deletes. One genuine reversal operation exists, for account lockout.
+    Nothing in the docs states a window for any reversal, so this grades `documented`, not
+    `verified`. NO WINDOW IS ASSERTED HERE BECAUSE THE DOCS STATE NONE.
+  reversal_operations:
+  - operation: post-user-unlock
+    path: POST /api/v1/users/{id}/unlock
+    reverses: An administrative user account lockout.
+    window: null
+    window_source: null
+    note: The only operation in either contract whose purpose is to undo a prior state change.
+  - operation: patch-log-stream
+    path: PATCH /api/v1/log-streams/{id}
+    reverses: 'Disabling a log stream, via the isActive flag.'
+    window: null
+    note: >-
+      Every entity carries an `isActive` boolean that PATCH can toggle. Deactivating rather than
+      deleting is the reversible path across the whole surface, and it is the pattern an agent
+      should prefer — but Aembit does not document it as a reversal mechanism, so it is recorded
+      as an observed property of the schema, not a published guarantee.
+  irreversible_writes:
+  - {operations: 22 DELETE operations across the Cloud API, note: 'No restore, undelete or trash endpoint exists for any entity. delete-access-policy-v2, delete-client-workload, delete-server-workload, delete-trust-provider, delete-credential-provider2, delete-resource-set-integration, delete-role, delete-user and delete-trust-provider-secret are all terminal as published.'}
+  - {operation: delete-trust-provider-secret, note: 'Deleting secret material is the least recoverable action on the surface; there is no documented rotation-with-grace or recovery path.'}
+  edge_api:
+    status: na
+    note: >-
+      The Edge API mints short-lived credentials and stores nothing. There is nothing to reverse;
+      expiry is the rollback. An honest `na` rather than a zero.
+  recommendation_for_agents: >-
+    Prefer PATCH isActive:false over DELETE. Treat every DELETE as permanent, and snapshot the
+    entity with its GET before issuing one, because Aembit publishes no way to get it back.
+metadata:
+  tags: 'Every entity carries a `tags` array of TagDTO objects for customer-defined labelling.'
+  descriptions: 'Every entity carries name (1-128 chars) and a nullable description.'
+field_expansion:
+  supported: false
+  note: No expand, include or fields parameter exists. Related entities are fetched by their own id in a second call.
+cross_links:
+  authentication: authentication/aembit-authentication.yml
+  errors: errors/aembit-problem-types.yml
+  lifecycle: lifecycle/aembit-lifecycle.yml
+  rate_limits: rate-limits/aembit-rate-limits.yml
+  data_model: data-model/aembit-data-model.yml
+  mcp: mcp/aembit-mcp.yml

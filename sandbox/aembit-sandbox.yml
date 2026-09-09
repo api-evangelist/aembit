@@ -1,0 +1,60 @@
+generated: '2026-09-09'
+method: searched
+source: https://docs.aembit.io/get-started/signup-options/, https://docs.aembit.io/dev-guide/integration/testing/
+model: free-tenant
+separate_test_mode: false
+note: >-
+  NO TEST/LIVE KEY SEPARATION EXISTS. Aembit has no sandbox mode, no test-vs-live key prefixes,
+  no magic test identifiers, no fixture or trigger tooling and no time simulation. The evaluation
+  path is a REAL, self-serve, free-tier tenant on the production stack — everything created in it
+  is live configuration operating on real workloads. This is recorded as a finding, not a gap
+  papered over: a Workload IAM control plane has no equivalent of a test card number, because the
+  thing under test is an actual workload's actual identity in an actual cloud account.
+  NO TEST VALUES ARE LISTED HERE BECAUSE AEMBIT PUBLISHES NONE.
+evaluation_environment:
+  name: Aembit Starter tenant (free tier)
+  signup: https://useast2.aembit.io/signup
+  signup_docs: https://docs.aembit.io/get-started/signup-options/
+  sales_call_required: false
+  cost: 0
+  limits:
+    workloads: 10
+    access_policies: 10
+    ai_agents: 3
+    mcp_authorization_policies: 5
+    event_log_retention: 24 hours
+  note: >-
+    Fully self-serve. Also available through cloud marketplace signup paths per the signup-options
+    guide. The 24-hour event log retention is the constraint most likely to surprise someone
+    testing the reporting endpoints or the MCP Server tools, whose date filters accept spans far
+    longer than the free tier retains.
+console:
+  url: https://useast2.aembit.io/
+  name: Aembit Admin UI
+  note: >-
+    Web console for the same surface the Cloud API exposes. The Admin UI Profile screen is where
+    an Aembit API Token is generated and where the tenant id needed to construct the templated
+    base URL is found — so an API integration starts in the console by necessity.
+testing_and_debugging:
+  guide: https://docs.aembit.io/dev-guide/integration/testing/
+  scope: >-
+    "Verify credential delivery end to end for the Agent Proxy, Edge SDK, Aembit CLI, and Edge
+    API integration paths" — a first-party integration-verification guide covering all four
+    client paths.
+  verification_endpoints:
+  - {operation: get-credential-provider-verification-v2, path: 'GET /api/v2/credential-providers/{id}/verification', purpose: Confirm a configured Credential Provider is working.}
+  - {operation: get-identity-provider-verification, path: 'GET /api/v1/sso-idps/{id}/verification', purpose: Confirm a configured SSO identity provider is working.}
+  - {operation: get-health, path: GET /api/v1/health, purpose: Cloud API health check.}
+  note: >-
+    These are the closest thing to a rehearsal affordance in the contract — they verify existing
+    configuration, they do not preview a pending write. There is no dry-run mode; see
+    conventions/aembit-conventions.yml.
+mcp_testing:
+  tool: MCP Inspector
+  docs: https://docs.aembit.io/ai-guide/mcp/mcp-server/connect/mcp-inspector/
+  note: Aembit documents using MCP Inspector to test and explore the MCP Server interactively before wiring an agent to it.
+  prompt_library: https://docs.aembit.io/ai-guide/prompt-library/
+  prompt_library_note: Curated prompts for querying Aembit event logs through the MCP Server — a published starting set for agent evaluation.
+local_development:
+  self_hosted_mcp_gateway: https://docs.aembit.io/ai-guide/mcp/identity-gateway/self-host-mcp-gateway/
+  note: The MCP Identity Gateway can be self-hosted on a Linux host, which is the closest available local test rig for the MCP product line.

@@ -1,0 +1,82 @@
+generated: '2026-09-09'
+method: searched
+source: >-
+  openapi/aembit-cloud-api-openapi.yml, https://docs.aembit.io/user-guide/administration/log-streams/,
+  https://docs.aembit.io/user-guide/audit-report/
+spec_type: none
+asyncapi_published: false
+webhooks_published: false
+note: >-
+  NO ASYNCAPI AND NO WEBHOOKS — BUT A REAL EVENT SURFACE. Recorded so the shape of the absence is
+  measured rather than assumed. Aembit produces three first-class event streams and ships a
+  configurable outbound delivery mechanism for them, yet publishes neither an AsyncAPI document
+  nor a customer-callback webhook. Deliberately NO AsyncAPI pointer and NO Webhooks pointer are
+  emitted from this file: Log Streams deliver to a closed set of four SIEM and object-store
+  destination types, not to an arbitrary HTTP endpoint a customer supplies, so calling it a
+  webhook surface would overstate what a buyer would actually find.
+probes:
+- {url: 'https://docs.aembit.io/asyncapi.yaml', status: 404}
+- {url: 'https://docs.aembit.io/asyncapi.json', status: 404}
+  # docs host returns its 404 HTML shell for any unknown path
+searched:
+  github_org: https://github.com/Aembit — 10 public repos, no AsyncAPI document in any of them.
+  docs: No event-catalog, webhook or subscription page exists in the documentation tree.
+event_types:
+- name: Audit Log
+  docs: https://docs.aembit.io/user-guide/audit-report/
+  rest: [get-audit-logs, get-audit-log]
+  mcp_tool: get_audit_logs
+  categories: [Unknown, Tenant, Users, Authentication, Workloads, AccessPolicies, Agents, CredentialProvider, TrustProvider]
+  severities: [Info, Warn, Alert]
+  description: Administrative actions taken in the tenant — who changed what.
+- name: Access Authorization Event
+  docs: https://docs.aembit.io/user-guide/audit-report/access-authorization-events/
+  rest: [get-access-authorization-events, get-access-authorization-event]
+  mcp_tool: get_auth_events
+  event_types: [Request, Authorization, Credential]
+  severities: [Error, Alert, Warn, Info]
+  description: The record of an access decision — a workload asked, policy evaluated, a credential was or was not issued.
+  correlation_field: ContextId
+- name: Workload Event
+  docs: https://docs.aembit.io/user-guide/audit-report/workload-events/
+  reference: https://docs.aembit.io/user-guide/audit-report/workload-events/reference/
+  rest: [get-workload-events, get-workload-event]
+  mcp_tool: get_workload_events
+  app_protocols: [Redshift, HTTP, MySQL, Postgres, Redis, Snowflake, TCP, OracleDatabase, MCP]
+  severities: [Error, Alert, Warn, Info]
+  description: Connection-level activity observed by Agent Proxy, classified by application protocol.
+  correlation_field: ConnectionId
+  note: >-
+    Aembit publishes a Workload Event reference documenting the common fields every event shares,
+    with examples — the closest thing to a message schema in the profile, and the natural basis
+    for an AsyncAPI document if Aembit chose to publish one.
+delivery:
+  mechanism: Log Streams
+  managed_via_api: true
+  rest: [get-log-streams, get-log-stream, post-log-stream, put-log-stream, patch-log-stream, delete-log-stream]
+  schema: LogStreamDTO
+  destination_types:
+  - {type: AwsS3Bucket, transport: object-store, required: [s3BucketName, s3BucketRegion], optional: [s3PathPrefix]}
+  - {type: GcsBucket, transport: object-store, fields: [gcsBucketName, gcsPathPrefix, audience, serviceAccountEmail, tokenLifetime]}
+  - {type: SplunkHttpEventCollector, transport: http-push, required: [hecHostPort, authenticationToken, hecSourceName], optional: [tls, tlsVerification]}
+  - {type: CrowdstrikeHttpEventCollector, transport: http-push, required: [hecHostPort, apiKey, hecSourceName], optional: [tls, tlsVerification]}
+  data_types: 'Selected per stream via the dataType field (e.g. AuditLogs).'
+  guides:
+  - https://docs.aembit.io/user-guide/administration/log-streams/splunk-siem/
+  - https://docs.aembit.io/user-guide/administration/log-streams/crowdstrike-siem/
+  classification: >-
+    The two HEC destinations ARE an outbound HTTP push to a customer-supplied host:port with a
+    customer-supplied token, which is webhook-adjacent in mechanism. It is not a webhook in
+    contract: the payload shape is the SIEM vendor's HEC envelope, the destination type is a
+    closed enum of four, and no arbitrary callback URL can be registered. Recorded as SIEM log
+    streaming.
+gap: >-
+  Three well-defined event families with published severities, categories, protocols and a field
+  reference, plus an API-managed delivery mechanism, and no AsyncAPI describing any of it. An
+  AsyncAPI 3.x document over the three event types would be a small step from what is already
+  written, and a generic webhook destination type would turn Log Streams into an integration
+  surface rather than a SIEM feature.
+retention_caveat: >-
+  Event availability is tier-bound: 24 hours on the free tiers and Workloads Teams, 7 days on
+  Agentic AI Teams, custom on Enterprise. Log Streams are the documented path to durable
+  retention. See plans/aembit-plans-pricing.yml.

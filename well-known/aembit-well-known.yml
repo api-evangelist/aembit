@@ -1,0 +1,191 @@
+generated: '2026-09-09'
+method: probed
+source: live probe of the /.well-known/ surface on every host this record knows
+path_echo_control: passed
+note: >-
+  THREE HOSTS RETURNED 200s AND NONE OF THEM IS AEMBIT'S OWN DOCUMENT. Every 200 recorded below
+  is served by a third-party SaaS running on an Aembit subdomain and, judged by what the document
+  says about itself, describes that vendor rather than Aembit:
+  status.aembit.io/.well-known/security.txt is Atlassian Statuspage's PGP-signed RFC 9116 file
+  (Contact atlassian.com, Canonical https://www.atlassian.com/.well-known/security.txt);
+  trust.aembit.io serves SafeBase's OAuth/OIDC discovery documents, whose issuer, authorization,
+  token, registration and revocation endpoints all resolve to https://app.safebase.io/api/mcp and
+  whose resource_documentation is https://docs.safebase.io/mcp. They are saved here verbatim as
+  evidence, marked vendor_operated, and DELIBERATELY EARN NO WellKnown OR SecurityTxt POINTER —
+  crediting Aembit with an OAuth discovery surface or a vulnerability-disclosure document that
+  belongs to its status-page and trust-center vendors would be a false claim made on its behalf.
+  Aembit's own registrable domain, its docs host and its tenant/console host publish no
+  /.well-known/ documents at all. A negative-control path that cannot exist
+  (/.well-known/aembit-negative-control-7f3ab91c.json) returned a non-2xx on every host, so none
+  of these is a path-echoing false positive.
+hit_count: 4
+first_party_hit_count: 0
+hosts:
+- host: https://aembit.io
+  role: registrable domain / marketing site
+  server_note: WordPress; 404s return a full 152KB HTML error page, not a document
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/oauth-protected-resource, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/ucp.json, status: 404}
+  - {path: /.well-known/acp.json, status: 404}
+  - {path: /.well-known/aauth-resource.json, status: 404}
+  - {path: /.well-known/apis.json, status: 404}
+  - {path: /apis.json, status: 404}
+  - {path: /apis.yml, status: 403}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+  - {path: /.well-known/aembit-negative-control-7f3ab91c.json, status: 404}
+- host: https://www.aembit.io
+  role: www alias
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/oauth-protected-resource, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/ucp.json, status: 404}
+  - {path: /.well-known/acp.json, status: 404}
+  - {path: /.well-known/aauth-resource.json, status: 404}
+  - {path: /.well-known/apis.json, status: 404}
+  - {path: /apis.json, status: 404}
+  - {path: /apis.yml, status: 403}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+  - {path: /.well-known/aembit-negative-control-7f3ab91c.json, status: 404}
+- host: https://docs.aembit.io
+  role: documentation host (Astro/Starlight) — serves both OpenAPI contracts at /cloud.yaml and /edge.yaml
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/oauth-protected-resource, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/ucp.json, status: 404}
+  - {path: /.well-known/acp.json, status: 404}
+  - {path: /.well-known/aauth-resource.json, status: 404}
+  - {path: /.well-known/apis.json, status: 404}
+  - {path: /apis.json, status: 404}
+  - {path: /apis.yml, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+  - {path: /.well-known/aembit-negative-control-7f3ab91c.json, status: 404}
+- host: https://useast2.aembit.io
+  role: tenant / admin console host and OpenAPI servers[] host (https://{tenant}.aembit.io)
+  server_note: >-
+    The bare stack hostname answers 502 Bad Gateway on every /.well-known/ path — the gateway
+    routes on tenant subdomain, so an unauthenticated probe of the stack root cannot reach an
+    application. This is an infrastructure response, not a published absence.
+  documents:
+  - {path: /.well-known/security.txt, status: 502}
+  - {path: /.well-known/openid-configuration, status: 502}
+  - {path: /.well-known/oauth-authorization-server, status: 502}
+  - {path: /.well-known/oauth-protected-resource, status: 502}
+  - {path: /.well-known/api-catalog, status: 502}
+  - {path: /.well-known/ai-plugin.json, status: 502}
+  - {path: /.well-known/ucp.json, status: 502}
+  - {path: /.well-known/acp.json, status: 502}
+  - {path: /.well-known/aauth-resource.json, status: 502}
+  - {path: /.well-known/apis.json, status: 502}
+  - {path: /apis.json, status: 404}
+  - {path: /apis.yml, status: 404}
+  - {path: /.well-known/agent-card.json, status: 502}
+  - {path: /.well-known/agent.json, status: 502}
+  - {path: /.well-known/aembit-negative-control-7f3ab91c.json, status: 502}
+- host: https://status.aembit.io
+  role: status page (Atlassian Statuspage)
+  vendor_operated: true
+  vendor: Atlassian Statuspage
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: aembit-status-atlassian-security.txt
+    vendor_operated: true
+    first_party: false
+    note: >-
+      PGP-signed RFC 9116 document belonging to Atlassian, not Aembit. Contact
+      https://www.atlassian.com/trust/security/report-a-vulnerability and mailto:security@atlassian.com;
+      Canonical https://www.atlassian.com/.well-known/security.txt; Expires 2027-02-04. Served by
+      the Statuspage platform for every customer status subdomain. NOT counted as an Aembit
+      security.txt and no SecurityTxt pointer is emitted from it.
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/oauth-protected-resource, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/ucp.json, status: 404}
+  - {path: /.well-known/acp.json, status: 404}
+  - {path: /.well-known/aauth-resource.json, status: 404}
+  - {path: /.well-known/apis.json, status: 404}
+  - {path: /apis.json, status: 404}
+  - {path: /apis.yml, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+  - {path: /.well-known/aembit-negative-control-7f3ab91c.json, status: 404}
+- host: https://trust.aembit.io
+  role: trust center (SafeBase)
+  vendor_operated: true
+  vendor: SafeBase
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 200
+    file: aembit-trust-safebase-openid-configuration.json
+    vendor_operated: true
+    first_party: false
+    note: 'issuer https://app.safebase.io/api/mcp — SafeBase''s own MCP authorization server, not Aembit''s.'
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: aembit-trust-safebase-oauth-authorization-server.json
+    vendor_operated: true
+    first_party: false
+    note: Byte-identical to the openid-configuration document; same SafeBase issuer.
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: aembit-trust-safebase-oauth-protected-resource.json
+    vendor_operated: true
+    first_party: false
+    note: 'RFC 9728 document naming resource https://app.safebase.io/api/mcp and authorization_servers [https://app.safebase.io/api/mcp].'
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/ucp.json, status: 404}
+  - {path: /.well-known/acp.json, status: 404}
+  - {path: /.well-known/aauth-resource.json, status: 404}
+  - {path: /.well-known/apis.json, status: 404}
+  - {path: /apis.json, status: 404}
+  - {path: /apis.yml, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+  - {path: /.well-known/aembit-negative-control-7f3ab91c.json, status: 404}
+- host: https://support.aembit.io
+  role: help center (Zendesk)
+  vendor_operated: true
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/oauth-protected-resource, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/ucp.json, status: 404}
+  - {path: /.well-known/acp.json, status: 404}
+  - {path: /.well-known/aauth-resource.json, status: 404}
+  - {path: /.well-known/apis.json, status: 404}
+  - {path: /apis.json, status: 404}
+  - {path: /apis.yml, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+  - {path: /.well-known/aembit-negative-control-7f3ab91c.json, status: 404}
+a2a_result:
+  found: false
+  note: >-
+    No A2A Agent Card on any of the seven hosts at either /.well-known/agent-card.json or the
+    legacy /.well-known/agent.json. Per the pipeline contract nothing was written to a2a/ — no
+    stub, no candidate manifest. Aembit is an MCP-native provider (hosted MCP Server, MCP
+    Identity Gateway, MCP Authorization Server) and publishes no A2A surface.

@@ -1,0 +1,110 @@
+generated: '2026-09-09'
+method: searched
+source: https://aembit.io/pricing/
+currency: USD
+plan_count: 6
+structure: >-
+  TWO SEPARATE PRODUCT LINES, each with its own three-tier ladder. Workloads is priced per
+  workload; Agentic AI is priced per AI agent. They are not tiers of one plan — a buyer picks
+  a line (or both) and then a tier within it.
+billing_period: monthly
+self_serve: true
+self_serve_url: https://useast2.aembit.io/signup
+plans:
+- line: Workloads
+  name: Starter
+  price: 0
+  currency: USD
+  billing_period: monthly
+  included:
+    workloads: 10
+    access_policies: 10
+    event_log_retention: 24 hours
+  support: community
+  overage: null
+  overage_note: Not published; the tier is capped rather than metered.
+- line: Workloads
+  name: Teams
+  price: 20
+  price_unit: per workload per month
+  currency: USD
+  billing_period: monthly
+  included:
+    workloads: 10-50
+    event_log_retention: 24 hours
+  support: business hours
+  overage: null
+  overage_note: >-
+    Not published. The 10-50 workload band is stated as the tier's applicable range; what happens
+    above 50 is not stated on the pricing page beyond the Enterprise tier existing.
+- line: Workloads
+  name: Enterprise
+  price: null
+  price_model: contact sales
+  currency: USD
+  included:
+    workloads: unlimited
+    access_policies: unlimited
+    event_log_retention: custom
+    conditional_access: true
+  support: 24/7
+- line: Agentic AI
+  name: Starter
+  price: 0
+  currency: USD
+  billing_period: monthly
+  included:
+    ai_agents: 3
+    mcp_identity_gateways: 1
+    mcp_authorization_policies: 5
+    blended_identity: via human IdPs
+    event_log_retention: 24 hours
+  support: community
+- line: Agentic AI
+  name: Teams
+  price: 20
+  price_unit: per agent per month
+  currency: USD
+  billing_period: monthly
+  included:
+    ai_agents: 10-500
+    mcp_identity_gateway: customizable
+    mcp_authorization_policies: unlimited
+    blended_identity: true
+    event_log_retention: 7 days
+  support: business hours
+- line: Agentic AI
+  name: Enterprise
+  price: null
+  price_model: contact sales
+  currency: USD
+  included:
+    ai_agents: unlimited
+    mcp_identity_gateway: customizable
+    mcp_authorization_policies: unlimited
+    blended_identity: true
+    event_log_retention: custom
+    conditional_access: true
+  support: 24/7
+limits_attached_to_tier:
+  note: >-
+    Event log retention is the sharpest tier boundary and it is directly relevant to the API:
+    24 hours on both free tiers and on Workloads Teams, 7 days on Agentic AI Teams, custom on
+    Enterprise. The Cloud API reporting endpoints and all three MCP Server tools read that same
+    event store, so on a Starter or Workloads Teams tenant get_audit_logs, get_auth_events and
+    get_workload_events can only return the last 24 hours regardless of the spanLastDays
+    parameter they accept (which defaults to 30). Log Streams to S3, GCS, Splunk or CrowdStrike
+    are the documented path to longer retention.
+  conditional_access: Enterprise only, on both lines.
+observations:
+  free_tier: true
+  free_tier_note: >-
+    Both lines have a genuinely self-serve free tier reachable without a sales call
+    (https://useast2.aembit.io/signup), which is also the practical evaluation environment for
+    the API — see sandbox/aembit-sandbox.yml.
+  api_access_gating: >-
+    The pricing page does not gate API, CLI, SDK or Terraform access behind a tier. No published
+    rate limit or API call quota is attached to any tier.
+  transparency: >-
+    List pricing is published for four of six tiers with named unit prices — better than the
+    contact-sales-only norm in this category.

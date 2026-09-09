@@ -1,0 +1,120 @@
+generated: '2026-09-09'
+method: searched
+source: https://github.com/Aembit/edge-sdks
+note: >-
+  Registry metadata read unauthenticated from registry.npmjs.org, pypi.org and
+  registry.terraform.io on 2026-09-09. Aembit ships a TypeScript Edge SDK on npm, a Python Edge
+  SDK that exists in the first-party repository but has NOT been published to PyPI, a Terraform
+  provider on the HashiCorp registry, and a GitHub Action. The Aembit CLI and Edge Components are
+  distributed as signed archives from releases.aembit.io, not through a language registry.
+packages:
+- language: typescript
+  registry: npm
+  name: "@aembit/edge-sdk"
+  url: https://www.npmjs.com/package/@aembit/edge-sdk
+  install: npm install @aembit/edge-sdk
+  official: true
+  license: Apache-2.0
+  repository: https://github.com/Aembit/edge-sdks
+  version: 1.34.1
+  published: '2026-09-07'
+  first_published: '2026-08-24'
+  wraps: openapi/aembit-edge-api-openapi.yml
+  note: >-
+    Reference implementation of the Edge SDK family. Version line tracks the Aembit Edge
+    Component release train (1.34.x), so the SDK version and the platform version move together.
+- language: python
+  registry: pypi
+  name: aembit-edge-sdk
+  url: https://github.com/Aembit/edge-sdks/tree/main/py
+  install: null
+  official: true
+  license: Apache-2.0
+  repository: https://github.com/Aembit/edge-sdks
+  version: null
+  published: null
+  wraps: openapi/aembit-edge-api-openapi.yml
+  note: >-
+    CHECKED, NOTHING TO RECORD ON PyPI. py/pyproject.toml in the first-party repo declares
+    name "aembit-edge-sdk" version 0.1.0, and the 2026-08-27 changelog announces "TypeScript and
+    Python SDKs", but pypi.org/pypi/aembit-edge-sdk/json returned 404 on 2026-09-09, as did
+    aembit, aembit-sdk, aembit_edge_sdk and aembit-edge. The Python SDK is installable from
+    source only; there is no published release to date, so no version or date can be recorded.
+- language: hcl
+  registry: terraform
+  name: Aembit/aembit
+  url: https://registry.terraform.io/providers/Aembit/aembit/latest
+  install: |
+    terraform {
+      required_providers {
+        aembit = {
+          source = "Aembit/aembit"
+        }
+      }
+    }
+  official: true
+  repository: https://github.com/Aembit/terraform-provider-aembit
+  version: 1.33.0
+  published: '2026-08-07'
+  downloads: 46279
+  wraps: openapi/aembit-cloud-api-openapi.yml
+  note: >-
+    Infrastructure-as-code client for the Aembit Cloud API; the documented path for scaling
+    Access Policy, Trust Provider and Credential Provider configuration.
+- language: hcl
+  registry: github
+  name: terraform-aembit-access-policies
+  url: https://github.com/Aembit/terraform-aembit-access-policies
+  install: null
+  official: true
+  version: null
+  published: null
+  note: >-
+    Terraform module for creating a set of Aembit Access Policies, Trust Providers and
+    Credential Providers. Distributed from the GitHub repository, not a registry release, so
+    there is no registry metadata endpoint to read a version from.
+- language: hcl
+  registry: github
+  name: terraform-aembit-ecs
+  url: https://github.com/Aembit/terraform-aembit-ecs
+  install: null
+  official: true
+  version: null
+  published: null
+  note: Terraform module for deploying Aembit Edge alongside AWS ECS workloads. Repo-distributed; no registry release.
+- language: typescript
+  registry: github-actions
+  name: Aembit/get-credentials
+  url: https://github.com/Aembit/get-credentials
+  install: "uses: Aembit/get-credentials@v1"
+  official: true
+  version: null
+  published: null
+  note: >-
+    GitHub Action that retrieves credentials from Aembit inside a workflow, using the GitHub
+    Action ID Token Trust Provider. Distributed via the repository; not listed on a package
+    registry, so version metadata is unavailable.
+- language: binary
+  registry: cdn
+  name: aembit (Aembit CLI)
+  url: https://releases.aembit.io/agent/1.34.5772/linux/amd64/aembit_agent_cli_linux_amd64_1.34.5772.tar.gz
+  install: curl -O "https://releases.aembit.io/agent/1.34.5772/linux/amd64/aembit_agent_cli_linux_amd64_1.34.5772.tar.gz"
+  official: true
+  version: 1.34.5772
+  published: null
+  note: >-
+    Distributed as a version-PINNED archive from the Aembit release CDN, not a language registry,
+    so there is no metadata endpoint. The version is read from the download URL published in the
+    setup guide. Each archive ships a .sha256 checksum and a .sha256.sig detached signature.
+    Linux amd64 has two builds (default musl, optional glibc 2.28+) and arm64 has musl only.
+    No publish date is stated on the download page, so `published` is null rather than guessed.
+unregistered_distribution:
+- name: Aembit Edge Components
+  channel: https://releases.aembit.io/
+  components: [Agent Proxy 1.34.5755, AWS Lambda Extension 1.34.175, Agent Injector 1.34.433]
+  note: >-
+    Versions read from the 2026-08-27 changelog entry. Delivered as container images and
+    installers rather than registry packages.
+- name: Aembit AWS Lambda Layer
+  channel: https://github.com/Aembit/aembit_aws_lambda_layer
+  note: Repo-distributed Lambda layer. Last repository activity 2025-05-05.

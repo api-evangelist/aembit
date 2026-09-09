@@ -64,5 +64,43 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-AEMBIT is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://www.nasdaqprivatemarket.com/
+Aembit is a Workload Identity and Access Management (Workload IAM) platform for non-human
+identities — AI agents, applications, microservices, CI/CD pipelines and service accounts.
+Rather than storing long-lived secrets, Aembit cryptographically attests a workload against a
+Trust Provider, evaluates an Access Policy, and injects a short-lived credential just in time.
+
+## What Aembit publishes
+
+| Surface | Where |
+|---|---|
+| Aembit Cloud API — OpenAPI 3.1.1, 165 operations | <https://docs.aembit.io/cloud.yaml> |
+| Aembit Edge API — OpenAPI 3.1.1, 2 operations | <https://docs.aembit.io/edge.yaml> |
+| Aembit MCP Server (hosted, read-only, 3 tools) | <https://docs.aembit.io/ai-guide/mcp/mcp-server/> |
+| Developer guide | <https://docs.aembit.io/dev-guide/> |
+| llms.txt (developer + company) | <https://docs.aembit.io/llms.txt>, <https://aembit.io/llms.txt> |
+| TypeScript Edge SDK | <https://www.npmjs.com/package/@aembit/edge-sdk> |
+| Terraform provider | <https://registry.terraform.io/providers/Aembit/aembit/latest> |
+| CLI | <https://docs.aembit.io/dev-guide/cli/> |
+| Changelog | <https://docs.aembit.io/changelog/> |
+| Status page | <https://status.aembit.io/> |
+| Trust center (SOC 2 Type II, ISO/IEC 27001:2022) | <https://trust.aembit.io/> |
+| Pricing | <https://aembit.io/pricing/> |
+
+## Notes from this profile
+
+- Both OpenAPI contracts are served from the documentation host at `/cloud.yaml` and `/edge.yaml`,
+  discovered from the Scalar reference page rather than from any conventional `/openapi.json` path.
+- Servers are tenant-templated (`https://{tenant}.aembit.io`); there is no shared multi-tenant host.
+- **No idempotency mechanism** exists on any of the 96 mutating operations, and **no reversal or
+  restore endpoint** exists for the 22 DELETE operations.
+- **No published rate limit.** The Edge API declares `429` on both operations with no `Retry-After`
+  header and no documented number.
+- Deprecation is signalled by tag naming (`Access Policy (Deprecated)`, `Credential Provider
+  (Deprecated)` — 16 operations) but `deprecated: true` is set on **zero** operations, so no code
+  generator or linter surfaces it.
+- **No A2A agent card** on any of seven probed hosts, and **no first-party `/.well-known/` document**.
+  The three `.well-known` 200s found belong to Atlassian Statuspage and SafeBase, not to Aembit.
+- The Python Edge SDK exists in the first-party repository but is **not published to PyPI**.
+
+Company surfaced through the API Evangelist harvest backlog (secondary-market source) and
+profiled from Aembit's own public developer surface.

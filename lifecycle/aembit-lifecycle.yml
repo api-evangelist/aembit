@@ -1,0 +1,88 @@
+generated: '2026-09-09'
+method: searched
+source: >-
+  https://docs.aembit.io/changelog/, https://docs.aembit.io/reference/edge-components/edge-component-supported-versions/,
+  openapi/aembit-cloud-api-openapi.yml
+versioning:
+  scheme: uri-path
+  current: v1 with a v2 line for four resource families
+  docs: https://docs.aembit.io/dev-guide/api/
+  note: >-
+    info.version on both contracts reads "v1", while the Cloud API paths carry /api/v1/,
+    /api/v2/ and one /api/alpha/ prefix. Version selection is per-resource, not per-API: a
+    client can be on v2 Access Policies and v1 Client Workloads at the same time.
+  v2_families: [Access Policy, Access Condition, Credential Provider, Integration]
+  alpha_surface:
+    path: /api/alpha/server-workload-drafts/{id}
+    note: >-
+      The only alpha-prefixed operation, and the ONLY operation in 167 with no operationId and no
+      summary. It is published in the contract with no stability statement attached.
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  deprecated_flag_used: false
+  signal: tag-naming
+  evidence: >-
+    Aembit signals deprecation by NAMING THE TAG, not by marking the operation. Two tags read
+    "Access Policy (Deprecated)" (8 operations) and "Credential Provider (Deprecated)" (8
+    operations), each with a v2 successor tag. But `deprecated: true` is set on ZERO of 165
+    Cloud API operations, no Sunset or Deprecation response header appears anywhere, and no
+    removal date, migration guide URL or support window is published for either family.
+  machine_readability: >-
+    A tooling client that reads the OpenAPI `deprecated` flag — which is what every code
+    generator and linter does — will not see any of this. The deprecation is human-readable only.
+  gap: >-
+    Setting `deprecated: true` on the 16 affected operations would be a one-line change per
+    operation and would make the v1 to v2 migration visible to every generated SDK.
+deprecated_operations:
+- openapi/aembit-cloud-api-openapi.yml#get-access-policies
+- openapi/aembit-cloud-api-openapi.yml#get-access-policy
+- openapi/aembit-cloud-api-openapi.yml#post-access-policy
+- openapi/aembit-cloud-api-openapi.yml#put-access-policy
+- openapi/aembit-cloud-api-openapi.yml#patch-access-policy
+- openapi/aembit-cloud-api-openapi.yml#delete-access-policy
+- openapi/aembit-cloud-api-openapi.yml#get-access-policy-by-workloads
+- openapi/aembit-cloud-api-openapi.yml#post-access-policy-note
+- openapi/aembit-cloud-api-openapi.yml#get-credential-providers
+- openapi/aembit-cloud-api-openapi.yml#get-credential-provider
+- openapi/aembit-cloud-api-openapi.yml#post-credential-provider
+- openapi/aembit-cloud-api-openapi.yml#put-credential-provider
+- openapi/aembit-cloud-api-openapi.yml#patch-credential-provider
+- openapi/aembit-cloud-api-openapi.yml#delete-credential-provider
+- openapi/aembit-cloud-api-openapi.yml#get-credential-provider-authorization
+- openapi/aembit-cloud-api-openapi.yml#get-credential-provider-verification
+deprecated_operations_note: >-
+  Derived from the "(Deprecated)" tag membership, NOT from a `deprecated: true` flag — the flag
+  is absent. Listed so the migration is machine-readable somewhere even though it is not
+  machine-readable in the contract.
+status_page:
+  url: https://status.aembit.io/
+  platform: Atlassian Statuspage
+  api: https://status.aembit.io/api/v2/summary.json
+  components: [Management Portal (Admin and API), Control Plane]
+  observed: {date: '2026-09-09', indicator: none, description: All Systems Operational}
+  note: Machine-readable Statuspage v2 API is available unauthenticated, so an agent can poll platform health.
+sla:
+  url: null
+  uptime_target: null
+  note: >-
+    No published uptime SLA was found. The pricing page differentiates support response by tier
+    (community / business hours / 24-7) but states no availability commitment, and no SLA
+    document is linked from the terms of service or the docs. Enterprise agreements are
+    contact-sales, so any SLA is presumably contractual and not public.
+support_windows:
+  community: Starter (free) tier
+  business_hours: Teams tier
+  '24x7': Enterprise tier
+component_lifecycle:
+  docs: https://docs.aembit.io/reference/edge-components/edge-component-supported-versions/
+  note: >-
+    Aembit DOES publish a supported-versions table for Edge Components (Agent Proxy, Agent
+    Injector, AWS Lambda Extension) with release dates. This is a real lifecycle commitment, and
+    it is stronger than anything published for the REST API itself — the deployed software has a
+    support window while the contract does not.
+  current_train: '1.34.x (Agent Proxy 1.34.5755, AWS Lambda Extension 1.34.175, Agent Injector 1.34.433, CLI 1.34.5772)'
+release_cadence:
+  observed: Roughly weekly to fortnightly dated entries on the changelog through 2026.
+  cross_link: changelog/aembit-changelog.yml
