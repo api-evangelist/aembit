@@ -27,6 +27,20 @@ tags:
 - Secrets Management
 - Zero Trust
 - Agentic AI
+- MCP
+- Authentication
+- Authorization
+- DevSecOps
+- Cloud Security
+tags_raw:
+- Security
+- Identity
+- Access Management
+- Workload Identity
+- Non-Human Identity
+- Secrets Management
+- Zero Trust
+- Agentic AI
 - Model Context Protocol
 - Authentication
 - Authorization
@@ -38,62 +52,21 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 apis:
-- name: Aembit Cloud API
-  description: The Aembit Cloud API is the management and control plane contract for the Aembit platform.
-    It exposes 165 operations across 74 paths for Access Policies, Access Conditions, Client and Server
-    Workloads, Credential Providers, Trust Providers, Trust Provider Secrets, Content Security, Resource
-    Sets, Roles, Users, SSO Identity Providers, Sign-On Policies, Integrations, Discovery Integrations,
-    Log Streams, Certificate Authorities, Routing, Agent Controllers, and the Audit Log, Authorization
-    Event and Workload Event reporting surfaces. Authentication is a bearer API token issued from the
-    Aembit Admin UI; the host is tenant-scoped.
-  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
-  baseURL: https://{tenant}.aembit.io
-  tags:
-  - Access Management
-  - Workload Identity
-  - Administration
-  properties:
-  - type: OpenAPI
-    url: openapi/_original/aembit-cloud-openapi-original.yml
-  - type: Overlay
-    url: overlays/aembit-cloud-overlay.yaml
-  - type: Documentation
-    url: https://docs.aembit.io/dev-guide/api/cloud/
-  - type: APIReference
-    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
-- name: Aembit Edge API
-  description: The Aembit Edge API is the workload-facing runtime contract. Two operations let a Client
-    Workload bootstrap a session by presenting attestation evidence to a configured Trust Provider (POST
-    /edge/v1/auth) and then retrieve a short-lived credential for a Server Workload (POST /edge/v1/credentials).
-    It is the contract the Aembit Edge SDKs and the Aembit CLI wrap, and the path applications use when
-    they cannot run Agent Proxy.
-  humanURL: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
-  baseURL: https://{tenant}.aembit.io
-  tags:
-  - Workload Identity
-  - Authentication
-  - Credentials
-  properties:
-  - type: OpenAPI
-    url: openapi/_original/aembit-edge-openapi-original.yml
-  - type: Overlay
-    url: overlays/aembit-edge-overlay.yaml
-  - type: Documentation
-    url: https://docs.aembit.io/dev-guide/api/edge/
-  - type: APIReference
-    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
-  - type: SDKs
-    url: https://docs.aembit.io/dev-guide/sdk/edge/
 - name: Aembit MCP Server
-  description: A first-party hosted Model Context Protocol server that gives AI agents and MCP clients
-    read-only access to a tenant's Aembit event logs. Three tools — get_audit_logs, get_auth_events and
-    get_workload_events — expose the same audit, authorization-event and workload-event data as the Cloud
-    API reporting endpoints, with filtering, ordering and pagination. Authentication is an Aembit API
-    token as a bearer, optionally scoped with an X-Aembit-ResourceSet header. The server is read-only
-    by design and must be enabled per tenant.
+  description: >-
+    A first-party hosted Model Context Protocol server that gives AI agents and MCP clients read-only
+    access to a tenant's Aembit event logs. Three tools — get_audit_logs, get_auth_events and get_workload_events
+    — expose the same audit, authorization-event and workload-event data as the Cloud API reporting endpoints,
+    with filtering, ordering and pagination. Authentication is an Aembit API token as a bearer, optionally
+    scoped with an X-Aembit-ResourceSet header. The server is read-only by design and must be enabled
+    per tenant.
   humanURL: https://docs.aembit.io/ai-guide/mcp/mcp-server/
   baseURL: https://{tenantId}.mcp.useast2.aembit.io/mcp
   tags:
+  - MCP
+  - Agentic AI
+  - Audit
+  tags_raw:
   - Model Context Protocol
   - Agentic AI
   - Audit
@@ -106,6 +79,752 @@ apis:
     url: https://docs.aembit.io/ai-guide/mcp/mcp-server/
   - type: APIReference
     url: https://docs.aembit.io/ai-guide/mcp/mcp-server/reference-mcp-server/
+- aid: aembit:aembit-access-authorization-event-api
+  name: Aembit Access Authorization Event API
+  description: >-
+    The Access Authorization Event API from Aembit — 2 operation(s) for access authorization event.
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - Access Authorization Event
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-access-authorization-event-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-access-condition-api
+  name: Aembit Access Condition API
+  description: The Access Condition API from Aembit — 2 operation(s) for access condition.
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - Access Condition
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-access-condition-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-access-condition-v2-api
+  name: Aembit Access Condition v2 API
+  description: The Access Condition v2 API from Aembit — 2 operation(s) for access condition v2.
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - Access Condition v2
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-access-condition-v2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-access-policy-deprecated-api
+  name: Aembit Access Policy (Deprecated) API
+  description: >-
+    The Access Policy (Deprecated) API from Aembit — 4 operation(s) for access policy (deprecated).
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - Access Policy (Deprecated)
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-access-policy-deprecated-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-access-policy-v2-api
+  name: Aembit Access Policy v2 API
+  description: The Access Policy v2 API from Aembit — 5 operation(s) for access policy v2.
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - Access Policy v2
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-access-policy-v2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-agent-controller-api
+  name: Aembit Agent Controller API
+  description: The Agent Controller API from Aembit — 3 operation(s) for agent controller.
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - Agent Controller
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-agent-controller-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-audit-log-api
+  name: Aembit Audit Log API
+  description: The Audit Log API from Aembit — 2 operation(s) for audit log.
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - Audit Log
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-audit-log-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-auth-api
+  name: Aembit Auth API
+  description: The Auth API from Aembit — 1 operation(s) for auth.
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - Auth
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-auth-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-client-workload-api
+  name: Aembit Client Workload API
+  description: The Client Workload API from Aembit — 3 operation(s) for client workload.
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - Client Workload
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-client-workload-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-compliance-api
+  name: Aembit Compliance API
+  description: The Compliance API from Aembit — 1 operation(s) for compliance.
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - Compliance
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-compliance-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-content-security-api
+  name: Aembit Content Security API
+  description: The Content Security API from Aembit — 2 operation(s) for content security.
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - Content Security
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-content-security-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-credential-provider-deprecated-api
+  name: Aembit Credential Provider (Deprecated) API
+  description: >-
+    The Credential Provider (Deprecated) API from Aembit — 4 operation(s) for credential provider (deprecated).
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - Credential Provider (Deprecated)
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-credential-provider-deprecated-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-credential-provider-integration-api
+  name: Aembit Credential Provider Integration API
+  description: >-
+    The Credential Provider Integration API from Aembit — 3 operation(s) for credential provider integration.
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - Credential Provider Integration
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-credential-provider-integration-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-credential-provider-v2-api
+  name: Aembit Credential Provider v2 API
+  description: The Credential Provider v2 API from Aembit — 4 operation(s) for credential provider v2.
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - Credential Provider v2
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-credential-provider-v2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-credentials-api
+  name: Aembit Credentials API
+  description: The Credentials API from Aembit — 1 operation(s) for credentials.
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - Credentials
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-credentials-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-discoveryintegration-api
+  name: Aembit Discovery Integration API
+  description: The DiscoveryIntegration API from Aembit — 2 operation(s) for discoveryintegration.
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - DiscoveryIntegration
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-discoveryintegration-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-discoveryserverworkloaddraft-api
+  name: Aembit Discovery Server Workload Draft API
+  description: >-
+    The DiscoveryServerWorkloadDraft API from Aembit — 1 operation(s) for discoveryserverworkloaddraft.
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - DiscoveryServerWorkloadDraft
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-discoveryserverworkloaddraft-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-health-api
+  name: Aembit Health API
+  description: The Health API from Aembit — 1 operation(s) for health.
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - Health
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-health-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-integration-api
+  name: Aembit Integration API
+  description: The Integration API from Aembit — 2 operation(s) for integration.
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - Integration
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-integration-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-integration-v2-api
+  name: Aembit Integration v2 API
+  description: The Integration v2 API from Aembit — 2 operation(s) for integration v2.
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - Integration v2
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-integration-v2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-log-stream-api
+  name: Aembit Log Stream API
+  description: The Log Stream API from Aembit — 2 operation(s) for log stream.
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - Log Stream
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-log-stream-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-mfa-signon-policy-api
+  name: Aembit MFA SignOn Policy API
+  description: The MFA SignOn Policy API from Aembit — 1 operation(s) for mfa signon policy.
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - MFA SignOn Policy
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-mfa-signon-policy-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-policy-api
+  name: Aembit Policy API
+  description: The Policy API from Aembit — 1 operation(s) for policy.
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - Policy
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-policy-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-resource-set-api
+  name: Aembit Resource Set API
+  description: The Resource Set API from Aembit — 2 operation(s) for resource set.
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - Resource Set
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-resource-set-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-role-api
+  name: Aembit Role API
+  description: The Role API from Aembit — 2 operation(s) for role.
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - Role
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-role-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-routing-api
+  name: Aembit Routing API
+  description: The Routing API from Aembit — 2 operation(s) for routing.
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - Routing
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-routing-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-server-workload-api
+  name: Aembit Server Workload API
+  description: The Server Workload API from Aembit — 2 operation(s) for server workload.
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - Server Workload
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-server-workload-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-signon-policy-api
+  name: Aembit SignOn Policy API
+  description: The SignOn Policy API from Aembit — 1 operation(s) for signon policy.
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - SignOn Policy
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-signon-policy-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-sso-identity-provider-api
+  name: Aembit SSO Identity Provider API
+  description: The SSO Identity Provider API from Aembit — 3 operation(s) for sso identity provider.
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - SSO Identity Provider
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-sso-identity-provider-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-sso-signon-policy-api
+  name: Aembit SSO SignOn Policy API
+  description: The SSO SignOn Policy API from Aembit — 1 operation(s) for sso signon policy.
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - SSO SignOn Policy
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-sso-signon-policy-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-standalone-certificate-authority-api
+  name: Aembit Standalone Certificate Authority API
+  description: >-
+    The Standalone Certificate Authority API from Aembit — 2 operation(s) for standalone certificate authority.
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - Standalone Certificate Authority
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-standalone-certificate-authority-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-standalone-tls-decrypt-api
+  name: Aembit Standalone TLS Decrypt API
+  description: The Standalone TLS Decrypt API from Aembit — 1 operation(s) for standalone tls decrypt.
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - Standalone TLS Decrypt
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-standalone-tls-decrypt-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-tls-decrypt-api
+  name: Aembit TLS Decrypt API
+  description: The TLS Decrypt API from Aembit — 1 operation(s) for tls decrypt.
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - TLS Decrypt
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-tls-decrypt-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-trust-provider-api
+  name: Aembit Trust Provider API
+  description: The Trust Provider API from Aembit — 2 operation(s) for trust provider.
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - Trust Provider
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-trust-provider-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-trust-provider-secret-api
+  name: Aembit Trust Provider Secret API
+  description: The Trust Provider Secret API from Aembit — 2 operation(s) for trust provider secret.
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - Trust Provider Secret
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-trust-provider-secret-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-user-api
+  name: Aembit User API
+  description: The User API from Aembit — 3 operation(s) for user.
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - User
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-user-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
+- aid: aembit:aembit-workload-event-api
+  name: Aembit Workload Event API
+  description: The Workload Event API from Aembit — 2 operation(s) for workload event.
+  humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  baseURL: https://{tenant}.aembit.io
+  tags:
+  - Workload Event
+  properties:
+  - type: OpenAPI
+    url: openapi/aembit-workload-event-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/cloud/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
+  - type: Documentation
+    url: https://docs.aembit.io/dev-guide/api/edge/
+  - type: APIReference
+    url: https://docs.aembit.io/dev-guide/api/edge/api-reference-edge/
+  - type: SDKs
+    url: https://docs.aembit.io/dev-guide/sdk/edge/
 common:
 - type: Website
   url: https://aembit.io/
