@@ -207,6 +207,8 @@ apis:
   humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
   baseURL: https://{tenant}.aembit.io
   tags:
+  - Audit Logs
+  tags_raw:
   - Audit Log
   properties:
   - type: OpenAPI
@@ -227,6 +229,8 @@ apis:
   humanURL: https://docs.aembit.io/dev-guide/api/cloud/api-reference-cloud/
   baseURL: https://{tenant}.aembit.io
   tags:
+  - Authentication
+  tags_raw:
   - Auth
   properties:
   - type: OpenAPI
