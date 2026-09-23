@@ -1,0 +1,83 @@
+openapi: 3.2.0
+info:
+  title: Aembit Cloud Health API
+  version: v1
+servers:
+- url: https://{tenant}.aembit.io
+  variables:
+    tenant:
+      default: tenant
+      description: Aembit Tenant ID
+security:
+- {}
+tags:
+- name: Health
+paths:
+  /api/v1/health:
+    get:
+      tags:
+      - Health
+      summary: Aembit Cloud API Health
+      description: Get the health of the Aembit Cloud API.
+      operationId: get-health
+      responses:
+        '200':
+          description: API Health
+          content:
+            application/json:
+              schema:
+                description: Aembit Health Status
+                $ref: '#/components/schemas/HealthDTO'
+components:
+  schemas:
+    HealthDTO:
+      type: object
+      properties:
+        status:
+          type:
+          - 'null'
+          - string
+          description: Aembit Health Status
+        version:
+          type:
+          - 'null'
+          - string
+          description: Aembit Cloud Version
+        gitSHA:
+          type:
+          - 'null'
+          - string
+          description: Aembit Cloud Version Git SHA
+        host:
+          type:
+          - 'null'
+          - string
+          description: Aembit Cloud Requested Hostname
+        user:
+          type:
+          - 'null'
+          - string
+          description: Aembit Cloud Authenticated User Email
+        userFullName:
+          type:
+          - 'null'
+          - string
+          description: Aembit Cloud Authenticated User Full Name
+        tenant:
+          type:
+          - 'null'
+          - string
+          description: Aembit Cloud Tenant ID
+        sessionExpiresAt:
+          type:
+          - 'null'
+          - string
+          description: Aembit Cloud Session Expiration
+      additionalProperties: false
+      description: Aembit Health Status
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: Authorization header using the Bearer scheme.
+      scheme: bearer
+      bearerFormat: Reference

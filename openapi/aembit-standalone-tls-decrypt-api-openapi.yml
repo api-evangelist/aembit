@@ -1,0 +1,45 @@
+openapi: 3.2.0
+info:
+  title: Aembit Cloud Standalone TLS Decrypt API
+  version: v1
+servers:
+- url: https://{tenant}.aembit.io
+  variables:
+    tenant:
+      default: tenant
+      description: Aembit Tenant ID
+security:
+- {}
+tags:
+- name: Standalone TLS Decrypt
+paths:
+  /api/v1/certificate-authorities/{id}/root-ca:
+    get:
+      tags:
+      - Standalone TLS Decrypt
+      summary: Download Standalone Root CA Certificate
+      description: Download the Standalone Root CA Certificate. This CA Certificate can be used for TLS verification when utilizing the Aembit TLS Decrypt feature.
+      operationId: standalone-root-ca
+      parameters:
+      - name: id
+        in: path
+        description: ID of Standalone Certificate Authority
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/x-pem-file:
+              schema:
+                type: string
+                format: binary
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: Authorization header using the Bearer scheme.
+      scheme: bearer
+      bearerFormat: Reference

@@ -1,0 +1,349 @@
+openapi: 3.2.0
+info:
+  title: Aembit Cloud Audit Log API
+  version: v1
+servers:
+- url: https://{tenant}.aembit.io
+  variables:
+    tenant:
+      default: tenant
+      description: Aembit Tenant ID
+security:
+- {}
+tags:
+- name: Audit Log
+paths:
+  /api/v1/audit-logs:
+    get:
+      tags:
+      - Audit Log
+      summary: Get a page of Audit Log events
+      description: Get a page of Audit Log events.
+      operationId: get-audit-logs
+      parameters:
+      - name: X-Aembit-ResourceSet
+        in: header
+        schema:
+          type: string
+          format: uuid
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: per-page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 100
+      - name: order
+        in: query
+        schema:
+          type: string
+          default: ''
+      - name: search
+        in: query
+        schema:
+          type: string
+          default: ''
+      - name: span-last-minutes
+        in: query
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      - name: span-last-days
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 30
+      - name: start-date
+        in: query
+        schema:
+          type: string
+          format: date-time
+      - name: end-date
+        in: query
+        schema:
+          type: string
+          format: date-time
+      - name: category
+        in: query
+        schema:
+          type: string
+          default: ''
+      - name: severity
+        in: query
+        schema:
+          type: string
+          default: ''
+      responses:
+        '200':
+          description: Page of Audit Logs
+          content:
+            application/json:
+              schema:
+                description: Page of Aembit Audit Logs
+                $ref: '#/components/schemas/AuditLogListDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+  /api/v1/audit-logs/{id}:
+    get:
+      tags:
+      - Audit Log
+      summary: Get an Audit Log event
+      description: Get an Audit Log event identified by its ID.
+      operationId: get-audit-log
+      parameters:
+      - name: id
+        in: path
+        description: ID of Audit Log
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Aembit-ResourceSet
+        in: header
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Audit Log
+          content:
+            application/json:
+              schema:
+                description: DTO for an individual Aembit Audit Log
+                $ref: '#/components/schemas/AuditLogDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+components:
+  schemas:
+    EventResultDTO:
+      type: object
+      properties:
+        reason:
+          type:
+          - 'null'
+          - string
+        attribute:
+          type:
+          - 'null'
+          - string
+        expectedValue:
+          type:
+          - 'null'
+          - string
+        actualValue:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+    GenericResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
+    AuditLogListDTO:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Page of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
+          type:
+          - 'null'
+          - string
+          description: Ordering criteria used for the current page
+        statusCode:
+          type: integer
+          description: HTTP Status Code of the response
+          format: int32
+        recordsTotal:
+          type: integer
+          description: Total number of Aembit Audit Logs
+          format: int32
+        auditLogs:
+          type:
+          - 'null'
+          - array
+          items:
+            description: DTO for an individual Aembit Audit Log
+            $ref: '#/components/schemas/AuditLogDTO'
+          description: Page of Aembit Audit Logs
+      additionalProperties: false
+      description: Page of Aembit Audit Logs
+    AuditOutcomeDTO:
+      type: object
+      properties:
+        reason:
+          type:
+          - 'null'
+          - string
+          description: Reason for the outcome of this Aembit Audit Log
+        result:
+          type:
+          - 'null'
+          - string
+          description: Outcome of the action associated with this Aembit Audit Log
+      additionalProperties: false
+      description: DTO for the Outcome of an individual Aembit Audit Log
+    AuditLogDTO:
+      type: object
+      properties:
+        externalId:
+          type: string
+          description: ID of an Aembit Audit Log
+          format: uuid
+        resourceSetId:
+          type: string
+          description: Resource Set ID of an Aembit Audit Log
+          format: uuid
+        category:
+          type:
+          - 'null'
+          - string
+          description: Category of an Aembit Audit Log (e.g. Users, AccessPolicies, Workloads, etc.)
+        actor:
+          description: Actor DTO of an Aembit Audit Log
+          $ref: '#/components/schemas/AuditActorDTO'
+        activity:
+          type:
+          - 'null'
+          - string
+          description: Activity of an Aembit Audit Log
+        target:
+          type:
+          - 'null'
+          - string
+          description: Target of an Aembit Audit Log
+        client:
+          description: Remote Client DTO of an Aembit Audit Log
+          $ref: '#/components/schemas/AuditClientDTO'
+        outcome:
+          description: Outcome DTO of an Aembit Audit Log
+          $ref: '#/components/schemas/AuditOutcomeDTO'
+        trustProvider:
+          description: Attestation Result DTO for an AgentController of an Aembit Audit Log
+          $ref: '#/components/schemas/EventResultDTO'
+        severity:
+          type:
+          - 'null'
+          - string
+          description: Severity of an Aembit Audit Log
+        createdAt:
+          type: string
+          description: Timestamp of when this Aembit Audit Log was created
+          format: date-time
+      additionalProperties: false
+      description: DTO for an individual Aembit Audit Log
+    AuditActorDTO:
+      type: object
+      properties:
+        type:
+          type:
+          - 'null'
+          - string
+          description: The type of Audit Log actor (e.g. User, System, or Role)
+        displayName:
+          type:
+          - 'null'
+          - string
+          description: Fully qualified Audit Log Actor name
+        userName:
+          type:
+          - 'null'
+          - string
+        email:
+          type:
+          - 'null'
+          - string
+        credentialProviderId:
+          type:
+          - 'null'
+          - string
+          description: Credential Provider ID that was used to generate the Role-based Access Token for this Audit Log action
+        accessPolicyId:
+          type:
+          - 'null'
+          - string
+          description: Access Policy ID that was used to generate the Role-based Access Token for this Audit Log action
+      additionalProperties: false
+      description: DTO for the Actor details of an Aembit Audit Log
+    UserAgentDTO:
+      type: object
+      properties:
+        browser:
+          type:
+          - 'null'
+          - string
+          description: The browser as determined from the HTTP User Agent
+        operatingSystem:
+          type:
+          - 'null'
+          - string
+          description: The operating system as determined from the HTTP User Agent
+        raw:
+          type:
+          - 'null'
+          - string
+          description: The raw HTTP User Agent
+      additionalProperties: false
+      description: DTO for the HTTP User Agent of an individual Aembit Audit Log
+    AuditClientDTO:
+      type: object
+      properties:
+        ipAddress:
+          type:
+          - 'null'
+          - string
+          description: IP Address of the remote client
+        userAgent:
+          description: HTTP User Agent of the remote client
+          $ref: '#/components/schemas/UserAgentDTO'
+      additionalProperties: false
+      description: DTO for the Client details of an Aembit Audit Log
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: Authorization header using the Bearer scheme.
+      scheme: bearer
+      bearerFormat: Reference

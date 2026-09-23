@@ -1,0 +1,417 @@
+openapi: 3.2.0
+info:
+  title: Aembit Cloud Discovery Integration API
+  version: v1
+servers:
+- url: https://{tenant}.aembit.io
+  variables:
+    tenant:
+      default: tenant
+      description: Aembit Tenant ID
+security:
+- {}
+tags:
+- name: DiscoveryIntegration
+paths:
+  /api/v1/discovery-integrations:
+    get:
+      tags:
+      - DiscoveryIntegration
+      summary: Get a page of Integrations
+      description: Get a page of Integrations.
+      operationId: get-discovery-integrations
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: per-page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 100
+      - name: filter
+        in: query
+        schema:
+          type: string
+          default: ''
+      - name: order
+        in: query
+        schema:
+          type: string
+          default: ''
+      responses:
+        '200':
+          description: Page of Integrations
+          content:
+            application/json:
+              schema:
+                description: Page of Integrations
+                $ref: '#/components/schemas/DiscoveryIntegrationListDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    post:
+      tags:
+      - DiscoveryIntegration
+      summary: Create an Integration
+      description: Create an Integration.
+      operationId: post-discovery-integration
+      requestBody:
+        description: DiscoveryIntegrationDTO
+        content:
+          application/json:
+            schema:
+              description: Integration details for 3rd party data used by Discovery
+              $ref: '#/components/schemas/DiscoveryIntegrationDTO'
+      responses:
+        '201':
+          description: Created Integration
+          content:
+            application/json:
+              schema:
+                description: Integration details for 3rd party data used by Discovery
+                $ref: '#/components/schemas/DiscoveryIntegrationDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    put:
+      tags:
+      - DiscoveryIntegration
+      summary: Update an Integration
+      description: Update an Integration.
+      operationId: put-discovery-integration
+      requestBody:
+        description: DiscoveryIntegrationDTO
+        content:
+          application/json:
+            schema:
+              description: Integration details for 3rd party data used by Discovery
+              $ref: '#/components/schemas/DiscoveryIntegrationDTO'
+      responses:
+        '200':
+          description: Updated Integration
+          content:
+            application/json:
+              schema:
+                description: Integration details for 3rd party data used by Discovery
+                $ref: '#/components/schemas/DiscoveryIntegrationDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+  /api/v1/discovery-integrations/{id}:
+    get:
+      tags:
+      - DiscoveryIntegration
+      summary: Get an Integration
+      description: Get an Integration.
+      operationId: get-discovery-integration
+      parameters:
+      - name: id
+        in: path
+        description: ID of Integration
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Integration
+          content:
+            application/json:
+              schema:
+                description: Integration details for 3rd party data used by Discovery
+                $ref: '#/components/schemas/DiscoveryIntegrationDTO'
+        '204':
+          description: Integration Not Found
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    delete:
+      tags:
+      - DiscoveryIntegration
+      summary: Delete an Integration
+      description: Delete an Integration as identified by its ID.
+      operationId: delete-discovery-integration
+      parameters:
+      - name: id
+        in: path
+        description: ID of Integration
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Successfully deleted Integration
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    patch:
+      tags:
+      - DiscoveryIntegration
+      summary: Patch an Integration
+      description: Patch an Integration as identified by its ID.
+      operationId: patch-discovery-integration
+      parameters:
+      - name: id
+        in: path
+        description: ID of Integration
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: DiscoveryIntegrationPatchDTO
+        content:
+          application/json:
+            schema:
+              description: Patch request for an individual Integration
+              $ref: '#/components/schemas/DiscoveryIntegrationPatchDTO'
+      responses:
+        '200':
+          description: Patched Integration
+          content:
+            application/json:
+              schema:
+                description: Integration details for 3rd party data used by Discovery
+                $ref: '#/components/schemas/DiscoveryIntegrationDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+components:
+  schemas:
+    DiscoveryIntegrationDTO:
+      required:
+      - discoveryIntegrationJSON
+      - endpoint
+      - isActive
+      - name
+      - resourceSet
+      - syncFrequencySeconds
+      - type
+      type: object
+      properties:
+        externalId:
+          type: string
+          format: uuid
+        name:
+          maxLength: 128
+          minLength: 1
+          type: string
+          description: Name of the Entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: Description of the Entity
+        isActive:
+          type: boolean
+          description: True/False value that determines if this entity is Active or Disabled
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        createdBy:
+          type:
+          - 'null'
+          - string
+        modifiedBy:
+          type:
+          - 'null'
+          - string
+        resourceSet:
+          type: string
+          description: ID of the Resource Set in which this Access Entity exists
+          format: uuid
+        type:
+          minLength: 1
+          type: string
+        syncFrequencySeconds:
+          maximum: 3600
+          minimum: 300
+          type: integer
+          format: int32
+        lastSync:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        lastSyncStatus:
+          type:
+          - 'null'
+          - string
+        endpoint:
+          minLength: 1
+          type: string
+        discoveryIntegrationJSON:
+          minLength: 1
+          type: string
+      additionalProperties: false
+      description: Integration details for 3rd party data used by Discovery
+    GenericResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
+    DiscoveryIntegrationListDTO:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Page of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
+          type:
+          - 'null'
+          - string
+          description: Ordering criteria used for the current page
+        statusCode:
+          type: integer
+          description: HTTP Status Code of the response
+          format: int32
+        recordsTotal:
+          type: integer
+          description: Total number of Integrations
+          format: int32
+        integrations:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Integration details for 3rd party data used by Discovery
+            $ref: '#/components/schemas/DiscoveryIntegrationDTO'
+          description: Page of Integrations
+      additionalProperties: false
+      description: Page of Integrations
+    TagDTO:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          minLength: 1
+          type: string
+          description: Tag Key
+        value:
+          minLength: 1
+          type: string
+          description: Tag Key Value
+      additionalProperties: false
+      description: Aembit Entity Tag Details
+    DiscoveryIntegrationPatchDTO:
+      type: object
+      properties:
+        name:
+          maxLength: 128
+          type:
+          - 'null'
+          - string
+          description: New Name for the identified entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: New Description for the identified entity
+        isActive:
+          type:
+          - 'null'
+          - boolean
+          description: New Status for the identified entity
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+          description: New Tags for the identified entity
+      additionalProperties: false
+      description: Patch request for an individual Integration
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: Authorization header using the Bearer scheme.
+      scheme: bearer
+      bearerFormat: Reference

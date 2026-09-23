@@ -1,0 +1,107 @@
+openapi: 3.2.0
+info:
+  title: Aembit Cloud Policy API
+  version: v1
+servers:
+- url: https://{tenant}.aembit.io
+  variables:
+    tenant:
+      default: tenant
+      description: Aembit Tenant ID
+security:
+- {}
+tags:
+- name: Policy
+paths:
+  /api/v1/compliance-settings:
+    get:
+      tags:
+      - Policy
+      summary: Gets global compliance settings
+      description: Gets global compliance settings which control the rules for creating access policy and other entities
+      operationId: get-compliance-settings
+      responses:
+        '200':
+          description: A list of compliance settings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SettingDTO'
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    put:
+      tags:
+      - Policy
+      summary: Updates a global compliance setting
+      operationId: update-compliance-setting
+      requestBody:
+        description: SettingDTO
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SettingDTO'
+      responses:
+        '200':
+          description: Successfully updated a compliance setting
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SettingDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+components:
+  schemas:
+    GenericResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
+    SettingDTO:
+      required:
+      - name
+      - value
+      type: object
+      properties:
+        name:
+          minLength: 1
+          type: string
+        value:
+          minLength: 1
+          type: string
+      additionalProperties: false
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: Authorization header using the Bearer scheme.
+      scheme: bearer
+      bearerFormat: Reference

@@ -1,0 +1,77 @@
+openapi: 3.2.0
+info:
+  title: Aembit Cloud SSO SignOn Policy API
+  version: v1
+servers:
+- url: https://{tenant}.aembit.io
+  variables:
+    tenant:
+      default: tenant
+      description: Aembit Tenant ID
+security:
+- {}
+tags:
+- name: SSO SignOn Policy
+paths:
+  /api/v1/signin-policies/sso:
+    put:
+      tags:
+      - SSO SignOn Policy
+      summary: Update a SSO SignOn Policy
+      description: Update a SSO SignOn Policy.
+      operationId: put-SSO-signon Policy
+      requestBody:
+        description: SSOSignInPolicyDTO
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SSOSignInPolicyDTO'
+      responses:
+        '200':
+          description: Updated SSO SignOn Policy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SSOSignInPolicyDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+components:
+  schemas:
+    GenericResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
+    SSOSignInPolicyDTO:
+      type: object
+      properties:
+        ssoRequired:
+          type: boolean
+      additionalProperties: false
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: Authorization header using the Bearer scheme.
+      scheme: bearer
+      bearerFormat: Reference

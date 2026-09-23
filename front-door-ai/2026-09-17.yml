@@ -1,0 +1,35 @@
+# Front Door AI Index — aembit — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: aembit
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: aembit.io
+  final_host: aembit.io
+  ownership: own
+  owner: aembit
+  shares_host_with: null
+  inherited_from: null
+  verdict: scored
+  score: 152
+  host_score: 152
+  density: 60.39
+  words: 2517
+  tiers:
+    agentic: 74
+    core: 65
+    model: 13
+  ambiguous: 57
+  top_terms:
+    AI: 64
+    agent: 55
+    AI agent: 25
+    agentic: 23
+    MCP: 21
+    Claude: 9
+    copilot: 5
+    Gemini: 2
+    OpenAI: 2
+    intelligence: 2
+    LLMs: 1

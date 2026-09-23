@@ -1,0 +1,84 @@
+openapi: 3.2.0
+info:
+  title: Aembit Cloud MFA SignOn Policy API
+  version: v1
+servers:
+- url: https://{tenant}.aembit.io
+  variables:
+    tenant:
+      default: tenant
+      description: Aembit Tenant ID
+security:
+- {}
+tags:
+- name: MFA SignOn Policy
+paths:
+  /api/v1/signin-policies/mfa:
+    put:
+      tags:
+      - MFA SignOn Policy
+      summary: Update a MFA SignOn Policy
+      description: Update a MFA SignOn Policy.
+      operationId: put-mfa-signon Policy
+      requestBody:
+        description: MFASignInPolicyDTO
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MFASignInPolicyDTO'
+      responses:
+        '200':
+          description: Updated MFA SignOn Policy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MFASignInPolicyDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+components:
+  schemas:
+    GenericResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
+    MFASignInPolicyDTO:
+      type: object
+      properties:
+        mfaRequired:
+          type: boolean
+      additionalProperties: false
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: Authorization header using the Bearer scheme.
+      scheme: bearer
+      bearerFormat: Reference

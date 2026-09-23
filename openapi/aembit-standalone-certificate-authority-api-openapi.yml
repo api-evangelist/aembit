@@ -1,0 +1,473 @@
+openapi: 3.2.0
+info:
+  title: Aembit Cloud Standalone Certificate Authority API
+  version: v1
+servers:
+- url: https://{tenant}.aembit.io
+  variables:
+    tenant:
+      default: tenant
+      description: Aembit Tenant ID
+security:
+- {}
+tags:
+- name: Standalone Certificate Authority
+paths:
+  /api/v1/certificate-authorities/{id}:
+    delete:
+      tags:
+      - Standalone Certificate Authority
+      summary: Delete a Standalone Certificate Authority
+      description: Delete a Standalone Certificate Authority identified by its ID.
+      operationId: delete-standalone-certificate-authority
+      parameters:
+      - name: id
+        in: path
+        description: ID of Standalone Certificate Authority
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: Successfully deleted Standalone Certificate Authority
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    get:
+      tags:
+      - Standalone Certificate Authority
+      summary: Get a Standalone Certificate Authority
+      description: Get a Standalone Certificate Authority identified by its ID.
+      operationId: get-standalone-certificate-authority
+      parameters:
+      - name: id
+        in: path
+        description: ID of Standalone Certificate Authority
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Standalone Certificate Authority
+          content:
+            application/json:
+              schema:
+                description: Individual Standalone Certificate Authority
+                $ref: '#/components/schemas/StandaloneCertificateResponseDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    patch:
+      tags:
+      - Standalone Certificate Authority
+      summary: Patch a Standalone Certificate Authority
+      description: Patch a Standalone Certificate Authority identified by its ID.
+      operationId: patch-standalone-certificate-authority
+      parameters:
+      - name: id
+        in: path
+        description: ID of Standalone Certificate Authority
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: StandaloneCertificatePatchDTO
+        content:
+          application/json:
+            schema:
+              description: Patch Request for an Individual Standalone Certificate Authority
+              $ref: '#/components/schemas/StandaloneCertificatePatchDTO'
+      responses:
+        '200':
+          description: Patched Standalone Certificate Authority
+          content:
+            application/json:
+              schema:
+                description: Individual Standalone Certificate Authority
+                $ref: '#/components/schemas/StandaloneCertificateResponseDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+  /api/v1/certificate-authorities:
+    get:
+      tags:
+      - Standalone Certificate Authority
+      summary: Get a page of Standalone Certificate Authorities
+      description: Get a page of Standalone Certificate Authorities.
+      operationId: get-standalone-certificate-authorities
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: per-page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 100
+      - name: filter
+        in: query
+        schema:
+          type: string
+          default: ''
+      - name: order
+        in: query
+        schema:
+          type: string
+          default: ''
+      - name: group-by
+        in: query
+        schema:
+          type: string
+          default: ''
+      responses:
+        '200':
+          description: Page of Standalone Certificate Authorities
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandaloneCertificateResponseDTOListDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    post:
+      tags:
+      - Standalone Certificate Authority
+      summary: Create a Standalone Certificate Authority
+      description: Create a Standalone Certificate Authority.
+      operationId: post-standalone-certificate-authority
+      requestBody:
+        description: StandaloneCertificateDTO
+        content:
+          application/json:
+            schema:
+              description: Individual Standalone Certificate Authority
+              $ref: '#/components/schemas/StandaloneCertificateRequestDTO'
+      responses:
+        '201':
+          description: Created Standalone Certificate Authority
+          content:
+            application/json:
+              schema:
+                description: Individual Standalone Certificate Authority
+                $ref: '#/components/schemas/StandaloneCertificateResponseDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    put:
+      tags:
+      - Standalone Certificate Authority
+      summary: Update a Standalone Certificate Authority
+      description: Update a Standalone Certificate Authority.
+      operationId: put-standalone-certificate-authority
+      requestBody:
+        description: StandaloneCertificateDTO
+        content:
+          application/json:
+            schema:
+              description: Individual Standalone Certificate Authority
+              $ref: '#/components/schemas/StandaloneCertificateRequestDTO'
+      responses:
+        '200':
+          description: Updated Standalone Certificate Authority
+          content:
+            application/json:
+              schema:
+                description: Individual Standalone Certificate Authority
+                $ref: '#/components/schemas/StandaloneCertificateResponseDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+components:
+  schemas:
+    StandaloneCertificatePatchDTO:
+      type: object
+      properties:
+        name:
+          maxLength: 128
+          type:
+          - 'null'
+          - string
+          description: New Name for the identified entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: New Description for the identified entity
+        isActive:
+          type:
+          - 'null'
+          - boolean
+          description: New Status for the identified entity
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+          description: New Tags for the identified entity
+        leafLifetime:
+          type:
+          - 'null'
+          - integer
+          format: int32
+      additionalProperties: false
+      description: Patch Request for an Individual Standalone Certificate Authority
+    StandaloneCertificateRequestDTO:
+      required:
+      - isActive
+      - leafLifetime
+      - name
+      - resourceSet
+      type: object
+      properties:
+        externalId:
+          type: string
+          format: uuid
+        name:
+          maxLength: 128
+          minLength: 1
+          type: string
+          description: Name of the Entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: Description of the Entity
+        isActive:
+          type: boolean
+          description: True/False value that determines if this entity is Active or Disabled
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        createdBy:
+          type:
+          - 'null'
+          - string
+        modifiedBy:
+          type:
+          - 'null'
+          - string
+        resourceSet:
+          type: string
+          description: ID of the Resource Set in which this Access Entity exists
+          format: uuid
+        leafLifetime:
+          type: integer
+          description: Leaf certificate lifetime value for this Standalone Certificate Authority
+          format: int32
+      additionalProperties: false
+      description: Individual Standalone Certificate Authority
+    StandaloneCertificateResponseDTOListDTO:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
+          type:
+          - 'null'
+          - string
+          description: Ordering criteria used for the current page
+        statusCode:
+          type: integer
+          description: HTTP StatusCode for the current result
+          format: int32
+        recordsTotal:
+          type: integer
+          description: Total number of entities available
+          format: int32
+        entities:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Individual Standalone Certificate Authority
+            $ref: '#/components/schemas/StandaloneCertificateResponseDTO'
+          description: Page of entities for this request
+      additionalProperties: false
+    GenericResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
+    StandaloneCertificateResponseDTO:
+      required:
+      - isActive
+      - leafLifetime
+      - name
+      - resourceSet
+      type: object
+      properties:
+        externalId:
+          type: string
+          format: uuid
+        name:
+          maxLength: 128
+          minLength: 1
+          type: string
+          description: Name of the Entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: Description of the Entity
+        isActive:
+          type: boolean
+          description: True/False value that determines if this entity is Active or Disabled
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        createdBy:
+          type:
+          - 'null'
+          - string
+        modifiedBy:
+          type:
+          - 'null'
+          - string
+        resourceSet:
+          type: string
+          description: ID of the Resource Set in which this Access Entity exists
+          format: uuid
+        leafLifetime:
+          type: integer
+          description: Leaf certificate lifetime value for this Standalone Certificate Authority
+          format: int32
+        notBefore:
+          type: string
+          description: 'Not before value of the Root CA for this Standalone Certificate Authority '
+          format: date-time
+        notAfter:
+          type: string
+          description: Not after value of the Root CA for this Standalone Certificate Authority
+          format: date-time
+        clientWorkloadCount:
+          type:
+          - 'null'
+          - integer
+          description: Client Workloads associated with this Standalone Certificate Authority
+          format: int32
+      additionalProperties: false
+      description: Individual Standalone Certificate Authority
+    TagDTO:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          minLength: 1
+          type: string
+          description: Tag Key
+        value:
+          minLength: 1
+          type: string
+          description: Tag Key Value
+      additionalProperties: false
+      description: Aembit Entity Tag Details
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: Authorization header using the Bearer scheme.
+      scheme: bearer
+      bearerFormat: Reference

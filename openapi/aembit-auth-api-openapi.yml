@@ -1,0 +1,497 @@
+openapi: 3.2.0
+info:
+  title: Aembit Edge Auth API
+  version: v1
+servers:
+- url: https://{tenant}.aembit.io
+  variables:
+    tenant:
+      default: tenant
+      description: Aembit Tenant ID
+security:
+- EdgeApiAuth: []
+tags:
+- name: Auth
+paths:
+  /edge/v1/auth:
+    post:
+      tags:
+      - Auth
+      summary: Authenticate to the Edge API
+      description: 'Bootstraps a session with the Aembit Edge API. This endpoint authenticates a Client Workload by
+
+        verifying its identity against a specific Aembit Trust Provider. The Trust Provider must be configured in the
+
+        Aembit Console to match the environment where the workload is running. Supported Trust Provider types include
+
+        AWS Metadata Service, AWS Role, GCP Identity Token, GitHub Action ID Token, GitLab Job ID Token, Kubernetes Service Account,
+
+        OIDC ID Token, and Terraform Cloud Identity Token.'
+      operationId: edge-api-auth
+      parameters:
+      - name: X-Aembit-ResourceSet
+        in: header
+        description: The Resource Set ID corresponding to the Trust Provider you want to authenticate with. If not specified, the default Resource Set will be used.
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: "Identity and attestation information for Client Workload authentication. \nThis request initiates a session with the Aembit Edge API by providing proof of \nworkload identity via a configured Trust Provider."
+              title: AuthRequest
+              $ref: '#/components/schemas/AuthRequest'
+      responses:
+        '200':
+          description: Successfully retrieved access token
+          content:
+            application/json:
+              schema:
+                description: OAuth2-style access token response with expiration details
+                $ref: '#/components/schemas/TokenDTO'
+        '400':
+          description: Invalid request or missing parameters
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+              examples:
+                '400':
+                  summary: 400 response example
+                  value:
+                    success: false
+                    message: Invalid client ID.
+                    id: 0
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+              examples:
+                '401':
+                  summary: 401 response example
+                  value:
+                    success: false
+                    message: Unauthorized.
+                    id: 0
+        '429':
+          description: Too many authentication requests
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+              examples:
+                '429':
+                  summary: 429 response example
+                  value:
+                    success: false
+                    message: Too many requests. Please try again later.
+                    id: 0
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+              examples:
+                '500':
+                  summary: 500 response example
+                  value:
+                    success: false
+                    message: Authentication failed due to an internal error.
+                    id: 0
+      security:
+      - {}
+components:
+  schemas:
+    ProcessDTO:
+      type: object
+      properties:
+        name:
+          type:
+          - 'null'
+          - string
+          description: Process name
+        pid:
+          type: integer
+          description: Process identifier (PID)
+          format: int32
+        userId:
+          type: integer
+          description: User identifier running the process
+          format: int32
+        userName:
+          type:
+          - 'null'
+          - string
+          description: Username running the process
+        exePath:
+          type:
+          - 'null'
+          - string
+          description: Executable file path of the process
+        commandLine:
+          type:
+          - 'null'
+          - string
+          description: Command line running the process
+        exeHash:
+          type:
+          - 'null'
+          - string
+          description: Executable hash of the process
+      additionalProperties: false
+      description: Process information for Client Workload identification
+    StsGetCallerIdentityDTO:
+      type: object
+      properties:
+        headers:
+          type:
+          - 'null'
+          - object
+          additionalProperties:
+            type:
+            - 'null'
+            - string
+          description: HTTP headers for AWS STS GetCallerIdentity request
+        region:
+          type:
+          - 'null'
+          - string
+          description: AWS region for STS GetCallerIdentity request
+      additionalProperties: false
+      description: AWS STS GetCallerIdentity request data for identity verification
+    GenericResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
+    AzureAttestationDTO:
+      type: object
+      properties:
+        attestedDocument:
+          description: Azure Instance Metadata Service (IMDS) Attested Data document.
+          $ref: '#/components/schemas/AzureAttestedDocumentDTO'
+      additionalProperties: false
+      description: Azure-specific attestation data for Client Workload identification
+    K8sDTO:
+      type: object
+      properties:
+        serviceAccountToken:
+          type:
+          - 'null'
+          - string
+          description: Kubernetes service account JWT token
+      additionalProperties: false
+      description: Kubernetes-specific attestation data for Kubernetes pod identification
+    CrowdStrikeDTO:
+      type: object
+      properties:
+        agentId:
+          type:
+          - 'null'
+          - string
+          description: Unique identifier for the CrowdStrike agent
+      additionalProperties: false
+      description: CrowdStrike agent information for endpoint security attestation
+    AwsDTO:
+      type: object
+      properties:
+        instanceIdentityDocument:
+          type:
+          - 'null'
+          - string
+          description: Base64-encoded AWS instance identity document
+        instanceIdentityDocumentSignature:
+          type:
+          - 'null'
+          - string
+          description: Base64-encoded signature for AWS instance identity document verification
+        lambda:
+          description: AWS Lambda function information for serverless workload attestation
+          $ref: '#/components/schemas/LambdaDTO'
+        ecs:
+          description: AWS ECS container and task metadata for workload attestation
+          $ref: '#/components/schemas/AwsEcsDTO'
+        stsGetCallerIdentity:
+          description: AWS STS GetCallerIdentity request data for identity verification
+          $ref: '#/components/schemas/StsGetCallerIdentityDTO'
+      additionalProperties: false
+      description: AWS-specific attestation data for Client Workload identification
+    EnvironmentDTO:
+      type: object
+      properties:
+        K8S_POD_NAME:
+          type:
+          - 'null'
+          - string
+          description: Kubernetes pod name environment variable
+        CLIENT_WORKLOAD_ID:
+          type:
+          - 'null'
+          - string
+          description: Aembit Client Workload identifier environment variable
+        KUBERNETES_PROVIDER_ID:
+          type:
+          - 'null'
+          - string
+          description: Kubernetes Trust Provider identifier environment variable
+        AEMBIT_RESOURCE_SET_ID:
+          type:
+          - 'null'
+          - string
+          description: Aembit Resource Set identifier environment variable
+      additionalProperties: false
+      description: Environment variables available to the Client Workload
+    NetworkInterfacesDTO:
+      type: object
+      properties:
+        name:
+          type:
+          - 'null'
+          - string
+          description: Name of the network interface
+        macAddress:
+          type:
+          - 'null'
+          - string
+          description: MAC address of the network interface
+        ipv4Addresses:
+          type:
+          - 'null'
+          - array
+          items:
+            type: string
+          description: List of IPv4 addresses
+        ipv6Addresses:
+          type:
+          - 'null'
+          - array
+          items:
+            type: string
+          description: List of IPv6 addresses
+      additionalProperties: false
+    HostDTO:
+      type: object
+      properties:
+        hostname:
+          type:
+          - 'null'
+          - string
+          description: Client Workload hostname
+        domainName:
+          type:
+          - 'null'
+          - string
+          description: Domain name of the Client Workload host
+        process:
+          description: Process information for Client Workload identification
+          $ref: '#/components/schemas/ProcessDTO'
+        sensors:
+          description: Security sensor data for enhanced Client Workload attestation
+          $ref: '#/components/schemas/SensorsDTO'
+        systemSerialNumber:
+          type:
+          - 'null'
+          - string
+          description: Hardware serial number of the Client Workload system
+        networkInterfaces:
+          type:
+          - 'null'
+          - array
+          items:
+            $ref: '#/components/schemas/NetworkInterfacesDTO'
+      additionalProperties: false
+      description: Host system information for Client Workload attestation
+    IdentityTokenAttestationDTO:
+      type: object
+      properties:
+        identityToken:
+          type:
+          - 'null'
+          - string
+          description: Identity token for workload attestation
+      additionalProperties: false
+      description: JWT-based identity token attestation for CI/CD platforms
+    GcpAttestationDTO:
+      type: object
+      properties:
+        identityToken:
+          type:
+          - 'null'
+          - string
+          description: Identity token for workload attestation
+        instanceDocument:
+          type:
+          - 'null'
+          - string
+          description: Base64-encoded GCP instance identity document
+      additionalProperties: false
+      description: GCP-specific attestation data for Client Workload identification
+    SensorsDTO:
+      type: object
+      properties:
+        crowdStrike:
+          description: CrowdStrike agent information for endpoint security attestation
+          $ref: '#/components/schemas/CrowdStrikeDTO'
+      additionalProperties: false
+      description: Security sensor data for enhanced Client Workload attestation
+    AuthRequest:
+      title: AuthRequest
+      required:
+      - client
+      - clientId
+      type: object
+      properties:
+        clientId:
+          minLength: 1
+          type: string
+          description: "The Aembit ARN of the Trust Provider configured to attest this workload.\nFormat: 'aembit:{stack}:{tenant}:identity:{type}:{uuid}'\nWhere to find it:\nIn the Aembit Admin UI, navigate to 'Trust Providers', select your provider, \nand copy the value from the 'ID' field."
+        client:
+          description: Client Workload identifiers for authentication
+          $ref: '#/components/schemas/ClientWorkloadDetails'
+      additionalProperties: false
+      description: "Identity and attestation information for Client Workload authentication. \nThis request initiates a session with the Aembit Edge API by providing proof of \nworkload identity via a configured Trust Provider."
+    LambdaDTO:
+      type: object
+      properties:
+        arn:
+          type:
+          - 'null'
+          - string
+          description: AWS Lambda function ARN
+      additionalProperties: false
+      description: AWS Lambda function information for serverless workload attestation
+    ClientWorkloadDetails:
+      type: object
+      properties:
+        sourceIP:
+          type:
+          - 'null'
+          - string
+          description: IP address of the requesting Client Workload
+        aws:
+          description: AWS-specific attestation data for Client Workload identification
+          $ref: '#/components/schemas/AwsDTO'
+        azure:
+          description: Azure-specific attestation data for Client Workload identification
+          $ref: '#/components/schemas/AzureAttestationDTO'
+        gcp:
+          description: GCP-specific attestation data for Client Workload identification
+          $ref: '#/components/schemas/GcpAttestationDTO'
+        os:
+          description: Operating system environment information for Client Workload attestation
+          $ref: '#/components/schemas/OsDTO'
+        k8s:
+          description: Kubernetes-specific attestation data for Kubernetes pod identification
+          $ref: '#/components/schemas/K8sDTO'
+        host:
+          description: Host system information for Client Workload attestation
+          $ref: '#/components/schemas/HostDTO'
+        github:
+          description: JWT-based identity token attestation for CI/CD platforms
+          $ref: '#/components/schemas/IdentityTokenAttestationDTO'
+        terraform:
+          description: JWT-based identity token attestation for CI/CD platforms
+          $ref: '#/components/schemas/IdentityTokenAttestationDTO'
+        gitlab:
+          description: JWT-based identity token attestation for CI/CD platforms
+          $ref: '#/components/schemas/IdentityTokenAttestationDTO'
+        oidc:
+          description: JWT-based identity token attestation for CI/CD platforms
+          $ref: '#/components/schemas/IdentityTokenAttestationDTO'
+      additionalProperties: false
+      description: Identity and attestation information for a Client Workload requesting credentials
+    OsDTO:
+      type: object
+      properties:
+        environment:
+          description: Environment variables available to the Client Workload
+          $ref: '#/components/schemas/EnvironmentDTO'
+      additionalProperties: false
+      description: Operating system environment information for Client Workload attestation
+    AwsEcsDTO:
+      type: object
+      properties:
+        containerMetadata:
+          type:
+          - 'null'
+          - string
+          description: JSON string containing AWS ECS container metadata
+        taskMetadata:
+          type:
+          - 'null'
+          - string
+          description: JSON string containing AWS ECS task metadata
+      additionalProperties: false
+      description: AWS ECS container and task metadata for workload attestation
+    TokenDTO:
+      required:
+      - accessToken
+      - expiresIn
+      - tokenType
+      type: object
+      properties:
+        accessToken:
+          minLength: 1
+          type: string
+          description: Bearer token for authenticating subsequent API requests
+        refreshToken:
+          type:
+          - 'null'
+          - string
+          description: Refresh token to obtain new access tokens for future API authentication requests
+        tokenType:
+          minLength: 1
+          type: string
+          description: Token type, typically 'Bearer' for OAuth2-style tokens
+        expiresIn:
+          type: integer
+          description: Token expiration time in seconds from issuance
+          format: int32
+      additionalProperties: false
+      description: OAuth2-style access token response with expiration details
+    AzureAttestedDocumentDTO:
+      type: object
+      properties:
+        encoding:
+          type:
+          - 'null'
+          - string
+          description: The encoding of the IMDS document.
+        signature:
+          type:
+          - 'null'
+          - string
+          description: The Base64-encoded signature (PKCS7 container) returned by the Azure IMDS 'document' field.
+        nonce:
+          type:
+          - 'null'
+          - string
+          description: The cryptographic nonce passed to the IMDS endpoint.
+      additionalProperties: false
+      description: Azure Instance Metadata Service (IMDS) Attested Data document.
+  securitySchemes:
+    EdgeApiAuth:
+      type: http
+      description: Use Aembit Edge API access token obtained via the /edge/v1/auth endpoint
+      scheme: bearer
+      bearerFormat: JWT

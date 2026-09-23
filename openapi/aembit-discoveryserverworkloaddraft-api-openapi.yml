@@ -1,0 +1,40 @@
+openapi: 3.2.0
+info:
+  title: Aembit Cloud Discovery Server Workload Draft API
+  version: v1
+servers:
+- url: https://{tenant}.aembit.io
+  variables:
+    tenant:
+      default: tenant
+      description: Aembit Tenant ID
+security:
+- {}
+tags:
+- name: DiscoveryServerWorkloadDraft
+paths:
+  /api/alpha/server-workload-drafts/{id}:
+    get:
+      tags:
+      - DiscoveryServerWorkloadDraft
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+      summary: Get api alpha server workload drafts by id
+      x-summary-source: derived
+      operationId: getApiAlphaServerWorkloadDraftsById
+      x-operation-id-source: derived
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: Authorization header using the Bearer scheme.
+      scheme: bearer
+      bearerFormat: Reference

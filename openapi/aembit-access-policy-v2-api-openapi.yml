@@ -1,0 +1,849 @@
+openapi: 3.2.0
+info:
+  title: Aembit Cloud Access Policy v2 API
+  version: v1
+servers:
+- url: https://{tenant}.aembit.io
+  variables:
+    tenant:
+      default: tenant
+      description: Aembit Tenant ID
+security:
+- {}
+tags:
+- name: Access Policy v2
+paths:
+  /api/v2/access-policies/{id}:
+    get:
+      tags:
+      - Access Policy v2
+      summary: Get the identified Access Policy
+      description: Get the Access Policy identified by its ID.
+      operationId: get-access-policy-v2
+      parameters:
+      - name: id
+        in: path
+        description: ID of Access Policy
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Access Policy
+          content:
+            application/json:
+              schema:
+                description: Individual Access Policy
+                $ref: '#/components/schemas/GetPolicyDTO'
+        '204':
+          description: Access Policy Not Found
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    delete:
+      tags:
+      - Access Policy v2
+      summary: Delete an Access Policy
+      description: Delete an Access Policy.
+      operationId: delete-access-policy-v2
+      parameters:
+      - name: id
+        in: path
+        description: ID of Access Policy
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: Deleted the Access Policy
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    patch:
+      tags:
+      - Access Policy v2
+      summary: Patch an Access Policy
+      description: Patch an Access Policy.
+      operationId: patch-access-policy-v2
+      parameters:
+      - name: id
+        in: path
+        description: ID of Access Policy
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: PatchPolicyV2DTO
+        content:
+          application/json:
+            schema:
+              description: Patch request for an Access Policy
+              $ref: '#/components/schemas/PatchPolicyV2DTO'
+      responses:
+        '200':
+          description: Patched Access Policy
+          content:
+            application/json:
+              schema:
+                description: Create/Update Access Policy
+                $ref: '#/components/schemas/CreatePolicyDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+  /api/v2/access-policies/getByWorkloadIds/{clientWorkloadId}/{serverWorkloadId}:
+    get:
+      tags:
+      - Access Policy v2
+      summary: Get the identified Access Policy
+      description: Get the Access Policy identified by a Client and Server Workload.
+      operationId: get-access-policy-by-workloads-v2
+      parameters:
+      - name: clientWorkloadId
+        in: path
+        description: ID of Client Workload
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: serverWorkloadId
+        in: path
+        description: ID of Server Workload
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Access Policy
+          content:
+            application/json:
+              schema:
+                description: Individual Access Policy
+                $ref: '#/components/schemas/GetPolicyDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+  /api/v2/access-policies:
+    get:
+      tags:
+      - Access Policy v2
+      summary: Get a page of Access Policies
+      description: Retrieve a page of Access Policies.
+      operationId: get-access-policies-v2
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: per-page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 100
+      - name: filter
+        in: query
+        description: Filter returned access policies using either a string or a key:value combination
+        schema:
+          type: string
+          default: ''
+      - name: order
+        in: query
+        schema:
+          type: string
+          default: ModifiedAt desc
+      - name: group-by
+        in: query
+        schema:
+          type: string
+          default: ''
+      - name: query
+        in: query
+        schema:
+          type: string
+          default: ''
+      responses:
+        '200':
+          description: Page of Access Policies
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPolicyDTOListDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    post:
+      tags:
+      - Access Policy v2
+      summary: Create an Access Policy
+      description: Create an Access Policy.
+      operationId: post-access-policy-v2
+      requestBody:
+        description: CreatePolicyDTO
+        content:
+          application/json:
+            schema:
+              description: Create/Update Access Policy
+              $ref: '#/components/schemas/CreatePolicyDTO'
+      responses:
+        '200':
+          description: Created Access Policy
+          content:
+            application/json:
+              schema:
+                description: Create/Update Access Policy
+                $ref: '#/components/schemas/CreatePolicyDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    put:
+      tags:
+      - Access Policy v2
+      summary: Update an Access Policy
+      description: Update an Access Policy.
+      operationId: put-access-policy-v2
+      requestBody:
+        description: CreatePolicyDTO
+        content:
+          application/json:
+            schema:
+              description: Create/Update Access Policy
+              $ref: '#/components/schemas/CreatePolicyDTO'
+      responses:
+        '200':
+          description: Updated Access Policy
+          content:
+            application/json:
+              schema:
+                description: Create/Update Access Policy
+                $ref: '#/components/schemas/CreatePolicyDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+  /api/v2/access-policies/{id}/notes:
+    post:
+      tags:
+      - Access Policy v2
+      summary: Add a note to an Access Policy
+      description: Add a note to an Access Policy.
+      operationId: post-access-policy-note-v2
+      parameters:
+      - name: id
+        in: path
+        description: ID of Access Policy
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: PolicyNoteDTO
+        content:
+          application/json:
+            schema:
+              description: Individual Note created for an Access Policy
+              $ref: '#/components/schemas/PolicyNoteDTO'
+      responses:
+        '201':
+          description: Note added to an Access Policy
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    get:
+      tags:
+      - Access Policy v2
+      summary: Gets notes for an Access Policy
+      description: Retrieves note information for an Access Policy.
+      operationId: get-access-policy-notes-v2
+      parameters:
+      - name: id
+        in: path
+        description: ID of Access Policy
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Page of Access Policy Notes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolicyNoteDTOListDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+  /api/v2/access-policies/{id}/credential-mappings:
+    get:
+      tags:
+      - Access Policy v2
+      summary: Gets a credential mappings of Access Policy
+      description: Retrieves credential mappings of Access Policy.
+      operationId: get-access-policy-credential-mappings-v2
+      parameters:
+      - name: id
+        in: path
+        description: ID of Access Policy
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Page of Credential Mappings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolicyNoteDTOListDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+components:
+  schemas:
+    CreatePolicyDTO:
+      required:
+      - isActive
+      - name
+      - resourceSet
+      type: object
+      properties:
+        externalId:
+          type: string
+          format: uuid
+        name:
+          maxLength: 128
+          minLength: 1
+          type: string
+          description: Name of the Entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: Description of the Entity
+        isActive:
+          type: boolean
+          description: True/False value that determines if this entity is Active or Disabled
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        createdBy:
+          type:
+          - 'null'
+          - string
+        modifiedBy:
+          type:
+          - 'null'
+          - string
+        resourceSet:
+          type: string
+          description: ID of the Resource Set in which this Access Entity exists
+          format: uuid
+        credentialProviders:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Access Policy Credential Mappings
+            $ref: '#/components/schemas/PolicyCredentialMappingDTO'
+          description: Credential Providers associated with this Access Policy
+        trustProviders:
+          type:
+          - 'null'
+          - array
+          items:
+            type: string
+            format: uuid
+          description: Trust Providers associated with this Access Policy
+        accessConditions:
+          type:
+          - 'null'
+          - array
+          items:
+            type: string
+            format: uuid
+          description: Access Conditions associated with this Access Policy
+        contentSecurity:
+          type:
+          - 'null'
+          - array
+          items:
+            type: string
+            format: uuid
+          description: Content Security associated with this Access Policy
+        clientWorkload:
+          type: string
+          description: Client Workload associated with this Access Policy
+          format: uuid
+        serverWorkload:
+          type: string
+          description: Server Workload associated with this Access Policy
+          format: uuid
+      additionalProperties: false
+      description: Create/Update Access Policy
+    PatchPolicyV2DTO:
+      type: object
+      properties:
+        name:
+          maxLength: 128
+          type:
+          - 'null'
+          - string
+          description: New Name for the identified entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: New Description for the identified entity
+        isActive:
+          type:
+          - 'null'
+          - boolean
+          description: New Status for the identified entity
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+          description: New Tags for the identified entity
+        clientWorkload:
+          type: string
+          description: Client Workload associated with this Access Policy
+          format: uuid
+        serverWorkload:
+          type: string
+          description: Server Workload associated with this Access Policy
+          format: uuid
+        credentialProviders:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Access Policy Credential Mappings
+            $ref: '#/components/schemas/PolicyCredentialMappingDTO'
+          description: Credential Providers associated with this Access Policy
+        trustProviders:
+          type:
+          - 'null'
+          - array
+          items:
+            type: string
+            format: uuid
+          description: Trust Providers associated with this Access Policy
+        accessConditions:
+          type:
+          - 'null'
+          - array
+          items:
+            type: string
+            format: uuid
+          description: Access Conditions associated with this Access Policy
+        contentSecurity:
+          type:
+          - 'null'
+          - array
+          items:
+            type: string
+            format: uuid
+          description: Content Security associated with this Access Policy
+      additionalProperties: false
+      description: Patch request for an Access Policy
+    GenericResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
+    PolicyCredentialMappingDTO:
+      required:
+      - credentialProviderId
+      - mappingType
+      type: object
+      properties:
+        credentialProviderId:
+          type: string
+          description: CredentialProviderId
+          format: uuid
+        mappingType:
+          description: Mapping Type
+          $ref: '#/components/schemas/PolicyCredentialProviderMappingTypes'
+        accessKeyId:
+          maxLength: 256
+          pattern: ^[A-Z0-9]*$
+          type:
+          - 'null'
+          - string
+          description: AWS Access Key Id
+        accountName:
+          maxLength: 256
+          pattern: ^[\p{L}a-zA-Z0-9][\p{L}a-zA-Z0-9._-]*$
+          type:
+          - 'null'
+          - string
+          description: Snowflake Username
+        headerName:
+          maxLength: 256
+          pattern: ^[\p{L}a-zA-Z0-9][\p{L}a-zA-Z0-9._-]*$
+          type:
+          - 'null'
+          - string
+          description: Header Name
+        headerValue:
+          maxLength: 256
+          pattern: ^[\p{L}a-zA-Z0-9][\p{L}a-zA-Z0-9._-]*$
+          type:
+          - 'null'
+          - string
+          description: Header Value
+        httpbodyFieldPath:
+          maxLength: 256
+          pattern: ^[\p{L}a-zA-Z0-9][\p{L}a-zA-Z0-9._-]*$
+          type:
+          - 'null'
+          - string
+          description: HttpBody Field Path
+        httpbodyFieldValue:
+          maxLength: 256
+          pattern: ^[\p{L}a-zA-Z0-9][\p{L}a-zA-Z0-9._-]*$
+          type:
+          - 'null'
+          - string
+          description: HttpBody Field Value
+      additionalProperties: false
+      description: Access Policy Credential Mappings
+    EntityMetaDTO:
+      type: object
+      properties:
+        externalId:
+          type: string
+          format: uuid
+        name:
+          type:
+          - 'null'
+          - string
+        isActive:
+          type: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+      additionalProperties: false
+    TagDTO:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          minLength: 1
+          type: string
+          description: Tag Key
+        value:
+          minLength: 1
+          type: string
+          description: Tag Key Value
+      additionalProperties: false
+      description: Aembit Entity Tag Details
+    PolicyCredentialProviderMappingTypes:
+      enum:
+      - None
+      - AccountName
+      - HttpHeader
+      - HttpBody
+      - AccessKeyId
+      type: string
+    GetPolicyDTOListDTO:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
+          type:
+          - 'null'
+          - string
+          description: Ordering criteria used for the current page
+        statusCode:
+          type: integer
+          description: HTTP StatusCode for the current result
+          format: int32
+        recordsTotal:
+          type: integer
+          description: Total number of entities available
+          format: int32
+        entities:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Individual Access Policy
+            $ref: '#/components/schemas/GetPolicyDTO'
+          description: Page of entities for this request
+      additionalProperties: false
+    PolicyNoteDTOListDTO:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
+          type:
+          - 'null'
+          - string
+          description: Ordering criteria used for the current page
+        statusCode:
+          type: integer
+          description: HTTP StatusCode for the current result
+          format: int32
+        recordsTotal:
+          type: integer
+          description: Total number of entities available
+          format: int32
+        entities:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Individual Note created for an Access Policy
+            $ref: '#/components/schemas/PolicyNoteDTO'
+          description: Page of entities for this request
+      additionalProperties: false
+    GetPolicyDTO:
+      required:
+      - isActive
+      - name
+      - resourceSet
+      type: object
+      properties:
+        externalId:
+          type: string
+          format: uuid
+        name:
+          maxLength: 128
+          minLength: 1
+          type: string
+          description: Name of the Entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: Description of the Entity
+        isActive:
+          type: boolean
+          description: True/False value that determines if this entity is Active or Disabled
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        createdBy:
+          type:
+          - 'null'
+          - string
+        modifiedBy:
+          type:
+          - 'null'
+          - string
+        resourceSet:
+          type: string
+          description: ID of the Resource Set in which this Access Entity exists
+          format: uuid
+        clientWorkload:
+          description: Client Workload associated with this Access Policy
+          $ref: '#/components/schemas/EntityMetaDTO'
+        serverWorkload:
+          description: Server Workload associated with this Access Policy
+          $ref: '#/components/schemas/EntityMetaDTO'
+        trustProviders:
+          type:
+          - 'null'
+          - array
+          items:
+            $ref: '#/components/schemas/EntityMetaDTO'
+          description: Trust Providers associated with this Access Policy
+        credentialProviders:
+          type:
+          - 'null'
+          - array
+          items:
+            $ref: '#/components/schemas/EntityMetaDTO'
+          description: Credential Providers associated with this Access Policy
+        accessConditions:
+          type:
+          - 'null'
+          - array
+          items:
+            $ref: '#/components/schemas/EntityMetaDTO'
+          description: Access Conditions associated with this Access Policy
+        contentSecurity:
+          type:
+          - 'null'
+          - array
+          items:
+            $ref: '#/components/schemas/EntityMetaDTO'
+          description: Content Security associated with this Access Policy
+      additionalProperties: false
+      description: Individual Access Policy
+    PolicyNoteDTO:
+      required:
+      - note
+      type: object
+      properties:
+        note:
+          maxLength: 1024
+          minLength: 1
+          type: string
+          description: Note added to an Access Policy by a User
+        createdAt:
+          type: string
+          description: Timestamp the Note was created
+          format: date-time
+        createdBy:
+          type:
+          - 'null'
+          - string
+          description: Email address of the User who created the Access Policy Note
+      additionalProperties: false
+      description: Individual Note created for an Access Policy
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: Authorization header using the Bearer scheme.
+      scheme: bearer
+      bearerFormat: Reference

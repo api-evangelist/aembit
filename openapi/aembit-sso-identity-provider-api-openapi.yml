@@ -1,0 +1,559 @@
+openapi: 3.2.0
+info:
+  title: Aembit Cloud SSO Identity Provider API
+  version: v1
+servers:
+- url: https://{tenant}.aembit.io
+  variables:
+    tenant:
+      default: tenant
+      description: Aembit Tenant ID
+security:
+- {}
+tags:
+- name: SSO Identity Provider
+paths:
+  /api/v1/sso-idps/{id}/verification:
+    get:
+      tags:
+      - SSO Identity Provider
+      summary: Verify the SSO Identity Provider
+      description: Verify the SSO Identity Provider has all necessary configuration data.
+      operationId: get-identity-provider-verification
+      parameters:
+      - name: id
+        in: path
+        description: ID of SSO Identity Provider
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: SSO Identity Provider verification
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+  /api/v1/sso-idps/{id}:
+    get:
+      tags:
+      - SSO Identity Provider
+      summary: Get a SSO Identity Provider
+      description: Get a SSO Identity Provider identified by its ID.
+      operationId: get-identity-provider
+      parameters:
+      - name: id
+        in: path
+        description: ID of SSO Identity Provider
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: SSO Identity Provider
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/SSOIdentityProviderDTO'
+                - $ref: '#/components/schemas/SamlIdentityProviderDTO'
+                - $ref: '#/components/schemas/OidcIdentityProviderDTO'
+                description: Individual SSO Identity Provider
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    delete:
+      tags:
+      - SSO Identity Provider
+      summary: Delete a SSO Identity Provider
+      description: Delete a SSO Identity Provider identified by its ID.
+      operationId: delete-identity-provider
+      parameters:
+      - name: id
+        in: path
+        description: ID of SSO Identity Provider
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: Successfully deleted SSO Identity Provider
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    patch:
+      tags:
+      - SSO Identity Provider
+      summary: Patch a SSO Identity Provider
+      description: Patch a SSO Identity Provider identified by its ID.
+      operationId: patch-identity-provider
+      parameters:
+      - name: id
+        in: path
+        description: ID of SSO Identity Provider
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: SSOIdentityProviderPatchDTO
+        content:
+          application/json:
+            schema:
+              description: Patch request for an individual SSO Identity Provider
+              $ref: '#/components/schemas/SSOIdentityProviderPatchDTO'
+      responses:
+        '200':
+          description: Patched SSO Identity Provider
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/SSOIdentityProviderDTO'
+                - $ref: '#/components/schemas/SamlIdentityProviderDTO'
+                - $ref: '#/components/schemas/OidcIdentityProviderDTO'
+                description: Individual SSO Identity Provider
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+  /api/v1/sso-idps:
+    get:
+      tags:
+      - SSO Identity Provider
+      summary: Get a page of SSO Identity Providers
+      description: Get a page of SSO Identity Providers.
+      operationId: get-identity-providers
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: per-page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 100
+      - name: filter
+        in: query
+        schema:
+          type: string
+          default: ''
+      - name: order
+        in: query
+        schema:
+          type: string
+          default: ''
+      - name: group-by
+        in: query
+        schema:
+          type: string
+          default: ''
+      responses:
+        '200':
+          description: Page of SSO Identity Providers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SSOIdentityProviderDTOListDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    post:
+      tags:
+      - SSO Identity Provider
+      summary: Create a SSO Identity Provider
+      description: Create a SSO Identity Provider.
+      operationId: post-identity-provider
+      requestBody:
+        description: SSOIdentityProviderDTO
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - $ref: '#/components/schemas/SSOIdentityProviderDTO'
+              - $ref: '#/components/schemas/SamlIdentityProviderDTO'
+              - $ref: '#/components/schemas/OidcIdentityProviderDTO'
+              description: Individual SSO Identity Provider
+      responses:
+        '201':
+          description: Created SSO Identity Provider
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/SSOIdentityProviderDTO'
+                - $ref: '#/components/schemas/SamlIdentityProviderDTO'
+                - $ref: '#/components/schemas/OidcIdentityProviderDTO'
+                description: Individual SSO Identity Provider
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    put:
+      tags:
+      - SSO Identity Provider
+      summary: Update a SSO Identity Provider
+      description: Update a SSO Identity Provider.
+      operationId: put-identity-provider
+      requestBody:
+        description: SSOIdentityProviderDTO
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - $ref: '#/components/schemas/SSOIdentityProviderDTO'
+              - $ref: '#/components/schemas/SamlIdentityProviderDTO'
+              - $ref: '#/components/schemas/OidcIdentityProviderDTO'
+              description: Individual SSO Identity Provider
+      responses:
+        '200':
+          description: Updated SSO Identity Provider
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/SSOIdentityProviderDTO'
+                - $ref: '#/components/schemas/SamlIdentityProviderDTO'
+                - $ref: '#/components/schemas/OidcIdentityProviderDTO'
+                description: Individual SSO Identity Provider
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+components:
+  schemas:
+    SamlIdentityProviderDTO:
+      allOf:
+      - $ref: '#/components/schemas/SSOIdentityProviderDTO'
+      - type: object
+        properties:
+          entityId:
+            type:
+            - 'null'
+            - string
+            description: SAML Entity ID of the remote SSO Identity Provider
+          metadataUrl:
+            pattern: https://.*
+            type:
+            - 'null'
+            - string
+            description: Metadata URL of the remote SSO Identity Provider
+          metadataXml:
+            type:
+            - 'null'
+            - string
+            description: Metadata XML content of the remote SSO Identity Provider
+          serviceProviderEntityId:
+            type:
+            - 'null'
+            - string
+          serviceProviderSsoUrl:
+            type:
+            - 'null'
+            - string
+        additionalProperties: false
+      description: Individual SSO Identity Provider
+    GenericResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
+    SSOIdentityProviderDTOListDTO:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
+          type:
+          - 'null'
+          - string
+          description: Ordering criteria used for the current page
+        statusCode:
+          type: integer
+          description: HTTP StatusCode for the current result
+          format: int32
+        recordsTotal:
+          type: integer
+          description: Total number of entities available
+          format: int32
+        entities:
+          type:
+          - 'null'
+          - array
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/SSOIdentityProviderDTO'
+            - $ref: '#/components/schemas/SamlIdentityProviderDTO'
+            - $ref: '#/components/schemas/OidcIdentityProviderDTO'
+            description: Individual SSO Identity Provider
+          description: Page of entities for this request
+      additionalProperties: false
+    TagDTO:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          minLength: 1
+          type: string
+          description: Tag Key
+        value:
+          minLength: 1
+          type: string
+          description: Tag Key Value
+      additionalProperties: false
+      description: Aembit Entity Tag Details
+    OidcIdentityProviderDTO:
+      allOf:
+      - $ref: '#/components/schemas/SSOIdentityProviderDTO'
+      - required:
+        - authType
+        - clientId
+        - oidcBaseURL
+        - scopes
+        type: object
+        properties:
+          type:
+            type:
+            - 'null'
+            - string
+            description: Type of the remote SSO Identity Provider (e.g. SAMLv2 (default) or OIDCv1)
+          oidcBaseURL:
+            minLength: 1
+            type: string
+          clientId:
+            minLength: 1
+            type: string
+          scopes:
+            minLength: 1
+            type: string
+          authType:
+            $ref: '#/components/schemas/OidcClientAuthType'
+          clientSecret:
+            type:
+            - 'null'
+            - string
+          pkceRequired:
+            type: boolean
+          aembitRedirectUrl:
+            type:
+            - 'null'
+            - string
+          aembitJwksUrl:
+            type:
+            - 'null'
+            - string
+        additionalProperties: false
+      description: Individual SSO Identity Provider
+    SsoStatementRoleMappingDTO:
+      type: object
+      properties:
+        attributeName:
+          type:
+          - 'null'
+          - string
+          description: SSO Attribute name
+        attributeValue:
+          type:
+          - 'null'
+          - string
+          description: SSO Attribute value
+        roleExternalId:
+          type: string
+          description: Aembit Role ID
+          format: uuid
+      additionalProperties: false
+      description: Represents a mapping of an SSO attribute to an Aembit role
+    OidcClientAuthType:
+      enum:
+      - KeyPair
+      - ClientSecret
+      type: string
+    SSOIdentityProviderDTO:
+      required:
+      - isActive
+      - name
+      - type
+      type: object
+      properties:
+        type:
+          minLength: 1
+          type: string
+          description: Type of the remote SSO Identity Provider (e.g. SAMLv2 (default) or OIDCv1)
+        externalId:
+          type: string
+          format: uuid
+        name:
+          maxLength: 128
+          minLength: 1
+          type: string
+          description: Name of the Entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: Description of the Entity
+        isActive:
+          type: boolean
+          description: True/False value that determines if this entity is Active or Disabled
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        createdBy:
+          type:
+          - 'null'
+          - string
+        modifiedBy:
+          type:
+          - 'null'
+          - string
+        ssoStatementRoleMappings:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Represents a mapping of an SSO attribute to an Aembit role
+            $ref: '#/components/schemas/SsoStatementRoleMappingDTO'
+          description: Collection of mappings of SAML attributes to Aembit roles
+        userAccessEnabled:
+          type: boolean
+          description: Whether user access via this Identity Provider is enabled
+      additionalProperties: false
+      description: Individual SSO Identity Provider
+      discriminator:
+        propertyName: type
+        mapping:
+          SAMLv2: '#/components/schemas/SamlIdentityProviderDTO'
+          OIDCv1: '#/components/schemas/OidcIdentityProviderDTO'
+    SSOIdentityProviderPatchDTO:
+      type: object
+      properties:
+        name:
+          maxLength: 128
+          type:
+          - 'null'
+          - string
+          description: New Name for the identified entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: New Description for the identified entity
+        isActive:
+          type:
+          - 'null'
+          - boolean
+          description: New Status for the identified entity
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+          description: New Tags for the identified entity
+      additionalProperties: false
+      description: Patch request for an individual SSO Identity Provider
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: Authorization header using the Bearer scheme.
+      scheme: bearer
+      bearerFormat: Reference

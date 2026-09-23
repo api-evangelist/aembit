@@ -1,0 +1,550 @@
+openapi: 3.2.0
+info:
+  title: Aembit Cloud Access Condition API
+  version: v1
+servers:
+- url: https://{tenant}.aembit.io
+  variables:
+    tenant:
+      default: tenant
+      description: Aembit Tenant ID
+security:
+- {}
+tags:
+- name: Access Condition
+paths:
+  /api/v1/access-conditions:
+    get:
+      tags:
+      - Access Condition
+      summary: Get a page of Access Conditions
+      description: Retrieve a page of Aembit Access Conditions.
+      operationId: get-access-conditions
+      parameters:
+      - name: X-Aembit-ResourceSet
+        in: header
+        schema:
+          type: string
+          format: uuid
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: per-page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 100
+      - name: filter
+        in: query
+        schema:
+          type: string
+          default: ''
+      - name: order
+        in: query
+        schema:
+          type: string
+          default: ''
+      - name: group-by
+        in: query
+        schema:
+          type: string
+          default: ''
+      responses:
+        '200':
+          description: Page of Access Conditions
+          content:
+            application/json:
+              schema:
+                description: Page of Access Conditions
+                $ref: '#/components/schemas/AccessConditionDTOAccessConditionListDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    post:
+      tags:
+      - Access Condition
+      summary: Create an Access Condition
+      description: Create an Aembit Access Condition which can then be associated with an Access Policy.
+      operationId: post-access-condition
+      parameters:
+      - name: X-Aembit-ResourceSet
+        in: header
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: AccessConditionDTO
+        content:
+          application/json:
+            schema:
+              description: DTO of an individual Access Condition for enforcement during Access Policy evaluation
+              $ref: '#/components/schemas/AccessConditionDTO'
+      responses:
+        '201':
+          description: Successfully created Access Condition
+          content:
+            application/json:
+              schema:
+                description: DTO of an individual Access Condition for enforcement during Access Policy evaluation
+                $ref: '#/components/schemas/AccessConditionDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    put:
+      tags:
+      - Access Condition
+      summary: Update a single Access Condition
+      description: Update a specific Access Condition identified by its ID.
+      operationId: put-access-condition
+      parameters:
+      - name: X-Aembit-ResourceSet
+        in: header
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: AccessConditionDTO
+        content:
+          application/json:
+            schema:
+              description: DTO of an individual Access Condition for enforcement during Access Policy evaluation
+              $ref: '#/components/schemas/AccessConditionDTO'
+      responses:
+        '200':
+          description: Successfully updated Access Condition
+          content:
+            application/json:
+              schema:
+                description: DTO of an individual Access Condition for enforcement during Access Policy evaluation
+                $ref: '#/components/schemas/AccessConditionDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+  /api/v1/access-conditions/{id}:
+    get:
+      tags:
+      - Access Condition
+      summary: Get the identified Access Condition
+      description: Get the Access Condition identified by its ID.
+      operationId: get-access-condition
+      parameters:
+      - name: id
+        in: path
+        description: ID of Access Condition
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Aembit-ResourceSet
+        in: header
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Access Condition
+          content:
+            application/json:
+              schema:
+                description: DTO of an individual Access Condition for enforcement during Access Policy evaluation
+                $ref: '#/components/schemas/AccessConditionDTO'
+        '204':
+          description: Access Condition Not Found
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    delete:
+      tags:
+      - Access Condition
+      summary: Delete a single Access Condition
+      description: Delete a specific Access Condition identified by its ID.
+      operationId: delete-access-condition
+      parameters:
+      - name: id
+        in: path
+        description: ID of Access Condition
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Aembit-ResourceSet
+        in: header
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: Deleted the Access Condition
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    patch:
+      tags:
+      - Access Condition
+      summary: Patch a single Access Condition
+      description: Patch a specific Access Condition identified by its ID.
+      operationId: patch-access-condition
+      parameters:
+      - name: id
+        in: path
+        description: ID of Access Condition
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Aembit-ResourceSet
+        in: header
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: AccessConditionPatchDTO
+        content:
+          application/json:
+            schema:
+              description: Patch Request DTO for individual Access Condition
+              $ref: '#/components/schemas/AccessConditionPatchDTO'
+      responses:
+        '200':
+          description: Successfully updated Access Condition
+          content:
+            application/json:
+              schema:
+                description: DTO of an individual Access Condition for enforcement during Access Policy evaluation
+                $ref: '#/components/schemas/AccessConditionDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+components:
+  schemas:
+    IntegrationDTO:
+      required:
+      - endpoint
+      - integrationJSON
+      - isActive
+      - name
+      - resourceSet
+      - syncFrequencySeconds
+      - type
+      type: object
+      properties:
+        externalId:
+          type: string
+          format: uuid
+        name:
+          maxLength: 128
+          minLength: 1
+          type: string
+          description: Name of the Entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: Description of the Entity
+        isActive:
+          type: boolean
+          description: True/False value that determines if this entity is Active or Disabled
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        createdBy:
+          type:
+          - 'null'
+          - string
+        modifiedBy:
+          type:
+          - 'null'
+          - string
+        resourceSet:
+          type: string
+          description: ID of the Resource Set in which this Access Entity exists
+          format: uuid
+        type:
+          minLength: 1
+          type: string
+        syncFrequencySeconds:
+          maximum: 3600
+          minimum: 300
+          type: integer
+          format: int32
+        lastSync:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        lastSyncStatus:
+          type:
+          - 'null'
+          - string
+        endpoint:
+          minLength: 1
+          type: string
+        integrationJSON:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/JsonNode'
+        accessConditionsCount:
+          type: integer
+          format: int32
+      additionalProperties: false
+      description: Integration details for 3rd party data used by Access Conditions
+    GenericResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
+    AccessConditionDTO:
+      required:
+      - conditions
+      - isActive
+      - name
+      - resourceSet
+      type: object
+      properties:
+        externalId:
+          type: string
+          format: uuid
+        name:
+          maxLength: 128
+          minLength: 1
+          type: string
+          description: Name of the Entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: Description of the Entity
+        isActive:
+          type: boolean
+          description: True/False value that determines if this entity is Active or Disabled
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        createdBy:
+          type:
+          - 'null'
+          - string
+        modifiedBy:
+          type:
+          - 'null'
+          - string
+        resourceSet:
+          type: string
+          description: ID of the Resource Set in which this Access Entity exists
+          format: uuid
+        integrationID:
+          type: string
+          description: ID of the Integration Entity used by this Access Condition
+          format: uuid
+        integration:
+          description: Integration Entity used by this Access Condition
+          $ref: '#/components/schemas/IntegrationDTO'
+        conditions:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/JsonNode'
+          description: Rules which are enforced by the Access Condition
+        accessPolicyCount:
+          type: integer
+          description: Access Policies associated with this Access Condition
+          format: int32
+        integrationType:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+      description: DTO of an individual Access Condition for enforcement during Access Policy evaluation
+    AccessConditionDTOAccessConditionListDTO:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Page of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
+          type:
+          - 'null'
+          - string
+          description: Ordering criteria used for the current page
+        statusCode:
+          type: integer
+          description: HTTP Status Code of the response
+          format: int32
+        recordsTotal:
+          type: integer
+          description: Total number of Access Conditions
+          format: int32
+        accessConditions:
+          type:
+          - 'null'
+          - array
+          items:
+            description: DTO of an individual Access Condition for enforcement during Access Policy evaluation
+            $ref: '#/components/schemas/AccessConditionDTO'
+          description: Page of Access Conditions
+      additionalProperties: false
+      description: Page of Access Conditions
+    JsonNodeOptions:
+      type: object
+      properties:
+        propertyNameCaseInsensitive:
+          type: boolean
+      additionalProperties: false
+    TagDTO:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          minLength: 1
+          type: string
+          description: Tag Key
+        value:
+          minLength: 1
+          type: string
+          description: Tag Key Value
+      additionalProperties: false
+      description: Aembit Entity Tag Details
+    JsonNode:
+      type: object
+      properties:
+        options:
+          $ref: '#/components/schemas/JsonNodeOptions'
+        parent:
+          $ref: '#/components/schemas/JsonNode'
+        root:
+          $ref: '#/components/schemas/JsonNode'
+      additionalProperties: false
+    AccessConditionPatchDTO:
+      type: object
+      properties:
+        name:
+          maxLength: 128
+          type:
+          - 'null'
+          - string
+          description: New Name for the identified entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: New Description for the identified entity
+        isActive:
+          type:
+          - 'null'
+          - boolean
+          description: New Status for the identified entity
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+          description: New Tags for the identified entity
+      additionalProperties: false
+      description: Patch Request DTO for individual Access Condition
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: Authorization header using the Bearer scheme.
+      scheme: bearer
+      bearerFormat: Reference

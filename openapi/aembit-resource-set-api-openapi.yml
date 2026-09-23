@@ -1,0 +1,556 @@
+openapi: 3.2.0
+info:
+  title: Aembit Cloud Resource Set API
+  version: v1
+servers:
+- url: https://{tenant}.aembit.io
+  variables:
+    tenant:
+      default: tenant
+      description: Aembit Tenant ID
+security:
+- {}
+tags:
+- name: Resource Set
+paths:
+  /api/v1/resource-sets/{id}:
+    get:
+      tags:
+      - Resource Set
+      summary: Get a Resource Set
+      description: Get a Resource Set identified by its ID.
+      operationId: get-resource-set
+      parameters:
+      - name: id
+        in: path
+        description: ID of Resource Set
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Resource Set
+          content:
+            application/json:
+              schema:
+                description: Individual Resource Set
+                $ref: '#/components/schemas/ResourceSetDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    patch:
+      tags:
+      - Resource Set
+      summary: Patch a Resource Set
+      description: Patch a Resource Set identified by its ID.
+      operationId: patch-resource-set
+      parameters:
+      - name: id
+        in: path
+        description: ID of Resource Set
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: ResourceSetPatchDTO
+        content:
+          application/json:
+            schema:
+              description: Patch Request for an Individual Resource Set
+              $ref: '#/components/schemas/ResourceSetPatchDTO'
+      responses:
+        '200':
+          description: Patched Resource Set
+          content:
+            application/json:
+              schema:
+                description: Individual Resource Set
+                $ref: '#/components/schemas/ResourceSetDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    delete:
+      tags:
+      - Resource Set
+      summary: Delete a Resource Set
+      description: Delete a Resource Set identified by its ID.
+      operationId: delete-resource-set-integration
+      parameters:
+      - name: id
+        in: path
+        description: ID of Resource Set
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: Successfully deleted Resource Set
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+  /api/v1/resource-sets:
+    get:
+      tags:
+      - Resource Set
+      summary: Get a page of Resource Sets
+      description: Get a page of Resource Sets.
+      operationId: get-resource-sets
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: per-page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 100
+      - name: filter
+        in: query
+        schema:
+          type: string
+          default: ''
+      - name: order
+        in: query
+        schema:
+          type: string
+          default: ''
+      - name: group-by
+        in: query
+        schema:
+          type: string
+          default: ''
+      responses:
+        '200':
+          description: Page of Resource Sets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceSetDTOListDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    post:
+      tags:
+      - Resource Set
+      summary: Create a Resource Set
+      description: Create a Resource Set.
+      operationId: post-resource-set
+      requestBody:
+        description: ResourceSetDTO
+        content:
+          application/json:
+            schema:
+              description: Individual Resource Set
+              $ref: '#/components/schemas/ResourceSetDTO'
+      responses:
+        '201':
+          description: Created Resource Set
+          content:
+            application/json:
+              schema:
+                description: Individual Resource Set
+                $ref: '#/components/schemas/ResourceSetDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    put:
+      tags:
+      - Resource Set
+      summary: Update a Resource Set
+      description: Update a Resource Set.
+      operationId: put-resource-set
+      requestBody:
+        description: ResourceSetDTO
+        content:
+          application/json:
+            schema:
+              description: Individual Resource Set
+              $ref: '#/components/schemas/ResourceSetDTO'
+      responses:
+        '200':
+          description: Updated Resource Set
+          content:
+            application/json:
+              schema:
+                description: Individual Resource Set
+                $ref: '#/components/schemas/ResourceSetDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+components:
+  schemas:
+    ResourceSetDTOListDTO:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
+          type:
+          - 'null'
+          - string
+          description: Ordering criteria used for the current page
+        statusCode:
+          type: integer
+          description: HTTP StatusCode for the current result
+          format: int32
+        recordsTotal:
+          type: integer
+          description: Total number of entities available
+          format: int32
+        entities:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Individual Resource Set
+            $ref: '#/components/schemas/ResourceSetDTO'
+          description: Page of entities for this request
+      additionalProperties: false
+    GenericResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
+    ResourceSetDTO:
+      required:
+      - isActive
+      - name
+      type: object
+      properties:
+        externalId:
+          type: string
+          format: uuid
+        name:
+          maxLength: 128
+          minLength: 1
+          type: string
+          description: Name of the Entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: Description of the Entity
+        isActive:
+          type: boolean
+          description: True/False value that determines if this entity is Active or Disabled
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        createdBy:
+          type:
+          - 'null'
+          - string
+        modifiedBy:
+          type:
+          - 'null'
+          - string
+        serverWorkloadCount:
+          type:
+          - 'null'
+          - integer
+          description: Server Workloads associated with this Resource Set
+          format: int32
+        clientWorkloadCount:
+          type:
+          - 'null'
+          - integer
+          description: Client Workloads associated with this Resource Set
+          format: int32
+        accessPolicyCount:
+          type:
+          - 'null'
+          - integer
+          description: Access Policies associated with this Resource Set
+          format: int32
+        trustProviderCount:
+          type:
+          - 'null'
+          - integer
+          description: Trust Providers associated with this Resource Set
+          format: int32
+        accessConditionCount:
+          type:
+          - 'null'
+          - integer
+          description: Access Conditions associated with this Resource Set
+          format: int32
+        credentialProviderCount:
+          type:
+          - 'null'
+          - integer
+          description: Credential Providers associated with this Resource Set
+          format: int32
+        roles:
+          type:
+          - 'null'
+          - array
+          items:
+            type: string
+            format: uuid
+          description: Roles associated with this Resource Set
+        rolesDetails:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Individual Role
+            $ref: '#/components/schemas/RoleDTO'
+          description: Details of the Roles associated with this Resource Set
+        users:
+          type:
+          - 'null'
+          - array
+          items:
+            type: string
+          description: Users associated with this Resource Set
+        standaloneCertificateAuthority:
+          type:
+          - 'null'
+          - string
+          description: Standalone Certificate Authority associated with this Resource Set
+          format: uuid
+      additionalProperties: false
+      description: Individual Resource Set
+    RoleDTO:
+      required:
+      - isActive
+      - name
+      type: object
+      properties:
+        externalId:
+          type: string
+          format: uuid
+        name:
+          maxLength: 128
+          minLength: 1
+          type: string
+          description: Name of the Entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: Description of the Entity
+        isActive:
+          type: boolean
+          description: True/False value that determines if this entity is Active or Disabled
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        createdBy:
+          type:
+          - 'null'
+          - string
+        modifiedBy:
+          type:
+          - 'null'
+          - string
+        usersCount:
+          type: integer
+          description: Number of Users associated with this Role
+          format: int32
+        credentialProvidersCount:
+          type: integer
+          description: Number of Credential Providers associated with this Role
+          format: int32
+        isSystem:
+          type: boolean
+          description: True if this is a system included Role (e.g. SuperAdmin or Auditor)
+        permissions:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Individual Permission details
+            $ref: '#/components/schemas/PermissionDTO'
+          description: Permissions assigned to this Role
+        resourceSets:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Individual Resource Set
+            $ref: '#/components/schemas/ResourceSetDTO'
+          description: Resource Sets assigned to this Role
+      additionalProperties: false
+      description: Individual Role
+    PermissionDTO:
+      type: object
+      properties:
+        name:
+          type:
+          - 'null'
+          - string
+          description: Name of the Permission Target
+        read:
+          type: boolean
+          description: True if this permission allows access to Read the Permission Target, False otherwise
+        write:
+          type: boolean
+          description: True if this permission allows access to Write the Permission Target, False otherwise
+        isWritable:
+          type: boolean
+          description: True if this permission allows access to Write the Permission Target, False otherwise
+        isReadable:
+          type: boolean
+          description: True if this permission allows access to Read the Permission Target, False otherwise
+        accessLevel:
+          type:
+          - 'null'
+          - string
+          description: Description of the Permission level
+          readOnly: true
+      additionalProperties: false
+      description: Individual Permission details
+    TagDTO:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          minLength: 1
+          type: string
+          description: Tag Key
+        value:
+          minLength: 1
+          type: string
+          description: Tag Key Value
+      additionalProperties: false
+      description: Aembit Entity Tag Details
+    ResourceSetPatchDTO:
+      type: object
+      properties:
+        name:
+          maxLength: 128
+          type:
+          - 'null'
+          - string
+          description: New Name for the identified entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: New Description for the identified entity
+        isActive:
+          type:
+          - 'null'
+          - boolean
+          description: New Status for the identified entity
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+          description: New Tags for the identified entity
+      additionalProperties: false
+      description: Patch Request for an Individual Resource Set
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: Authorization header using the Bearer scheme.
+      scheme: bearer
+      bearerFormat: Reference

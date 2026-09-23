@@ -1,0 +1,1635 @@
+openapi: 3.2.0
+info:
+  title: Aembit Cloud Access Policy (Deprecated) API
+  version: v1
+servers:
+- url: https://{tenant}.aembit.io
+  variables:
+    tenant:
+      default: tenant
+      description: Aembit Tenant ID
+security:
+- {}
+tags:
+- name: Access Policy (Deprecated)
+paths:
+  /api/v1/access-policies/{id}:
+    get:
+      tags:
+      - Access Policy (Deprecated)
+      summary: Get the identified Access Policy
+      description: Get the Access Policy identified by its ID.
+      operationId: get-access-policy
+      parameters:
+      - name: id
+        in: path
+        description: ID of Access Policy
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Aembit-ResourceSet
+        in: header
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Access Policy
+          content:
+            application/json:
+              schema:
+                description: Individual Access Policy
+                $ref: '#/components/schemas/PolicyExternalDTO'
+        '204':
+          description: Access Policy Not Found
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    delete:
+      tags:
+      - Access Policy (Deprecated)
+      summary: Delete an Access Policy
+      description: Delete an Access Policy.
+      operationId: delete-access-policy
+      parameters:
+      - name: id
+        in: path
+        description: ID of Access Policy
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Aembit-ResourceSet
+        in: header
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: Deleted the Access Policy
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    patch:
+      tags:
+      - Access Policy (Deprecated)
+      summary: Patch an Access Policy
+      description: Patch an Access Policy.
+      operationId: patch-access-policy
+      parameters:
+      - name: id
+        in: path
+        description: ID of Access Policy
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Aembit-ResourceSet
+        in: header
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: PolicyPatchDTO
+        content:
+          application/json:
+            schema:
+              description: Patch request for an Access Policy
+              $ref: '#/components/schemas/PolicyPatchDTO'
+      responses:
+        '200':
+          description: Patched Access Policy
+          content:
+            application/json:
+              schema:
+                description: Individual Access Policy
+                $ref: '#/components/schemas/PolicyDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+  /api/v1/access-policies/getByWorkloadIds/{clientWorkloadId}/{serverWorkloadId}:
+    get:
+      tags:
+      - Access Policy (Deprecated)
+      summary: Get the identified Access Policy
+      description: Get the Access Policy identified by a Client and Server Workload.
+      operationId: get-access-policy-by-workloads
+      parameters:
+      - name: clientWorkloadId
+        in: path
+        description: ID of Client Workload
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: serverWorkloadId
+        in: path
+        description: ID of Server Workload
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Aembit-ResourceSet
+        in: header
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Access Policy
+          content:
+            application/json:
+              schema:
+                description: Individual Access Policy
+                $ref: '#/components/schemas/PolicyExternalDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+  /api/v1/access-policies:
+    get:
+      tags:
+      - Access Policy (Deprecated)
+      summary: Get a page of Access Policies
+      description: Retrieve a page of Access Policies.
+      operationId: get-access-policies
+      parameters:
+      - name: X-Aembit-ResourceSet
+        in: header
+        schema:
+          type: string
+          format: uuid
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: per-page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 100
+      - name: filter
+        in: query
+        description: Filter returned access policies using either a string or a key:value combination
+        schema:
+          type: string
+          default: ''
+      - name: order
+        in: query
+        schema:
+          type: string
+          default: ''
+      - name: group-by
+        in: query
+        schema:
+          type: string
+          default: ''
+      responses:
+        '200':
+          description: Page of Access Policies
+          content:
+            application/json:
+              schema:
+                description: Page of Access Policies
+                $ref: '#/components/schemas/PolicyListDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    post:
+      tags:
+      - Access Policy (Deprecated)
+      summary: Create an Access Policy
+      description: Create an Access Policy.
+      operationId: post-access-policy
+      parameters:
+      - name: X-Aembit-ResourceSet
+        in: header
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: PolicyDTO
+        content:
+          application/json:
+            schema:
+              description: Individual Access Policy
+              $ref: '#/components/schemas/PolicyDTO'
+      responses:
+        '200':
+          description: Created Access Policy
+          content:
+            application/json:
+              schema:
+                description: Individual Access Policy
+                $ref: '#/components/schemas/PolicyDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    put:
+      tags:
+      - Access Policy (Deprecated)
+      summary: Update an Access Policy
+      description: Update an Access Policy.
+      operationId: put-access-policy
+      parameters:
+      - name: X-Aembit-ResourceSet
+        in: header
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: PolicyDTO
+        content:
+          application/json:
+            schema:
+              description: Individual Access Policy
+              $ref: '#/components/schemas/PolicyDTO'
+      responses:
+        '200':
+          description: Updated Access Policy
+          content:
+            application/json:
+              schema:
+                description: Individual Access Policy
+                $ref: '#/components/schemas/PolicyDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+  /api/v1/access-policies/{id}/notes:
+    post:
+      tags:
+      - Access Policy (Deprecated)
+      summary: Add a note to an Access Policy
+      description: Add a note to an Access Policy.
+      operationId: post-access-policy-note
+      parameters:
+      - name: id
+        in: path
+        description: ID of Access Policy
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Aembit-ResourceSet
+        in: header
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: PolicyNoteDTO
+        content:
+          application/json:
+            schema:
+              description: Individual Note created for an Access Policy
+              $ref: '#/components/schemas/PolicyNoteDTO'
+      responses:
+        '201':
+          description: Note added to an Access Policy
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+components:
+  schemas:
+    ServerWorkloadExternalDTO:
+      required:
+      - isActive
+      - name
+      - resourceSet
+      - serviceEndpoint
+      type: object
+      properties:
+        externalId:
+          type: string
+          format: uuid
+        name:
+          maxLength: 128
+          minLength: 1
+          type: string
+          description: Name of the Entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: Description of the Entity
+        isActive:
+          type: boolean
+          description: True/False value that determines if this entity is Active or Disabled
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        createdBy:
+          type:
+          - 'null'
+          - string
+        modifiedBy:
+          type:
+          - 'null'
+          - string
+        resourceSet:
+          type: string
+          description: ID of the Resource Set in which this Access Entity exists
+          format: uuid
+        serviceEndpoint:
+          description: Service Endpoint of the Server Workload
+          $ref: '#/components/schemas/WorkloadServiceEndpointDTO'
+        type:
+          type:
+          - 'null'
+          - string
+          description: Type of Server Workload
+        accessPolicyCount:
+          type: integer
+          description: Access Policies associated with this Server Workload
+          format: int32
+      additionalProperties: false
+      description: Individual Server Workload
+    GenericResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
+    PolicyPatchDTO:
+      type: object
+      properties:
+        name:
+          maxLength: 128
+          type:
+          - 'null'
+          - string
+          description: New Name for the identified entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: New Description for the identified entity
+        isActive:
+          type:
+          - 'null'
+          - boolean
+          description: New Status for the identified entity
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+          description: New Tags for the identified entity
+        clientWorkload:
+          type: string
+          description: Client Workload associated with this Access Policy
+          format: uuid
+        serverWorkload:
+          type: string
+          description: Server Workload associated with this Access Policy
+          format: uuid
+        credentialProvider:
+          type:
+          - 'null'
+          - string
+          description: Credential Provider associated with this Access Policy
+          format: uuid
+        trustProviders:
+          type:
+          - 'null'
+          - array
+          items:
+            type: string
+            format: uuid
+          description: Trust Providers associated with this Access Policy
+        accessConditions:
+          type:
+          - 'null'
+          - array
+          items:
+            type: string
+            format: uuid
+          description: Access Conditions associated with this Access Policy
+        contentSecurity:
+          type:
+          - 'null'
+          - array
+          items:
+            type: string
+            format: uuid
+          description: Content Security associated with this Access Policy
+      additionalProperties: false
+      description: Patch request for an Access Policy
+    StringStringKeyValuePair:
+      type: object
+      properties:
+        key:
+          type:
+          - 'null'
+          - string
+        value:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+    ContentSecurityDTO:
+      required:
+      - isActive
+      - name
+      - resourceSet
+      - type
+      type: object
+      properties:
+        type:
+          minLength: 1
+          type: string
+          description: Content Security Type
+        externalId:
+          type: string
+          format: uuid
+        name:
+          maxLength: 128
+          minLength: 1
+          type: string
+          description: Name of the Entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: Description of the Entity
+        isActive:
+          type: boolean
+          description: True/False value that determines if this entity is Active or Disabled
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        createdBy:
+          type:
+          - 'null'
+          - string
+        modifiedBy:
+          type:
+          - 'null'
+          - string
+        resourceSet:
+          type: string
+          description: ID of the Resource Set in which this Access Entity exists
+          format: uuid
+        accessPolicyCount:
+          type: integer
+          description: Access Policies associated with this Content Security
+          format: int32
+      additionalProperties: false
+      description: Individual Content Security
+      discriminator:
+        propertyName: type
+        mapping:
+          CrowdStrikeAIDR: '#/components/schemas/CrowdStrikeAIDRContentSecurityDTO'
+    PolicyListDTO:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Page of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
+          type:
+          - 'null'
+          - string
+          description: Ordering criteria used for the current page
+        statusCode:
+          type: integer
+          description: HTTP Status Code of the response
+          format: int32
+        recordsTotal:
+          type: integer
+          description: Total number of Access Policies
+          format: int32
+        accessPolicies:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Individual Access Policy
+            $ref: '#/components/schemas/PolicyExternalDTO'
+          description: Page of Access Policies
+      additionalProperties: false
+      description: Page of Access Policies
+    IntegrationDTO:
+      required:
+      - endpoint
+      - integrationJSON
+      - isActive
+      - name
+      - resourceSet
+      - syncFrequencySeconds
+      - type
+      type: object
+      properties:
+        externalId:
+          type: string
+          format: uuid
+        name:
+          maxLength: 128
+          minLength: 1
+          type: string
+          description: Name of the Entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: Description of the Entity
+        isActive:
+          type: boolean
+          description: True/False value that determines if this entity is Active or Disabled
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        createdBy:
+          type:
+          - 'null'
+          - string
+        modifiedBy:
+          type:
+          - 'null'
+          - string
+        resourceSet:
+          type: string
+          description: ID of the Resource Set in which this Access Entity exists
+          format: uuid
+        type:
+          minLength: 1
+          type: string
+        syncFrequencySeconds:
+          maximum: 3600
+          minimum: 300
+          type: integer
+          format: int32
+        lastSync:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        lastSyncStatus:
+          type:
+          - 'null'
+          - string
+        endpoint:
+          minLength: 1
+          type: string
+        integrationJSON:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/JsonNode'
+        accessConditionsCount:
+          type: integer
+          format: int32
+      additionalProperties: false
+      description: Integration details for 3rd party data used by Access Conditions
+    JsonNodeOptions:
+      type: object
+      properties:
+        propertyNameCaseInsensitive:
+          type: boolean
+      additionalProperties: false
+    ClientWorkloadExternalDTO:
+      required:
+      - isActive
+      - name
+      - resourceSet
+      type: object
+      properties:
+        externalId:
+          type: string
+          format: uuid
+        name:
+          maxLength: 128
+          minLength: 1
+          type: string
+          description: Name of the Entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: Description of the Entity
+        isActive:
+          type: boolean
+          description: True/False value that determines if this entity is Active or Disabled
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        createdBy:
+          type:
+          - 'null'
+          - string
+        modifiedBy:
+          type:
+          - 'null'
+          - string
+        resourceSet:
+          type: string
+          description: ID of the Resource Set in which this Access Entity exists
+          format: uuid
+        identities:
+          type:
+          - 'null'
+          - array
+          items:
+            $ref: '#/components/schemas/ClientWorkloadIdentityDTO'
+        standaloneCertificateAuthority:
+          type:
+          - 'null'
+          - string
+          description: Standalone Certificate Authority associated with this Client Workload
+          format: uuid
+        enforceSso:
+          type: boolean
+          description: Whether SSO is enforced for MCP authorization
+        type:
+          type:
+          - 'null'
+          - string
+        accessPolicyCount:
+          type: integer
+          description: Access Policies associated with this Client Workload
+          format: int32
+        ssoIdentityProviders:
+          type:
+          - 'null'
+          - array
+          items:
+            type: string
+            format: uuid
+      additionalProperties: false
+    TrustProviderDTO:
+      required:
+      - isActive
+      - name
+      - provider
+      - resourceSet
+      type: object
+      properties:
+        externalId:
+          type: string
+          format: uuid
+        name:
+          maxLength: 128
+          minLength: 1
+          type: string
+          description: Name of the Entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: Description of the Entity
+        isActive:
+          type: boolean
+          description: True/False value that determines if this entity is Active or Disabled
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        createdBy:
+          type:
+          - 'null'
+          - string
+        modifiedBy:
+          type:
+          - 'null'
+          - string
+        resourceSet:
+          type: string
+          description: ID of the Resource Set in which this Access Entity exists
+          format: uuid
+        id:
+          type: integer
+          description: Trust Provider Id
+          format: int32
+        provider:
+          minLength: 1
+          type: string
+          description: Trust Provider Type
+        matchRules:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Individual Match Rule to enforce during Trust Provider attestation
+            $ref: '#/components/schemas/TrustProviderMatchRuleDTO'
+          description: Trust Provider Match Rules
+        certificate:
+          type:
+          - 'null'
+          - string
+          description: Trust Provider Certificate or Public Key for cryptographic attestation
+        jwks:
+          type:
+          - 'null'
+          - string
+          description: Jwks Content for cryptographic attestation
+        publicKeyValidation:
+          description: Response to a request for Public Key Validation
+          $ref: '#/components/schemas/PublicKeyValidationDTO'
+        oidcUrl:
+          type:
+          - 'null'
+          - string
+          description: OIDC URL to use for retrieving JWKS Public Keys
+        pemType:
+          type:
+          - 'null'
+          - string
+          description: PEM Input Type
+        accessPolicyCount:
+          type: integer
+          description: Access Policies associated with this Trust Provider
+          format: int32
+        agentControllersCount:
+          type: integer
+          description: Agent Controllers associated with this Trust Provider
+          format: int32
+        agentControllerIds:
+          type:
+          - 'null'
+          - array
+          items:
+            type: string
+            format: uuid
+          description: Agent Controller IDs associated with this Trust Provider
+        isAembitTenantOidcToken:
+          type: boolean
+        metadataUrl:
+          pattern: https://.*
+          type:
+          - 'null'
+          - string
+          description: Metadata URL of the remote SSO Identity Provider
+        metadataXml:
+          type:
+          - 'null'
+          - string
+          description: Metadata XML content of the remote SSO Identity Provider
+      additionalProperties: false
+      description: Individual Trust Provider
+    TrustProviderItemDTO:
+      type: object
+      properties:
+        externalId:
+          type: string
+          format: uuid
+        name:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+    WorkloadServiceAuthenticationDTO:
+      required:
+      - method
+      - scheme
+      type: object
+      properties:
+        method:
+          minLength: 1
+          type: string
+          description: Authentication Method
+        scheme:
+          minLength: 1
+          type: string
+          description: Authentication Scheme
+        config:
+          type:
+          - 'null'
+          - string
+          description: Authentication Configuration
+      additionalProperties: false
+      description: Authentication configuration for a Server Workload
+    PublicKeyValidationDTO:
+      type: object
+      properties:
+        isValidContent:
+          type: boolean
+          description: True if the Public Key was valid, False otherwise
+        thumbprint:
+          type:
+          - 'null'
+          - string
+          description: Thumbprint of the Public Key
+        expirationDate:
+          type:
+          - 'null'
+          - string
+          description: Expiration of the Public Key Certificate
+          format: date-time
+        expirationDateString:
+          type:
+          - 'null'
+          - string
+          description: Expiration of the Public Key Certificate in String Format
+        certificateSubject:
+          type:
+          - 'null'
+          - string
+          description: Subject of the Public Key Certificate
+        serialNumber:
+          type:
+          - 'null'
+          - string
+          description: Serial Number of the Public Key Certificate
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message describing why the Public Key was not valid if IsValidContent is False
+        pemType:
+          type:
+          - 'null'
+          - string
+          description: Certificate or Public Key
+      additionalProperties: false
+      description: Response to a request for Public Key Validation
+    AccessConditionDTO:
+      required:
+      - conditions
+      - isActive
+      - name
+      - resourceSet
+      type: object
+      properties:
+        externalId:
+          type: string
+          format: uuid
+        name:
+          maxLength: 128
+          minLength: 1
+          type: string
+          description: Name of the Entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: Description of the Entity
+        isActive:
+          type: boolean
+          description: True/False value that determines if this entity is Active or Disabled
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        createdBy:
+          type:
+          - 'null'
+          - string
+        modifiedBy:
+          type:
+          - 'null'
+          - string
+        resourceSet:
+          type: string
+          description: ID of the Resource Set in which this Access Entity exists
+          format: uuid
+        integrationID:
+          type: string
+          description: ID of the Integration Entity used by this Access Condition
+          format: uuid
+        integration:
+          description: Integration Entity used by this Access Condition
+          $ref: '#/components/schemas/IntegrationDTO'
+        conditions:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/JsonNode'
+          description: Rules which are enforced by the Access Condition
+        accessPolicyCount:
+          type: integer
+          description: Access Policies associated with this Access Condition
+          format: int32
+        integrationType:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+      description: DTO of an individual Access Condition for enforcement during Access Policy evaluation
+    ClientWorkloadIdentityDTO:
+      required:
+      - value
+      type: object
+      properties:
+        type:
+          maxLength: 255
+          type:
+          - 'null'
+          - string
+        value:
+          minLength: 1
+          type: string
+        key:
+          maxLength: 255
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+    WorkloadExternalDTO:
+      required:
+      - isActive
+      - name
+      - resourceSet
+      type: object
+      properties:
+        externalId:
+          type: string
+          format: uuid
+        name:
+          maxLength: 128
+          minLength: 1
+          type: string
+          description: Name of the Entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: Description of the Entity
+        isActive:
+          type: boolean
+          description: True/False value that determines if this entity is Active or Disabled
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        createdBy:
+          type:
+          - 'null'
+          - string
+        modifiedBy:
+          type:
+          - 'null'
+          - string
+        resourceSet:
+          type: string
+          description: ID of the Resource Set in which this Access Entity exists
+          format: uuid
+        trustProviders:
+          type:
+          - 'null'
+          - array
+          items:
+            $ref: '#/components/schemas/TrustProviderItemDTO'
+        credentialProviderId:
+          type:
+          - 'null'
+          - string
+          format: uuid
+        credentialProviderText:
+          type:
+          - 'null'
+          - string
+        workloadServiceEndpoints:
+          maxItems: 1
+          type:
+          - 'null'
+          - array
+          items:
+            type: string
+            format: uuid
+        serviceEndpoint:
+          description: Service Endpoint for a Server Workload
+          $ref: '#/components/schemas/WorkloadServiceEndpointDTO'
+        type:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+    TagDTO:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          minLength: 1
+          type: string
+          description: Tag Key
+        value:
+          minLength: 1
+          type: string
+          description: Tag Key Value
+      additionalProperties: false
+      description: Aembit Entity Tag Details
+    JsonNode:
+      type: object
+      properties:
+        options:
+          $ref: '#/components/schemas/JsonNodeOptions'
+        parent:
+          $ref: '#/components/schemas/JsonNode'
+        root:
+          $ref: '#/components/schemas/JsonNode'
+      additionalProperties: false
+    CredentialProviderDTO:
+      required:
+      - isActive
+      - name
+      - resourceSet
+      - type
+      type: object
+      properties:
+        externalId:
+          type: string
+          format: uuid
+        name:
+          maxLength: 128
+          minLength: 1
+          type: string
+          description: Name of the Entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: Description of the Entity
+        isActive:
+          type: boolean
+          description: True/False value that determines if this entity is Active or Disabled
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        createdBy:
+          type:
+          - 'null'
+          - string
+        modifiedBy:
+          type:
+          - 'null'
+          - string
+        resourceSet:
+          type: string
+          description: ID of the Resource Set in which this Access Entity exists
+          format: uuid
+        type:
+          minLength: 1
+          type: string
+          description: Credential Provider Type (e.g. oauth-client-credential, username-password, etc.)
+        roleId:
+          type:
+          - 'null'
+          - string
+          description: Credential Provider Role for use with Aembit Access Token type Credential Providers
+          format: uuid
+        lifetimeTimeSpanSeconds:
+          type: integer
+          description: The Lifetime of a Credential Provider's credential value
+          format: int32
+        lifetimeExpiration:
+          type:
+          - 'null'
+          - string
+          description: The expiration timestamp for a Credential Provider's credential value
+          format: date-time
+        providerDetailJSON:
+          type:
+          - 'null'
+          - string
+          description: JSON representation of the Credential Provider configuration details
+        accessPolicyCount:
+          type: integer
+          description: Access Policies associated with this Credential Provider
+          format: int32
+      additionalProperties: false
+      description: Individual Credential Provider
+    TrustProviderMatchRuleDTO:
+      required:
+      - attribute
+      - value
+      type: object
+      properties:
+        attribute:
+          minLength: 1
+          type: string
+          description: Match Rule Attribute
+        value:
+          minLength: 1
+          type: string
+          description: Match Rule Attribute Value
+        key:
+          type:
+          - 'null'
+          - string
+          description: Match Rule Attribute Key
+      additionalProperties: false
+      description: Individual Match Rule to enforce during Trust Provider attestation
+    CrowdStrikeAIDRContentSecurityDTO:
+      allOf:
+      - $ref: '#/components/schemas/ContentSecurityDTO'
+      - required:
+        - baseUrl
+        type: object
+        properties:
+          encryptedToken:
+            type:
+            - 'null'
+            - string
+            description: The encrypted API token or client secret used to authenticate with the CrowdStrike Falcon AIDR (AI Detection and Response) service.
+          baseUrl:
+            minLength: 1
+            type: string
+            description: The base URL of the CrowdStrike Falcon AIDR service endpoint or API gateway.
+          failOpen:
+            type: boolean
+            description: Indicates whether requests should be allowed (fail-open) or blocked (fail-closed) if the CrowdStrike Falcon AIDR service is unreachable or encounters an error.
+          timeoutMs:
+            maximum: 600000
+            minimum: 5000
+            type: integer
+            description: The connection timeout in milliseconds for requests sent to the CrowdStrike Falcon AIDR service.
+            format: int32
+          maxRetries:
+            maximum: 10
+            minimum: 0
+            type: integer
+            description: The maximum number of retry attempts for requests to the CrowdStrike Falcon AIDR service before executing the fail-open or fail-closed policy.
+            format: int32
+        additionalProperties: false
+      description: Individual Content Security
+    PolicyDTO:
+      required:
+      - clientWorkload
+      - isActive
+      - name
+      - resourceSet
+      - serverWorkload
+      type: object
+      properties:
+        externalId:
+          type: string
+          format: uuid
+        name:
+          maxLength: 128
+          minLength: 1
+          type: string
+          description: Name of the Entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: Description of the Entity
+        isActive:
+          type: boolean
+          description: True/False value that determines if this entity is Active or Disabled
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        createdBy:
+          type:
+          - 'null'
+          - string
+        modifiedBy:
+          type:
+          - 'null'
+          - string
+        resourceSet:
+          type: string
+          description: ID of the Resource Set in which this Access Entity exists
+          format: uuid
+        credentialProvider:
+          type:
+          - 'null'
+          - string
+          description: Credential Provider associated with this Access Policy
+          format: uuid
+        trustProviders:
+          type:
+          - 'null'
+          - array
+          items:
+            type: string
+            format: uuid
+          description: Trust Providers associated with this Access Policy
+        accessConditions:
+          type:
+          - 'null'
+          - array
+          items:
+            type: string
+            format: uuid
+          description: Access Conditions associated with this Access Policy
+        contentSecurity:
+          type:
+          - 'null'
+          - array
+          items:
+            type: string
+            format: uuid
+          description: Content Security associated with this Access Policy
+        clientWorkload:
+          type: string
+          description: Client Workload associated with this Access Policy
+          format: uuid
+        serverWorkload:
+          type: string
+          description: Server Workload associated with this Access Policy
+          format: uuid
+        clientWorkloadDetails:
+          description: Details of the Client Workload associated with this Access Policy
+          $ref: '#/components/schemas/WorkloadExternalDTO'
+        serverWorkloadDetails:
+          description: Details of the Server Workload associated with this Access Policy
+          $ref: '#/components/schemas/WorkloadExternalDTO'
+        policyNotes:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Individual Note created for an Access Policy
+            $ref: '#/components/schemas/PolicyNoteDTO'
+          description: Policy Notes for this Access Policy
+      additionalProperties: false
+      description: Individual Access Policy
+    PolicyExternalDTO:
+      required:
+      - isActive
+      - name
+      - resourceSet
+      type: object
+      properties:
+        externalId:
+          type: string
+          format: uuid
+        name:
+          maxLength: 128
+          minLength: 1
+          type: string
+          description: Name of the Entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: Description of the Entity
+        isActive:
+          type: boolean
+          description: True/False value that determines if this entity is Active or Disabled
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        createdBy:
+          type:
+          - 'null'
+          - string
+        modifiedBy:
+          type:
+          - 'null'
+          - string
+        resourceSet:
+          type: string
+          description: ID of the Resource Set in which this Access Entity exists
+          format: uuid
+        clientWorkload:
+          description: Details of the Client Workload associated with this Access Policy
+          $ref: '#/components/schemas/ClientWorkloadExternalDTO'
+        trustProviders:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Individual Trust Provider
+            $ref: '#/components/schemas/TrustProviderDTO'
+          description: Details of the Trust Providers associated with this Access Policy
+        accessConditions:
+          type:
+          - 'null'
+          - array
+          items:
+            description: DTO of an individual Access Condition for enforcement during Access Policy evaluation
+            $ref: '#/components/schemas/AccessConditionDTO'
+          description: Details of the Access Conditions associated with this Access Policy
+        contentSecurity:
+          type:
+          - 'null'
+          - array
+          items:
+            oneOf:
+            - description: Individual Content Security
+              $ref: '#/components/schemas/ContentSecurityDTO'
+            - $ref: '#/components/schemas/CrowdStrikeAIDRContentSecurityDTO'
+            description: Individual Content Security
+          description: Details of the Content Security associated with this Access Policy
+        credentialProvider:
+          description: Credential Provider associated with this Access Policy
+          $ref: '#/components/schemas/CredentialProviderDTO'
+        serverWorkload:
+          description: Details of the Server Workload associated with this Access Policy
+          $ref: '#/components/schemas/ServerWorkloadExternalDTO'
+        policyNotes:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Individual Note created for an Access Policy
+            $ref: '#/components/schemas/PolicyNoteDTO'
+          description: Policy Notes for this Access Policy
+      additionalProperties: false
+      description: Individual Access Policy
+    PolicyNoteDTO:
+      required:
+      - note
+      type: object
+      properties:
+        note:
+          maxLength: 1024
+          minLength: 1
+          type: string
+          description: Note added to an Access Policy by a User
+        createdAt:
+          type: string
+          description: Timestamp the Note was created
+          format: date-time
+        createdBy:
+          type:
+          - 'null'
+          - string
+          description: Email address of the User who created the Access Policy Note
+      additionalProperties: false
+      description: Individual Note created for an Access Policy
+    WorkloadServiceEndpointDTO:
+      required:
+      - appProtocol
+      - host
+      - port
+      - requestedPort
+      - requestedTls
+      - tls
+      - tlsVerification
+      - transportProtocol
+      type: object
+      properties:
+        externalId:
+          type:
+          - 'null'
+          - string
+          description: External ID of the Service Endpoint
+        id:
+          type: integer
+          description: ID of the Service Endpoint
+          format: int32
+        host:
+          minLength: 1
+          type: string
+          description: Hostname or IP Address
+        appProtocol:
+          minLength: 1
+          type: string
+          description: Application Protocol
+        transportProtocol:
+          maxLength: 3
+          minLength: 0
+          type: string
+          description: Transport Protocol (e.g. TCP)
+        requestedPort:
+          maximum: 65535
+          minimum: 1
+          type: integer
+          description: The target port as specified by the Client Workload
+          format: int32
+        requestedTls:
+          type: boolean
+          description: The TLS encryption configuration of the Client Workload
+        port:
+          maximum: 65535
+          minimum: 1
+          type: integer
+          description: The target port to which the Agent/Proxy will communicate
+          format: int32
+        tls:
+          type: boolean
+          description: The TLS encryption configuration which will be used by the Agent/Proxy
+        workloadServiceAuthentication:
+          description: Authentication configuration
+          $ref: '#/components/schemas/WorkloadServiceAuthenticationDTO'
+        tlsVerification:
+          minLength: 1
+          type: string
+          description: TLS Verification configuration for the Agent/Proxy to Server Workload connection
+        urlPath:
+          type:
+          - 'null'
+          - string
+          description: URL Path configuration for the Client Workload to Server Workload request
+        httpHeaders:
+          title: KeyValuePair<string, string>
+          type:
+          - 'null'
+          - array
+          items:
+            $ref: '#/components/schemas/StringStringKeyValuePair'
+          description: Static HTTP Headers to include for transmission to the Server Workload
+      additionalProperties: false
+      description: Service Endpoint for a Server Workload
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: Authorization header using the Bearer scheme.
+      scheme: bearer
+      bearerFormat: Reference

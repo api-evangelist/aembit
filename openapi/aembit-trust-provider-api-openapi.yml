@@ -1,0 +1,619 @@
+openapi: 3.2.0
+info:
+  title: Aembit Cloud Trust Provider API
+  version: v1
+servers:
+- url: https://{tenant}.aembit.io
+  variables:
+    tenant:
+      default: tenant
+      description: Aembit Tenant ID
+security:
+- {}
+tags:
+- name: Trust Provider
+paths:
+  /api/v1/trust-providers:
+    get:
+      tags:
+      - Trust Provider
+      summary: Get a page of Trust Providers
+      description: Get a page of Trust Providers.
+      operationId: get-trust-providers
+      parameters:
+      - name: X-Aembit-ResourceSet
+        in: header
+        schema:
+          type: string
+          format: uuid
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: per-page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 100
+      - name: filter
+        in: query
+        schema:
+          type: string
+          default: ''
+      - name: order
+        in: query
+        schema:
+          type: string
+          default: ''
+      - name: group-by
+        in: query
+        schema:
+          type: string
+          default: ''
+      - name: active
+        in: query
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Page of Trust Providers
+          content:
+            application/json:
+              schema:
+                description: Page of Trust Providers
+                $ref: '#/components/schemas/TrustProviderListDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    post:
+      tags:
+      - Trust Provider
+      summary: Create a Trust Provider
+      description: Create a Trust Provider.
+      operationId: post-trust-provider
+      parameters:
+      - name: X-Aembit-ResourceSet
+        in: header
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: TrustProviderDTO
+        content:
+          application/json:
+            schema:
+              description: Individual Trust Provider
+              $ref: '#/components/schemas/TrustProviderDTO'
+      responses:
+        '200':
+          description: Created Trust Provider
+          content:
+            application/json:
+              schema:
+                description: Individual Trust Provider
+                $ref: '#/components/schemas/TrustProviderDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    put:
+      tags:
+      - Trust Provider
+      summary: Update a Trust Provider
+      description: Update a Trust Provider.
+      operationId: put-trust-provider
+      parameters:
+      - name: X-Aembit-ResourceSet
+        in: header
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: TrustProviderDTO
+        content:
+          application/json:
+            schema:
+              description: Individual Trust Provider
+              $ref: '#/components/schemas/TrustProviderDTO'
+      responses:
+        '200':
+          description: Updated Trust Provider
+          content:
+            application/json:
+              schema:
+                description: Individual Trust Provider
+                $ref: '#/components/schemas/TrustProviderDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+  /api/v1/trust-providers/{id}:
+    get:
+      tags:
+      - Trust Provider
+      summary: Get a Trust Provider
+      description: Get a Trust Provider identified by its ID.
+      operationId: get-trust-provider
+      parameters:
+      - name: id
+        in: path
+        description: ID of Trust Provider
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Aembit-ResourceSet
+        in: header
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Trust Provider
+          content:
+            application/json:
+              schema:
+                description: Individual Trust Provider
+                $ref: '#/components/schemas/TrustProviderDTO'
+        '204':
+          description: Trust Provider Not Found
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    delete:
+      tags:
+      - Trust Provider
+      summary: Delete a Trust Provider
+      description: Delete a Trust Provider identified by its ID.
+      operationId: delete-trust-provider
+      parameters:
+      - name: id
+        in: path
+        description: ID of Trust Provider
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Aembit-ResourceSet
+        in: header
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: Successfully deleted Trust Provider
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    patch:
+      tags:
+      - Trust Provider
+      summary: Patch a Trust Provider
+      description: Patch a Trust Provider.
+      operationId: patch-trust-provider
+      parameters:
+      - name: id
+        in: path
+        description: ID of Trust Provider
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Aembit-ResourceSet
+        in: header
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: TrustProviderPatchDTO
+        content:
+          application/json:
+            schema:
+              description: Patch request for an individual Trust Provider
+              $ref: '#/components/schemas/TrustProviderPatchDTO'
+      responses:
+        '200':
+          description: Patched Trust Provider
+          content:
+            application/json:
+              schema:
+                description: Individual Trust Provider
+                $ref: '#/components/schemas/TrustProviderDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+components:
+  schemas:
+    TrustProviderDTO:
+      required:
+      - isActive
+      - name
+      - provider
+      - resourceSet
+      type: object
+      properties:
+        externalId:
+          type: string
+          format: uuid
+        name:
+          maxLength: 128
+          minLength: 1
+          type: string
+          description: Name of the Entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: Description of the Entity
+        isActive:
+          type: boolean
+          description: True/False value that determines if this entity is Active or Disabled
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        createdBy:
+          type:
+          - 'null'
+          - string
+        modifiedBy:
+          type:
+          - 'null'
+          - string
+        resourceSet:
+          type: string
+          description: ID of the Resource Set in which this Access Entity exists
+          format: uuid
+        id:
+          type: integer
+          description: Trust Provider Id
+          format: int32
+        provider:
+          minLength: 1
+          type: string
+          description: Trust Provider Type
+        matchRules:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Individual Match Rule to enforce during Trust Provider attestation
+            $ref: '#/components/schemas/TrustProviderMatchRuleDTO'
+          description: Trust Provider Match Rules
+        certificate:
+          type:
+          - 'null'
+          - string
+          description: Trust Provider Certificate or Public Key for cryptographic attestation
+        jwks:
+          type:
+          - 'null'
+          - string
+          description: Jwks Content for cryptographic attestation
+        publicKeyValidation:
+          description: Response to a request for Public Key Validation
+          $ref: '#/components/schemas/PublicKeyValidationDTO'
+        oidcUrl:
+          type:
+          - 'null'
+          - string
+          description: OIDC URL to use for retrieving JWKS Public Keys
+        pemType:
+          type:
+          - 'null'
+          - string
+          description: PEM Input Type
+        accessPolicyCount:
+          type: integer
+          description: Access Policies associated with this Trust Provider
+          format: int32
+        agentControllersCount:
+          type: integer
+          description: Agent Controllers associated with this Trust Provider
+          format: int32
+        agentControllerIds:
+          type:
+          - 'null'
+          - array
+          items:
+            type: string
+            format: uuid
+          description: Agent Controller IDs associated with this Trust Provider
+        isAembitTenantOidcToken:
+          type: boolean
+        metadataUrl:
+          pattern: https://.*
+          type:
+          - 'null'
+          - string
+          description: Metadata URL of the remote SSO Identity Provider
+        metadataXml:
+          type:
+          - 'null'
+          - string
+          description: Metadata XML content of the remote SSO Identity Provider
+      additionalProperties: false
+      description: Individual Trust Provider
+    TrustProviderListDTO:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Page of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
+          type:
+          - 'null'
+          - string
+          description: Ordering criteria used for the current page
+        statusCode:
+          type: integer
+          description: HTTP Status Code of the response
+          format: int32
+        recordsTotal:
+          type: integer
+          description: Total number of Trust Providers
+          format: int32
+        trustProviders:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Individual Trust Provider
+            $ref: '#/components/schemas/TrustProviderDTO'
+          description: Page of Trust Providers
+      additionalProperties: false
+      description: Page of Trust Providers
+    PublicKeyValidationDTO:
+      type: object
+      properties:
+        isValidContent:
+          type: boolean
+          description: True if the Public Key was valid, False otherwise
+        thumbprint:
+          type:
+          - 'null'
+          - string
+          description: Thumbprint of the Public Key
+        expirationDate:
+          type:
+          - 'null'
+          - string
+          description: Expiration of the Public Key Certificate
+          format: date-time
+        expirationDateString:
+          type:
+          - 'null'
+          - string
+          description: Expiration of the Public Key Certificate in String Format
+        certificateSubject:
+          type:
+          - 'null'
+          - string
+          description: Subject of the Public Key Certificate
+        serialNumber:
+          type:
+          - 'null'
+          - string
+          description: Serial Number of the Public Key Certificate
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message describing why the Public Key was not valid if IsValidContent is False
+        pemType:
+          type:
+          - 'null'
+          - string
+          description: Certificate or Public Key
+      additionalProperties: false
+      description: Response to a request for Public Key Validation
+    GenericResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
+    TagDTO:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          minLength: 1
+          type: string
+          description: Tag Key
+        value:
+          minLength: 1
+          type: string
+          description: Tag Key Value
+      additionalProperties: false
+      description: Aembit Entity Tag Details
+    TrustProviderPatchDTO:
+      type: object
+      properties:
+        name:
+          maxLength: 128
+          type:
+          - 'null'
+          - string
+          description: New Name for the identified entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: New Description for the identified entity
+        isActive:
+          type:
+          - 'null'
+          - boolean
+          description: New Status for the identified entity
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+          description: New Tags for the identified entity
+        provider:
+          type:
+          - 'null'
+          - string
+          description: Trust Provider Type
+        matchRules:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Individual Match Rule to enforce during Trust Provider attestation
+            $ref: '#/components/schemas/TrustProviderMatchRuleDTO'
+          description: Trust Provider Match Rules
+        oidcUrl:
+          type:
+          - 'null'
+          - string
+          description: OIDC URL to use for retrieving JWKS Public Keys
+        pemType:
+          type:
+          - 'null'
+          - string
+          description: PEM Input Type
+        certificate:
+          type:
+          - 'null'
+          - string
+          description: Trust Provider Certificate or Public Key for cryptographic attestation
+        jwks:
+          type:
+          - 'null'
+          - string
+          description: Jwks Content for cryptographic attestation
+        symmetricKey:
+          type:
+          - 'null'
+          - string
+          description: Symmetric Key
+        publicKeyValidation:
+          description: Response to a request for Public Key Validation
+          $ref: '#/components/schemas/PublicKeyValidationDTO'
+        metadataUrl:
+          pattern: https://.*
+          type:
+          - 'null'
+          - string
+          description: Metadata URL of the remote SSO Identity Provider
+        metadataXml:
+          type:
+          - 'null'
+          - string
+          description: Metadata XML content of the remote SSO Identity Provider
+      additionalProperties: false
+      description: Patch request for an individual Trust Provider
+    TrustProviderMatchRuleDTO:
+      required:
+      - attribute
+      - value
+      type: object
+      properties:
+        attribute:
+          minLength: 1
+          type: string
+          description: Match Rule Attribute
+        value:
+          minLength: 1
+          type: string
+          description: Match Rule Attribute Value
+        key:
+          type:
+          - 'null'
+          - string
+          description: Match Rule Attribute Key
+      additionalProperties: false
+      description: Individual Match Rule to enforce during Trust Provider attestation
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: Authorization header using the Bearer scheme.
+      scheme: bearer
+      bearerFormat: Reference

@@ -1,0 +1,717 @@
+openapi: 3.2.0
+info:
+  title: Aembit Cloud Access Authorization Event API
+  version: v1
+servers:
+- url: https://{tenant}.aembit.io
+  variables:
+    tenant:
+      default: tenant
+      description: Aembit Tenant ID
+security:
+- {}
+tags:
+- name: Access Authorization Event
+paths:
+  /api/v1/authorization-events:
+    get:
+      tags:
+      - Access Authorization Event
+      summary: Get a page of Access Authorization Events
+      description: Get a page of Access Authorization Events.
+      operationId: get-access-authorization-events
+      parameters:
+      - name: X-Aembit-ResourceSet
+        in: header
+        schema:
+          type: string
+          format: uuid
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: per-page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 100
+      - name: order
+        in: query
+        schema:
+          type: string
+          default: ''
+      - name: search
+        in: query
+        schema:
+          type: string
+          default: ''
+      - name: span-last-minutes
+        in: query
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      - name: span-last-hours
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 24
+      - name: start-date
+        in: query
+        schema:
+          type: string
+          format: date-time
+      - name: end-date
+        in: query
+        schema:
+          type: string
+          format: date-time
+      - name: severity
+        in: query
+        schema:
+          type: string
+          default: ''
+      - name: event-type
+        in: query
+        schema:
+          type: string
+          default: ''
+      responses:
+        '200':
+          description: Page of Access Authorization Events
+          content:
+            application/json:
+              schema:
+                description: Page of Aembit Access Authorization Events
+                $ref: '#/components/schemas/AuthorizationEventListDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+  /api/v1/authorization-events/{id}:
+    get:
+      tags:
+      - Access Authorization Event
+      summary: Get an Access Authorization Event
+      description: Get an Access Authorization Event identified by its ID.
+      operationId: get-access-authorization-event
+      parameters:
+      - name: id
+        in: path
+        description: ID of Access Authorization Event
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Aembit-ResourceSet
+        in: header
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Access Authorization Event
+          content:
+            application/json:
+              schema:
+                description: An individual Aembit Access Authorization Event
+                $ref: '#/components/schemas/AuthorizationEventDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+components:
+  schemas:
+    RequestMetadaGcpDTO:
+      type: object
+      properties:
+        serviceAccount:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+    RequestMetadaLambdaDTO:
+      type: object
+      properties:
+        arn:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+    RequestMetadaAembitDTO:
+      type: object
+      properties:
+        clientId:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+    GenericResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
+    RequestMetadaGitlabDTO:
+      type: object
+      properties:
+        namespacePath:
+          type:
+          - 'null'
+          - string
+        projectPath:
+          type:
+          - 'null'
+          - string
+        refPath:
+          type:
+          - 'null'
+          - string
+        subject:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+    RequestMetadaHostDTO:
+      type: object
+      properties:
+        hostname:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+    RequestMetadaOAuthDTO:
+      type: object
+      properties:
+        redirectUri:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+    RequestMetadaNetworkDTO:
+      type: object
+      properties:
+        sourceIP:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+    AuthorizationEventAtttestationResultDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Access Entity ID
+          format: uuid
+        name:
+          type:
+          - 'null'
+          - string
+          description: Access Entity Name
+        result:
+          type:
+          - 'null'
+          - string
+          description: Access Entity processing Result for this Access Authorization Event
+        matches:
+          type:
+          - 'null'
+          - array
+          items:
+            type: string
+          description: List of matched Access Entity Identifiers
+        reason:
+          type:
+          - 'null'
+          - string
+        attribute:
+          type:
+          - 'null'
+          - string
+        expectedValue:
+          type:
+          - 'null'
+          - string
+        expectedValues:
+          type:
+          - 'null'
+          - array
+          items:
+            type: string
+        actualValue:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+      description: Individual Access Entity Attestation Result of an Aembit Access Authorization Event
+    RequestMetadaAwsDTO:
+      type: object
+      properties:
+        accountId:
+          type:
+          - 'null'
+          - string
+        instanceId:
+          type:
+          - 'null'
+          - string
+        region:
+          type:
+          - 'null'
+          - string
+        ecs:
+          $ref: '#/components/schemas/RequestMetadaEcsDTO'
+        lambda:
+          $ref: '#/components/schemas/RequestMetadaLambdaDTO'
+      additionalProperties: false
+    AuthorizationEventDataMetaDTO:
+      type: object
+      properties:
+        clientIP:
+          type:
+          - 'null'
+          - string
+          description: Remote Client IP Address of the Access Authorization Request
+        timestamp:
+          type: string
+          description: Timestamp of the Access Authorization Request
+          format: date-time
+        eventType:
+          type:
+          - 'null'
+          - string
+          description: Event Type of the Access Authorization Request
+        eventId:
+          type: string
+          description: Unique ID of the Access Authorization Event
+          format: uuid
+        resourceSetId:
+          type: string
+          description: Resource Set ID of the Access Authorization Event
+          format: uuid
+        contextId:
+          type: string
+          description: Context ID of the Access Authorization Events for a single Access Authorization Request
+          format: uuid
+        directiveId:
+          type: string
+          description: Directive ID of the Access Authorization Event (if available)
+          format: uuid
+        severity:
+          type:
+          - 'null'
+          - string
+          description: Severity of the Access Authorization Event (e.g. Info, Warning, Error)
+      additionalProperties: false
+      description: Metadata DTO for an individual Aembit Access Authorization Event
+    RequestMetadaAzureDTO:
+      type: object
+      properties:
+        vmId:
+          type:
+          - 'null'
+          - string
+        subscriptionId:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+    RequestMetadaProcessDTO:
+      type: object
+      properties:
+        name:
+          type:
+          - 'null'
+          - string
+        userName:
+          type:
+          - 'null'
+          - string
+        exePath:
+          type:
+          - 'null'
+          - string
+        commandLine:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+    NetworkDTO:
+      required:
+      - proxyPort
+      - sourceIP
+      - sourcePort
+      - transportProtocol
+      type: object
+      properties:
+        sourceIP:
+          minLength: 1
+          type: string
+        sourcePort:
+          type: integer
+          format: int32
+        transportProtocol:
+          minLength: 1
+          type: string
+        proxyPort:
+          type: integer
+          format: int32
+        targetHost:
+          type:
+          - 'null'
+          - string
+        targetPort:
+          type: integer
+          format: int32
+      additionalProperties: false
+    AuthorizationEventCPResultDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Access Entity ID
+          format: uuid
+        name:
+          type:
+          - 'null'
+          - string
+          description: Access Entity Name
+        result:
+          type:
+          - 'null'
+          - string
+          description: Access Entity processing Result for this Access Authorization Event
+        matches:
+          type:
+          - 'null'
+          - array
+          items:
+            type: string
+          description: List of matched Access Entity Identifiers
+        type:
+          type:
+          - 'null'
+          - string
+          description: Credential Provider Type
+        reason:
+          type:
+          - 'null'
+          - string
+          description: Credential Provider Failure Reason
+      additionalProperties: false
+      description: Individual Credential Provider Result of an Aembit Access Authorization Event
+    RequestMetadaGithubDTO:
+      type: object
+      properties:
+        repository:
+          type:
+          - 'null'
+          - string
+        subject:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+    AuthorizationEventOutcomeDTO:
+      type: object
+      properties:
+        result:
+          type:
+          - 'null'
+          - string
+          description: Result of an individual Aembit Access Authorization Event
+        reason:
+          type:
+          - 'null'
+          - string
+          description: Reason for the Result of an individual Aembit Access Authorization Event
+      additionalProperties: false
+      description: Outcome of an individual Aembit Access Authorization Event
+    AuthorizationEventEnvironmentDataDTO:
+      type: object
+      properties:
+        network:
+          $ref: '#/components/schemas/RequestMetadaNetworkDTO'
+        host:
+          $ref: '#/components/schemas/RequestMetadaHostDTO'
+        process:
+          $ref: '#/components/schemas/RequestMetadaProcessDTO'
+        aembit:
+          $ref: '#/components/schemas/RequestMetadaAembitDTO'
+        aws:
+          $ref: '#/components/schemas/RequestMetadaAwsDTO'
+        gcp:
+          $ref: '#/components/schemas/RequestMetadaGcpDTO'
+        azure:
+          $ref: '#/components/schemas/RequestMetadaAzureDTO'
+        kubernetes:
+          $ref: '#/components/schemas/RequestMetadaKubernetesDTO'
+        gitlab:
+          $ref: '#/components/schemas/RequestMetadaGitlabDTO'
+        github:
+          $ref: '#/components/schemas/RequestMetadaGithubDTO'
+        oidc:
+          $ref: '#/components/schemas/RequestMetadataOidcDTO'
+        terraform:
+          $ref: '#/components/schemas/RequestMetadaTerraformDTO'
+        oauth:
+          $ref: '#/components/schemas/RequestMetadaOAuthDTO'
+      additionalProperties: false
+    RequestMetadaKubernetesDTO:
+      type: object
+      properties:
+        namespace:
+          type:
+          - 'null'
+          - string
+        podName:
+          type:
+          - 'null'
+          - string
+        serviceAccountName:
+          type:
+          - 'null'
+          - string
+        serviceAccountUID:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+    AuthorizationEventListDTO:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Page of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
+          type:
+          - 'null'
+          - string
+          description: Ordering criteria used for the current page
+        statusCode:
+          type: integer
+          description: HTTP Status Code of the response
+          format: int32
+        recordsTotal:
+          type: integer
+          description: Total number of Aembit Audit Logs
+          format: int32
+        authorizationEvents:
+          type:
+          - 'null'
+          - array
+          items:
+            description: An individual Aembit Access Authorization Event
+            $ref: '#/components/schemas/AuthorizationEventDTO'
+          description: Page of Aembit Access Authorization Events
+      additionalProperties: false
+      description: Page of Aembit Access Authorization Events
+    RequestMetadaTerraformDTO:
+      type: object
+      properties:
+        workspaceId:
+          type:
+          - 'null'
+          - string
+        organizationId:
+          type:
+          - 'null'
+          - string
+        projectId:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+    AuthorizationEventEntityResultDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Access Entity ID
+          format: uuid
+        name:
+          type:
+          - 'null'
+          - string
+          description: Access Entity Name
+        result:
+          type:
+          - 'null'
+          - string
+          description: Access Entity processing Result for this Access Authorization Event
+        matches:
+          type:
+          - 'null'
+          - array
+          items:
+            type: string
+          description: List of matched Access Entity Identifiers
+      additionalProperties: false
+      description: Access Entity Result of an Aembit Access Authorization Event
+    RequestMetadataOidcDTO:
+      type: object
+      properties:
+        sub:
+          type:
+          - 'null'
+          - string
+        aud:
+          type:
+          - 'null'
+          - string
+        iss:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+    AuthorizationEventDTO:
+      type: object
+      properties:
+        authorizationChain:
+          type:
+          - 'null'
+          - array
+          items:
+            type: string
+        meta:
+          description: Metadata for an individual Aembit Access Authorization Event
+          $ref: '#/components/schemas/AuthorizationEventDataMetaDTO'
+        outcome:
+          description: Outcome information for an individual Aembit Access Authorization Event
+          $ref: '#/components/schemas/AuthorizationEventOutcomeDTO'
+        clientRequest:
+          description: Client Request information for an individual Aembit Access Authorization Event
+          $ref: '#/components/schemas/ClientRequestDTO'
+        environment:
+          $ref: '#/components/schemas/AuthorizationEventEnvironmentDataDTO'
+        clientWorkload:
+          description: Client Workload information for an individual Aembit Access Authorization Event
+          $ref: '#/components/schemas/AuthorizationEventEntityResultDTO'
+        clientWorkloads:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Access Entity Result of an Aembit Access Authorization Event
+            $ref: '#/components/schemas/AuthorizationEventEntityResultDTO'
+          description: Client Workload information for an individual Aembit Access Authorization Event
+        serverWorkload:
+          description: Server Workload information for an individual Aembit Access Authorization Event
+          $ref: '#/components/schemas/AuthorizationEventEntityResultDTO'
+        serverWorkloads:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Access Entity Result of an Aembit Access Authorization Event
+            $ref: '#/components/schemas/AuthorizationEventEntityResultDTO'
+          description: Server Workload information for an individual Aembit Access Authorization Event
+        accessPolicy:
+          description: Access Policy information for an individual Aembit Access Authorization Event
+          $ref: '#/components/schemas/AuthorizationEventEntityResultDTO'
+        accessPolicies:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Access Entity Result of an Aembit Access Authorization Event
+            $ref: '#/components/schemas/AuthorizationEventEntityResultDTO'
+          description: Access Policy information for an individual Aembit Access Authorization Event
+        trustProviders:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Individual Access Entity Attestation Result of an Aembit Access Authorization Event
+            $ref: '#/components/schemas/AuthorizationEventAtttestationResultDTO'
+          description: Trust Provider information for an individual Aembit Access Authorization Event
+        accessConditions:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Individual Access Entity Attestation Result of an Aembit Access Authorization Event
+            $ref: '#/components/schemas/AuthorizationEventAtttestationResultDTO'
+          description: Access Condition information for an individual Aembit Access Authorization Event
+        contentSecurity:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Individual Access Entity Attestation Result of an Aembit Access Authorization Event
+            $ref: '#/components/schemas/AuthorizationEventAtttestationResultDTO'
+          description: Content Security information for an individual Aembit Access Authorization Event
+        credentialProvider:
+          description: Credential Provider information for an individual Aembit Access Authorization Event
+          $ref: '#/components/schemas/AuthorizationEventCPResultDTO'
+        user:
+          type:
+          - 'null'
+          - string
+          description: User information of the Aembit Access Authorization Event
+      additionalProperties: false
+      description: An individual Aembit Access Authorization Event
+    RequestMetadaEcsDTO:
+      type: object
+      properties:
+        taskFamily:
+          type:
+          - 'null'
+          - string
+        serviceName:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+    ClientRequestDTO:
+      required:
+      - network
+      - version
+      type: object
+      properties:
+        version:
+          minLength: 1
+          type: string
+        network:
+          $ref: '#/components/schemas/NetworkDTO'
+      additionalProperties: false
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: Authorization header using the Bearer scheme.
+      scheme: bearer
+      bearerFormat: Reference

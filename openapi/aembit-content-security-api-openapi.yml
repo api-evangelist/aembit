@@ -1,0 +1,451 @@
+openapi: 3.2.0
+info:
+  title: Aembit Cloud Content Security API
+  version: v1
+servers:
+- url: https://{tenant}.aembit.io
+  variables:
+    tenant:
+      default: tenant
+      description: Aembit Tenant ID
+security:
+- {}
+tags:
+- name: Content Security
+paths:
+  /api/v1/content-security/{id}:
+    get:
+      tags:
+      - Content Security
+      summary: Get a Content Security
+      description: Get a Content Security identified by its ID.
+      operationId: get-content-security
+      parameters:
+      - name: id
+        in: path
+        description: ID of Content Security
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Content Security
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ContentSecurityDTO'
+                - $ref: '#/components/schemas/CrowdStrikeAIDRContentSecurityDTO'
+                description: Individual Content Security
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    delete:
+      tags:
+      - Content Security
+      summary: Delete a Content Security
+      description: Delete a Content Security identified by its ID.
+      operationId: delete-content-security
+      parameters:
+      - name: id
+        in: path
+        description: ID of Content Security
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: Successfully deleted Content Security
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    patch:
+      tags:
+      - Content Security
+      summary: Patch a Content Security
+      description: Patch a Content Security identified by its ID.
+      operationId: patch-content-security
+      parameters:
+      - name: id
+        in: path
+        description: ID of Content Security
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: ContentSecurityPatchDTO
+        content:
+          application/json:
+            schema:
+              description: Patch request for an individual Content Security
+              $ref: '#/components/schemas/ContentSecurityPatchDTO'
+      responses:
+        '200':
+          description: Patched Content Security
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ContentSecurityDTO'
+                - $ref: '#/components/schemas/CrowdStrikeAIDRContentSecurityDTO'
+                description: Individual Content Security
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+  /api/v1/content-security:
+    get:
+      tags:
+      - Content Security
+      summary: Get a page of Content Security
+      description: Get a page of Content Security.
+      operationId: get-content-security-list
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: per-page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 100
+      - name: filter
+        in: query
+        schema:
+          type: string
+          default: ''
+      - name: order
+        in: query
+        schema:
+          type: string
+          default: ''
+      - name: group-by
+        in: query
+        schema:
+          type: string
+          default: ''
+      responses:
+        '200':
+          description: Page of Content Security
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentSecurityDTOListDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    post:
+      tags:
+      - Content Security
+      summary: Create a Content Security
+      description: Create a Content Security.
+      operationId: post-content-security
+      requestBody:
+        description: ContentSecurityDTO
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - $ref: '#/components/schemas/ContentSecurityDTO'
+              - $ref: '#/components/schemas/CrowdStrikeAIDRContentSecurityDTO'
+              description: Individual Content Security
+      responses:
+        '201':
+          description: Created Content Security
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ContentSecurityDTO'
+                - $ref: '#/components/schemas/CrowdStrikeAIDRContentSecurityDTO'
+                description: Individual Content Security
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    put:
+      tags:
+      - Content Security
+      summary: Update a Content Security
+      description: Update a Content Security.
+      operationId: put-content-security
+      requestBody:
+        description: ContentSecurityDTO
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - $ref: '#/components/schemas/ContentSecurityDTO'
+              - $ref: '#/components/schemas/CrowdStrikeAIDRContentSecurityDTO'
+              description: Individual Content Security
+      responses:
+        '200':
+          description: Updated Content Security
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ContentSecurityDTO'
+                - $ref: '#/components/schemas/CrowdStrikeAIDRContentSecurityDTO'
+                description: Individual Content Security
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+components:
+  schemas:
+    CrowdStrikeAIDRContentSecurityDTO:
+      allOf:
+      - $ref: '#/components/schemas/ContentSecurityDTO'
+      - required:
+        - baseUrl
+        type: object
+        properties:
+          encryptedToken:
+            type:
+            - 'null'
+            - string
+            description: The encrypted API token or client secret used to authenticate with the CrowdStrike Falcon AIDR (AI Detection and Response) service.
+          baseUrl:
+            minLength: 1
+            type: string
+            description: The base URL of the CrowdStrike Falcon AIDR service endpoint or API gateway.
+          failOpen:
+            type: boolean
+            description: Indicates whether requests should be allowed (fail-open) or blocked (fail-closed) if the CrowdStrike Falcon AIDR service is unreachable or encounters an error.
+          timeoutMs:
+            maximum: 600000
+            minimum: 5000
+            type: integer
+            description: The connection timeout in milliseconds for requests sent to the CrowdStrike Falcon AIDR service.
+            format: int32
+          maxRetries:
+            maximum: 10
+            minimum: 0
+            type: integer
+            description: The maximum number of retry attempts for requests to the CrowdStrike Falcon AIDR service before executing the fail-open or fail-closed policy.
+            format: int32
+        additionalProperties: false
+      description: Individual Content Security
+    GenericResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
+    ContentSecurityDTOListDTO:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
+          type:
+          - 'null'
+          - string
+          description: Ordering criteria used for the current page
+        statusCode:
+          type: integer
+          description: HTTP StatusCode for the current result
+          format: int32
+        recordsTotal:
+          type: integer
+          description: Total number of entities available
+          format: int32
+        entities:
+          type:
+          - 'null'
+          - array
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/ContentSecurityDTO'
+            - $ref: '#/components/schemas/CrowdStrikeAIDRContentSecurityDTO'
+            description: Individual Content Security
+          description: Page of entities for this request
+      additionalProperties: false
+    TagDTO:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          minLength: 1
+          type: string
+          description: Tag Key
+        value:
+          minLength: 1
+          type: string
+          description: Tag Key Value
+      additionalProperties: false
+      description: Aembit Entity Tag Details
+    ContentSecurityPatchDTO:
+      type: object
+      properties:
+        name:
+          maxLength: 128
+          type:
+          - 'null'
+          - string
+          description: New Name for the identified entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: New Description for the identified entity
+        isActive:
+          type:
+          - 'null'
+          - boolean
+          description: New Status for the identified entity
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+          description: New Tags for the identified entity
+      additionalProperties: false
+      description: Patch request for an individual Content Security
+    ContentSecurityDTO:
+      required:
+      - isActive
+      - name
+      - resourceSet
+      - type
+      type: object
+      properties:
+        type:
+          minLength: 1
+          type: string
+          description: Content Security Type
+        externalId:
+          type: string
+          format: uuid
+        name:
+          maxLength: 128
+          minLength: 1
+          type: string
+          description: Name of the Entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: Description of the Entity
+        isActive:
+          type: boolean
+          description: True/False value that determines if this entity is Active or Disabled
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        createdBy:
+          type:
+          - 'null'
+          - string
+        modifiedBy:
+          type:
+          - 'null'
+          - string
+        resourceSet:
+          type: string
+          description: ID of the Resource Set in which this Access Entity exists
+          format: uuid
+        accessPolicyCount:
+          type: integer
+          description: Access Policies associated with this Content Security
+          format: int32
+      additionalProperties: false
+      description: Individual Content Security
+      discriminator:
+        propertyName: type
+        mapping:
+          CrowdStrikeAIDR: '#/components/schemas/CrowdStrikeAIDRContentSecurityDTO'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: Authorization header using the Bearer scheme.
+      scheme: bearer
+      bearerFormat: Reference

@@ -1,0 +1,37 @@
+openapi: 3.2.0
+info:
+  title: Aembit Cloud TLS Decrypt API
+  version: v1
+servers:
+- url: https://{tenant}.aembit.io
+  variables:
+    tenant:
+      default: tenant
+      description: Aembit Tenant ID
+security:
+- {}
+tags:
+- name: TLS Decrypt
+paths:
+  /api/v1/root-ca:
+    get:
+      tags:
+      - TLS Decrypt
+      summary: Download Tenant Root CA Certificate
+      description: Download the Tenant Root CA Certificate. This CA Certificate can be used for TLS verification when utilizing the Aembit TLS Decrypt feature.
+      operationId: root-ca
+      responses:
+        '200':
+          description: OK
+          content:
+            application/x-pem-file:
+              schema:
+                type: string
+                format: binary
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: Authorization header using the Bearer scheme.
+      scheme: bearer
+      bearerFormat: Reference

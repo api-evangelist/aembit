@@ -1,0 +1,288 @@
+openapi: 3.2.0
+info:
+  title: Aembit Cloud Workload Event API
+  version: v1
+servers:
+- url: https://{tenant}.aembit.io
+  variables:
+    tenant:
+      default: tenant
+      description: Aembit Tenant ID
+security:
+- {}
+tags:
+- name: Workload Event
+paths:
+  /api/v1/workload-events:
+    get:
+      tags:
+      - Workload Event
+      summary: Get a page of Workload Events
+      description: Get a page of Workload Events.
+      operationId: get-workload-events
+      parameters:
+      - name: X-Aembit-ResourceSet
+        in: header
+        schema:
+          type: string
+          format: uuid
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: per-page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 100
+      - name: order
+        in: query
+        schema:
+          type: string
+          default: ''
+      - name: search
+        in: query
+        schema:
+          type: string
+          default: ''
+      - name: span-last-minutes
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: span-last-hours
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 24
+      - name: start-date
+        in: query
+        schema:
+          type: string
+          format: date-time
+      - name: end-date
+        in: query
+        schema:
+          type: string
+          format: date-time
+      - name: application-protocol
+        in: query
+        schema:
+          type: string
+          default: ''
+      - name: severity
+        in: query
+        schema:
+          type: string
+          default: ''
+      - name: source-workload
+        in: query
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+      - name: target-workload
+        in: query
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+      - name: user-id
+        in: query
+        schema:
+          type: string
+          default: ''
+      responses:
+        '200':
+          description: Page of Workload Events
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventListDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+  /api/v1/workload-events/{id}:
+    get:
+      tags:
+      - Workload Event
+      summary: Get a Workload Event
+      description: Get a Workload Event.
+      operationId: get-workload-event
+      parameters:
+      - name: id
+        in: path
+        description: ID of Workload Event
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Aembit-ResourceSet
+        in: header
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Workload Event
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+components:
+  schemas:
+    EventOutcomeDTO:
+      type: object
+      properties:
+        result:
+          type:
+          - 'null'
+          - string
+      additionalProperties: {}
+    EventNetworkDTO:
+      type: object
+      properties:
+        clientWorkloadIP:
+          type:
+          - 'null'
+          - string
+        clientWorkloadPort:
+          type: integer
+          format: int32
+        serverWorkloadIP:
+          type:
+          - 'null'
+          - string
+        serverWorkloadPort:
+          type:
+          - 'null'
+          - integer
+          format: int32
+        proxyPort:
+          type:
+          - 'null'
+          - integer
+          format: int32
+      additionalProperties: {}
+    EventDTO:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/EventMetaDTO'
+        network:
+          $ref: '#/components/schemas/EventNetworkDTO'
+        outcome:
+          $ref: '#/components/schemas/EventOutcomeDTO'
+      additionalProperties: {}
+    GenericResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
+    EventMetaDTO:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        eventType:
+          type:
+          - 'null'
+          - string
+        eventId:
+          type:
+          - 'null'
+          - string
+        resourceSetId:
+          type: string
+          format: uuid
+        policyId:
+          type:
+          - 'null'
+          - string
+        action:
+          type:
+          - 'null'
+          - string
+        connectionId:
+          type:
+          - 'null'
+          - string
+        severity:
+          type:
+          - 'null'
+          - string
+      additionalProperties: {}
+    EventListDTO:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Page of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
+          type:
+          - 'null'
+          - string
+          description: Ordering criteria used for the current page
+        statusCode:
+          type: integer
+          format: int32
+        recordsTotal:
+          type: integer
+          format: int32
+        workloadEvents:
+          type:
+          - 'null'
+          - array
+          items:
+            $ref: '#/components/schemas/EventDTO'
+      additionalProperties: false
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: Authorization header using the Bearer scheme.
+      scheme: bearer
+      bearerFormat: Reference

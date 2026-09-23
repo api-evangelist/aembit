@@ -1,0 +1,572 @@
+openapi: 3.2.0
+info:
+  title: Aembit Cloud Log Stream API
+  version: v1
+servers:
+- url: https://{tenant}.aembit.io
+  variables:
+    tenant:
+      default: tenant
+      description: Aembit Tenant ID
+security:
+- {}
+tags:
+- name: Log Stream
+paths:
+  /api/v1/log-streams:
+    get:
+      tags:
+      - Log Stream
+      summary: Get a page of Log Streams
+      description: Get a page of Log Streams.
+      operationId: get-log-streams
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: per-page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 100
+      - name: filter
+        in: query
+        schema:
+          type: string
+          default: ''
+      - name: order
+        in: query
+        schema:
+          type: string
+          default: ''
+      responses:
+        '200':
+          description: Page of Log Streams
+          content:
+            application/json:
+              schema:
+                description: Page of Log Streams
+                $ref: '#/components/schemas/LogStreamListDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    post:
+      tags:
+      - Log Stream
+      summary: Create a Log Stream
+      description: Create a Log Stream.
+      operationId: post-log-stream
+      requestBody:
+        description: LogStreamDTO
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - $ref: '#/components/schemas/LogStreamAWSS3DestinationDTO'
+              - $ref: '#/components/schemas/LogStreamGCSBucketDestinationDTO'
+              - $ref: '#/components/schemas/LogStreamCrowdstrikeDestinationDTO'
+              - $ref: '#/components/schemas/LogStreamSplunkDestinationDTO'
+              description: Individual Log Stream
+      responses:
+        '201':
+          description: Created Log Stream
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/LogStreamAWSS3DestinationDTO'
+                - $ref: '#/components/schemas/LogStreamGCSBucketDestinationDTO'
+                - $ref: '#/components/schemas/LogStreamCrowdstrikeDestinationDTO'
+                - $ref: '#/components/schemas/LogStreamSplunkDestinationDTO'
+                description: Individual Log Stream
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    put:
+      tags:
+      - Log Stream
+      summary: Update a Log Stream
+      description: Update a Log Stream.
+      operationId: put-log-stream
+      requestBody:
+        description: LogStreamDTO
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - $ref: '#/components/schemas/LogStreamAWSS3DestinationDTO'
+              - $ref: '#/components/schemas/LogStreamGCSBucketDestinationDTO'
+              - $ref: '#/components/schemas/LogStreamCrowdstrikeDestinationDTO'
+              - $ref: '#/components/schemas/LogStreamSplunkDestinationDTO'
+              description: Individual Log Stream
+      responses:
+        '200':
+          description: Updated Log Stream
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/LogStreamAWSS3DestinationDTO'
+                - $ref: '#/components/schemas/LogStreamGCSBucketDestinationDTO'
+                - $ref: '#/components/schemas/LogStreamCrowdstrikeDestinationDTO'
+                - $ref: '#/components/schemas/LogStreamSplunkDestinationDTO'
+                description: Individual Log Stream
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+  /api/v1/log-streams/{id}:
+    get:
+      tags:
+      - Log Stream
+      summary: Get a Log Stream
+      description: Get a Log Stream identified by its ID.
+      operationId: get-log-stream
+      parameters:
+      - name: id
+        in: path
+        description: ID of Log Stream
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Log Stream
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/LogStreamAWSS3DestinationDTO'
+                - $ref: '#/components/schemas/LogStreamGCSBucketDestinationDTO'
+                - $ref: '#/components/schemas/LogStreamCrowdstrikeDestinationDTO'
+                - $ref: '#/components/schemas/LogStreamSplunkDestinationDTO'
+                description: Individual Log Stream
+        '204':
+          description: Log Stream Not Found
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    delete:
+      tags:
+      - Log Stream
+      summary: Delete a Log Stream
+      description: Delete a Log Stream identified by its ID.
+      operationId: delete-log-stream
+      parameters:
+      - name: id
+        in: path
+        description: ID of Log Stream
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: Successfully deleted Log Stream
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    patch:
+      tags:
+      - Log Stream
+      summary: Patch a Log Stream
+      description: Patch a Log Stream identified by its ID.
+      operationId: patch-log-stream
+      parameters:
+      - name: id
+        in: path
+        description: ID of Log Stream
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: LogStreamPatchDTO
+        content:
+          application/json:
+            schema:
+              description: Patch Request for an individual of Log Stream
+              $ref: '#/components/schemas/LogStreamPatchDTO'
+      responses:
+        '200':
+          description: Patched Log Stream
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/LogStreamAWSS3DestinationDTO'
+                - $ref: '#/components/schemas/LogStreamGCSBucketDestinationDTO'
+                - $ref: '#/components/schemas/LogStreamCrowdstrikeDestinationDTO'
+                - $ref: '#/components/schemas/LogStreamSplunkDestinationDTO'
+                description: Individual Log Stream
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+components:
+  schemas:
+    LogStreamAWSS3DestinationDTO:
+      allOf:
+      - description: Individual Log Stream
+        $ref: '#/components/schemas/LogStreamDTO'
+      - required:
+        - s3BucketName
+        - s3BucketRegion
+        type: object
+        properties:
+          s3BucketRegion:
+            maxLength: 30
+            minLength: 8
+            pattern: ^[a-z\-\d]+$
+            type: string
+          s3BucketName:
+            maxLength: 63
+            minLength: 3
+            pattern: ^[a-z\d]+[a-z\-\.\d]*[a-z\d]+$
+            type: string
+          s3PathPrefix:
+            maxLength: 800
+            minLength: 3
+            pattern: ^[^\\\{\}\^\%`"'~#\[\]\>\<\|\\\x80-\xff]*$
+            type:
+            - 'null'
+            - string
+        additionalProperties: false
+      description: Individual Log Stream
+    GenericResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
+    LogStreamCrowdstrikeDestinationDTO:
+      allOf:
+      - $ref: '#/components/schemas/LogStreamDTO'
+      - required:
+        - apiKey
+        - hecHostPort
+        - hecSourceName
+        type: object
+        properties:
+          hecHostPort:
+            minLength: 1
+            pattern: ^[a-zA-Z0-9\-\.]+:[0-9]{1,5}$
+            type: string
+          apiKey:
+            minLength: 1
+            pattern: ^[a-zA-Z0-9-]{32,40}$
+            type: string
+          hecSourceName:
+            minLength: 1
+            type: string
+          tls:
+            type: boolean
+          tlsVerification:
+            type:
+            - 'null'
+            - string
+        additionalProperties: false
+      description: Individual Log Stream
+    LogStreamSplunkDestinationDTO:
+      allOf:
+      - $ref: '#/components/schemas/LogStreamDTO'
+      - required:
+        - authenticationToken
+        - hecHostPort
+        - hecSourceName
+        type: object
+        properties:
+          hecHostPort:
+            minLength: 1
+            pattern: ^[a-zA-Z0-9\-\.]+:[0-9]{1,5}$
+            type: string
+          authenticationToken:
+            minLength: 1
+            pattern: ^[a-fA-F0-9]{8}\-[a-fA-F0-9]{4}\-[a-fA-F0-9]{4}\-[a-fA-F0-9]{4}\-[a-fA-F0-9]{12}$
+            type: string
+          hecSourceName:
+            minLength: 1
+            type: string
+          tls:
+            type: boolean
+          tlsVerification:
+            type:
+            - 'null'
+            - string
+        additionalProperties: false
+      description: Individual Log Stream
+    TagDTO:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          minLength: 1
+          type: string
+          description: Tag Key
+        value:
+          minLength: 1
+          type: string
+          description: Tag Key Value
+      additionalProperties: false
+      description: Aembit Entity Tag Details
+    LogStreamPatchDTO:
+      type: object
+      properties:
+        name:
+          maxLength: 128
+          type:
+          - 'null'
+          - string
+          description: New Name for the identified entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: New Description for the identified entity
+        isActive:
+          type:
+          - 'null'
+          - boolean
+          description: New Status for the identified entity
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+          description: New Tags for the identified entity
+      additionalProperties: false
+      description: Patch Request for an individual of Log Stream
+    LogStreamListDTO:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Page of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
+          type:
+          - 'null'
+          - string
+          description: Ordering criteria used for the current page
+        statusCode:
+          type: integer
+          description: HTTP Status Code of the response
+          format: int32
+        recordsTotal:
+          type: integer
+          description: Total number of Log Streams
+          format: int32
+        logStreams:
+          type:
+          - 'null'
+          - array
+          items:
+            oneOf:
+            - description: Individual Log Stream
+              $ref: '#/components/schemas/LogStreamAWSS3DestinationDTO'
+            - $ref: '#/components/schemas/LogStreamGCSBucketDestinationDTO'
+            - $ref: '#/components/schemas/LogStreamCrowdstrikeDestinationDTO'
+            - $ref: '#/components/schemas/LogStreamSplunkDestinationDTO'
+            description: Individual Log Stream
+          description: Page of Log Streams
+      additionalProperties: false
+      description: Page of Log Streams
+    LogStreamGCSBucketDestinationDTO:
+      allOf:
+      - $ref: '#/components/schemas/LogStreamDTO'
+      - type: object
+        properties:
+          gcsBucketName:
+            pattern: (^[a-z\-_\d]{3,63}$)|(^(?=.*\.)[a-z\-\._\d]{3,222}$)
+            type:
+            - 'null'
+            - string
+          gcsPathPrefix:
+            maxLength: 256
+            minLength: 0
+            pattern: ^[^\#\[\]\*\?\:\"\<\>\|]*$
+            type:
+            - 'null'
+            - string
+          audience:
+            maxLength: 256
+            minLength: 0
+            type:
+            - 'null'
+            - string
+          serviceAccountEmail:
+            maxLength: 90
+            minLength: 0
+            type:
+            - 'null'
+            - string
+          tokenLifetime:
+            maximum: 3600
+            minimum: 15
+            type: integer
+            format: int32
+        additionalProperties: false
+      description: Individual Log Stream
+    LogStreamDestinationType:
+      enum:
+      - AwsS3Bucket
+      - GcsBucket
+      - SplunkHttpEventCollector
+      - CrowdstrikeHttpEventCollector
+      type: string
+    LogStreamDTO:
+      required:
+      - dataType
+      - isActive
+      - name
+      - type
+      type: object
+      properties:
+        type:
+          description: Log Stream Destination Type
+          $ref: '#/components/schemas/LogStreamDestinationType'
+        externalId:
+          type: string
+          format: uuid
+        name:
+          maxLength: 128
+          minLength: 1
+          type: string
+          description: Name of the Entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: Description of the Entity
+        isActive:
+          type: boolean
+          description: True/False value that determines if this entity is Active or Disabled
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        createdBy:
+          type:
+          - 'null'
+          - string
+        modifiedBy:
+          type:
+          - 'null'
+          - string
+        id:
+          type: integer
+          format: int32
+        dataType:
+          minLength: 1
+          type: string
+          description: Log Stream Data Type (e.g. AuditLogs, etc.)
+        inProgTransactionCount:
+          type: integer
+          description: Log Stream In Progress Transaction Count
+          format: int32
+        completedTransactionCount:
+          type: integer
+          description: Log Stream Completed Transaction Count
+          format: int32
+        erroredTransactionCount:
+          type: integer
+          description: Log Stream Errored Transaction Count
+          format: int32
+      additionalProperties: false
+      description: Individual Log Stream
+      discriminator:
+        propertyName: type
+        mapping:
+          AwsS3Bucket: '#/components/schemas/LogStreamAWSS3DestinationDTO'
+          GcsBucket: '#/components/schemas/LogStreamGCSBucketDestinationDTO'
+          CrowdstrikeHttpEventCollector: '#/components/schemas/LogStreamCrowdstrikeDestinationDTO'
+          SplunkHttpEventCollector: '#/components/schemas/LogStreamSplunkDestinationDTO'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: Authorization header using the Bearer scheme.
+      scheme: bearer
+      bearerFormat: Reference

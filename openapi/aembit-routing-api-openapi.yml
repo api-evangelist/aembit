@@ -1,0 +1,375 @@
+openapi: 3.2.0
+info:
+  title: Aembit Cloud Routing API
+  version: v1
+servers:
+- url: https://{tenant}.aembit.io
+  variables:
+    tenant:
+      default: tenant
+      description: Aembit Tenant ID
+security:
+- {}
+tags:
+- name: Routing
+paths:
+  /api/v1/routings/{id}:
+    get:
+      tags:
+      - Routing
+      summary: Get a Routing
+      description: Get a Routing identified by its ID.
+      operationId: get-routing
+      parameters:
+      - name: id
+        in: path
+        description: ID of Routing
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Routing
+          content:
+            application/json:
+              schema:
+                description: Individual Routing
+                $ref: '#/components/schemas/RoutingDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    patch:
+      tags:
+      - Routing
+      summary: Patch a Routing
+      description: Patch a Routing identified by its ID.
+      operationId: patch-routing
+      parameters:
+      - name: id
+        in: path
+        description: ID of Routing
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: RoutingPatchDTO
+        content:
+          application/json:
+            schema:
+              description: Patch request for an individual Routing
+              $ref: '#/components/schemas/RoutingPatchDTO'
+      responses:
+        '200':
+          description: Patched Routing
+          content:
+            application/json:
+              schema:
+                description: Individual Routing
+                $ref: '#/components/schemas/RoutingDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+  /api/v1/routings:
+    get:
+      tags:
+      - Routing
+      summary: Get a page of Routings
+      description: Get a page of Routings.
+      operationId: get-routings
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: per-page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 100
+      - name: filter
+        in: query
+        schema:
+          type: string
+          default: ''
+      - name: order
+        in: query
+        schema:
+          type: string
+          default: ''
+      - name: group-by
+        in: query
+        schema:
+          type: string
+          default: ''
+      responses:
+        '200':
+          description: Page of Routings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoutingDTOListDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    post:
+      tags:
+      - Routing
+      summary: Create a Routing
+      description: Create a Routing.
+      operationId: post-routing
+      requestBody:
+        description: RoutingDTO
+        content:
+          application/json:
+            schema:
+              description: Individual Routing
+              $ref: '#/components/schemas/RoutingDTO'
+      responses:
+        '201':
+          description: Created Routing
+          content:
+            application/json:
+              schema:
+                description: Individual Routing
+                $ref: '#/components/schemas/RoutingDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    put:
+      tags:
+      - Routing
+      summary: Update a Routing
+      description: Update a Routing.
+      operationId: put-routing
+      requestBody:
+        description: RoutingDTO
+        content:
+          application/json:
+            schema:
+              description: Individual Routing
+              $ref: '#/components/schemas/RoutingDTO'
+      responses:
+        '200':
+          description: Updated Routing
+          content:
+            application/json:
+              schema:
+                description: Individual Routing
+                $ref: '#/components/schemas/RoutingDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+components:
+  schemas:
+    RoutingDTO:
+      required:
+      - isActive
+      - name
+      - proxyUrl
+      - resourceSetId
+      type: object
+      properties:
+        externalId:
+          type: string
+          format: uuid
+        name:
+          maxLength: 128
+          minLength: 1
+          type: string
+          description: Name of the Entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: Description of the Entity
+        isActive:
+          type: boolean
+          description: True/False value that determines if this entity is Active or Disabled
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        createdBy:
+          type:
+          - 'null'
+          - string
+        modifiedBy:
+          type:
+          - 'null'
+          - string
+        resourceSetId:
+          type: string
+          description: ID of the Resource Set related to routing
+          format: uuid
+        proxyUrl:
+          maxLength: 255
+          minLength: 1
+          type: string
+          description: URL of the proxy. The format is http(s)://server:port
+      additionalProperties: false
+      description: Individual Routing
+    GenericResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
+    TagDTO:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          minLength: 1
+          type: string
+          description: Tag Key
+        value:
+          minLength: 1
+          type: string
+          description: Tag Key Value
+      additionalProperties: false
+      description: Aembit Entity Tag Details
+    RoutingDTOListDTO:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
+          type:
+          - 'null'
+          - string
+          description: Ordering criteria used for the current page
+        statusCode:
+          type: integer
+          description: HTTP StatusCode for the current result
+          format: int32
+        recordsTotal:
+          type: integer
+          description: Total number of entities available
+          format: int32
+        entities:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Individual Routing
+            $ref: '#/components/schemas/RoutingDTO'
+          description: Page of entities for this request
+      additionalProperties: false
+    RoutingPatchDTO:
+      type: object
+      properties:
+        name:
+          maxLength: 128
+          type:
+          - 'null'
+          - string
+          description: New Name for the identified entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: New Description for the identified entity
+        isActive:
+          type:
+          - 'null'
+          - boolean
+          description: New Status for the identified entity
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+          description: New Tags for the identified entity
+      additionalProperties: false
+      description: Patch request for an individual Routing
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: Authorization header using the Bearer scheme.
+      scheme: bearer
+      bearerFormat: Reference

@@ -1,0 +1,542 @@
+openapi: 3.2.0
+info:
+  title: Aembit Cloud Server Workload API
+  version: v1
+servers:
+- url: https://{tenant}.aembit.io
+  variables:
+    tenant:
+      default: tenant
+      description: Aembit Tenant ID
+security:
+- {}
+tags:
+- name: Server Workload
+paths:
+  /api/v1/server-workloads:
+    post:
+      tags:
+      - Server Workload
+      summary: Create a Server Workload
+      description: Create a Server Workload.
+      operationId: post-server-workload
+      parameters:
+      - name: X-Aembit-ResourceSet
+        in: header
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: ServerWorkloadExternalDTO
+        content:
+          application/json:
+            schema:
+              description: Individual Server Workload
+              $ref: '#/components/schemas/ServerWorkloadExternalDTO'
+      responses:
+        '204':
+          description: Created Server Workload
+          content:
+            application/json:
+              schema:
+                description: Individual Server Workload
+                $ref: '#/components/schemas/ServerWorkloadExternalDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    put:
+      tags:
+      - Server Workload
+      summary: Update a Server Workload
+      description: Update a Server Workload.
+      operationId: put-server-workload
+      parameters:
+      - name: X-Aembit-ResourceSet
+        in: header
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: ServerWorkloadExternalDTO
+        content:
+          application/json:
+            schema:
+              description: Individual Server Workload
+              $ref: '#/components/schemas/ServerWorkloadExternalDTO'
+      responses:
+        '200':
+          description: Updated Server Workload
+          content:
+            application/json:
+              schema:
+                description: Individual Server Workload
+                $ref: '#/components/schemas/ServerWorkloadExternalDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    get:
+      tags:
+      - Server Workload
+      summary: Get a page of Server Workloads
+      description: Get a page of Server Workloads.
+      operationId: get-server-workloads
+      parameters:
+      - name: X-Aembit-ResourceSet
+        in: header
+        schema:
+          type: string
+          format: uuid
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: per-page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 100
+      - name: filter
+        in: query
+        schema:
+          type: string
+          default: ''
+      - name: order
+        in: query
+        schema:
+          type: string
+          default: ''
+      - name: group-by
+        in: query
+        schema:
+          type: string
+          default: ''
+      responses:
+        '200':
+          description: Page of Server Workloads
+          content:
+            application/json:
+              schema:
+                description: Page of Server Workloads
+                $ref: '#/components/schemas/ServerWorkloadListDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+  /api/v1/server-workloads/{id}:
+    patch:
+      tags:
+      - Server Workload
+      summary: Patch a Server Workload
+      description: Patch a Server Workload.
+      operationId: patch-server-workload
+      parameters:
+      - name: id
+        in: path
+        description: ID of Server Workload
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Aembit-ResourceSet
+        in: header
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: EntityPatchDTO
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntityPatchDTO'
+      responses:
+        '200':
+          description: Patched Server Workload
+          content:
+            application/json:
+              schema:
+                description: Individual Server Workload
+                $ref: '#/components/schemas/ServerWorkloadExternalDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    get:
+      tags:
+      - Server Workload
+      summary: Get a Server Workload
+      description: Get a Server Workload identified by its ID.
+      operationId: get-server-workload
+      parameters:
+      - name: id
+        in: path
+        description: ID of Server Workload
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Aembit-ResourceSet
+        in: header
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Server Workload
+          content:
+            application/json:
+              schema:
+                description: Individual Server Workload
+                $ref: '#/components/schemas/ServerWorkloadExternalDTO'
+        '204':
+          description: Server Workload Not Found
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    delete:
+      tags:
+      - Server Workload
+      summary: Delete a Server Workload
+      description: Delete a Server Workload identified by its ID.
+      operationId: delete-server-workload
+      parameters:
+      - name: id
+        in: path
+        description: ID of Server Workload
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Aembit-ResourceSet
+        in: header
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: Successfully deleted Server Workload
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+components:
+  schemas:
+    WorkloadServiceAuthenticationDTO:
+      required:
+      - method
+      - scheme
+      type: object
+      properties:
+        method:
+          minLength: 1
+          type: string
+          description: Authentication Method
+        scheme:
+          minLength: 1
+          type: string
+          description: Authentication Scheme
+        config:
+          type:
+          - 'null'
+          - string
+          description: Authentication Configuration
+      additionalProperties: false
+      description: Authentication configuration for a Server Workload
+    EntityPatchDTO:
+      type: object
+      properties:
+        name:
+          maxLength: 128
+          type:
+          - 'null'
+          - string
+          description: New Name for the identified entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: New Description for the identified entity
+        isActive:
+          type:
+          - 'null'
+          - boolean
+          description: New Status for the identified entity
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+          description: New Tags for the identified entity
+      additionalProperties: false
+    ServerWorkloadExternalDTO:
+      required:
+      - isActive
+      - name
+      - resourceSet
+      - serviceEndpoint
+      type: object
+      properties:
+        externalId:
+          type: string
+          format: uuid
+        name:
+          maxLength: 128
+          minLength: 1
+          type: string
+          description: Name of the Entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: Description of the Entity
+        isActive:
+          type: boolean
+          description: True/False value that determines if this entity is Active or Disabled
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        createdBy:
+          type:
+          - 'null'
+          - string
+        modifiedBy:
+          type:
+          - 'null'
+          - string
+        resourceSet:
+          type: string
+          description: ID of the Resource Set in which this Access Entity exists
+          format: uuid
+        serviceEndpoint:
+          description: Service Endpoint of the Server Workload
+          $ref: '#/components/schemas/WorkloadServiceEndpointDTO'
+        type:
+          type:
+          - 'null'
+          - string
+          description: Type of Server Workload
+        accessPolicyCount:
+          type: integer
+          description: Access Policies associated with this Server Workload
+          format: int32
+      additionalProperties: false
+      description: Individual Server Workload
+    GenericResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
+    ServerWorkloadListDTO:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Page of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
+          type:
+          - 'null'
+          - string
+          description: Ordering criteria used for the current page
+        statusCode:
+          type: integer
+          format: int32
+        recordsTotal:
+          type: integer
+          format: int32
+        serverWorkloads:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Individual Server Workload
+            $ref: '#/components/schemas/ServerWorkloadExternalDTO'
+      additionalProperties: false
+      description: Page of Server Workloads
+    TagDTO:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          minLength: 1
+          type: string
+          description: Tag Key
+        value:
+          minLength: 1
+          type: string
+          description: Tag Key Value
+      additionalProperties: false
+      description: Aembit Entity Tag Details
+    StringStringKeyValuePair:
+      type: object
+      properties:
+        key:
+          type:
+          - 'null'
+          - string
+        value:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+    WorkloadServiceEndpointDTO:
+      required:
+      - appProtocol
+      - host
+      - port
+      - requestedPort
+      - requestedTls
+      - tls
+      - tlsVerification
+      - transportProtocol
+      type: object
+      properties:
+        externalId:
+          type:
+          - 'null'
+          - string
+          description: External ID of the Service Endpoint
+        id:
+          type: integer
+          description: ID of the Service Endpoint
+          format: int32
+        host:
+          minLength: 1
+          type: string
+          description: Hostname or IP Address
+        appProtocol:
+          minLength: 1
+          type: string
+          description: Application Protocol
+        transportProtocol:
+          maxLength: 3
+          minLength: 0
+          type: string
+          description: Transport Protocol (e.g. TCP)
+        requestedPort:
+          maximum: 65535
+          minimum: 1
+          type: integer
+          description: The target port as specified by the Client Workload
+          format: int32
+        requestedTls:
+          type: boolean
+          description: The TLS encryption configuration of the Client Workload
+        port:
+          maximum: 65535
+          minimum: 1
+          type: integer
+          description: The target port to which the Agent/Proxy will communicate
+          format: int32
+        tls:
+          type: boolean
+          description: The TLS encryption configuration which will be used by the Agent/Proxy
+        workloadServiceAuthentication:
+          description: Authentication configuration
+          $ref: '#/components/schemas/WorkloadServiceAuthenticationDTO'
+        tlsVerification:
+          minLength: 1
+          type: string
+          description: TLS Verification configuration for the Agent/Proxy to Server Workload connection
+        urlPath:
+          type:
+          - 'null'
+          - string
+          description: URL Path configuration for the Client Workload to Server Workload request
+        httpHeaders:
+          title: KeyValuePair<string, string>
+          type:
+          - 'null'
+          - array
+          items:
+            $ref: '#/components/schemas/StringStringKeyValuePair'
+          description: Static HTTP Headers to include for transmission to the Server Workload
+      additionalProperties: false
+      description: Service Endpoint for a Server Workload
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: Authorization header using the Bearer scheme.
+      scheme: bearer
+      bearerFormat: Reference

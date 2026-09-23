@@ -1,0 +1,716 @@
+openapi: 3.2.0
+info:
+  title: Aembit Cloud Agent Controller API
+  version: v1
+servers:
+- url: https://{tenant}.aembit.io
+  variables:
+    tenant:
+      default: tenant
+      description: Aembit Tenant ID
+security:
+- {}
+tags:
+- name: Agent Controller
+paths:
+  /api/v1/agent-controllers:
+    get:
+      tags:
+      - Agent Controller
+      summary: Get a page of Agent Controllers
+      description: Get a page of Agent Controllers.
+      operationId: get-agent-controllers
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: per-page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 100
+      - name: filter
+        in: query
+        schema:
+          type: string
+          default: ''
+      - name: order
+        in: query
+        schema:
+          type: string
+          default: ''
+      - name: group-by
+        in: query
+        schema:
+          type: string
+          default: ''
+      - name: check-tls-type
+        in: query
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: Page of Agent Controllers
+          content:
+            application/json:
+              schema:
+                description: Page of Agent Controllers for Agent Proxy management
+                $ref: '#/components/schemas/AgentControllerListDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    post:
+      tags:
+      - Agent Controller
+      summary: Create an Agent Controller
+      description: Create an Agent Controller.
+      operationId: post-agent-controller
+      requestBody:
+        description: AgentControllerDTO
+        content:
+          application/json:
+            schema:
+              description: DTO of an individual Agent Controller for Agent Proxy management
+              $ref: '#/components/schemas/AgentControllerDTO'
+      responses:
+        '201':
+          description: Created Agent Controller
+          content:
+            application/json:
+              schema:
+                description: DTO of an individual Agent Controller for Agent Proxy management
+                $ref: '#/components/schemas/AgentControllerDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    put:
+      tags:
+      - Agent Controller
+      summary: Update an Agent Controller
+      description: Update an Agent Controller.
+      operationId: put-agent-controller
+      requestBody:
+        description: AgentControllerDTO
+        content:
+          application/json:
+            schema:
+              description: DTO of an individual Agent Controller for Agent Proxy management
+              $ref: '#/components/schemas/AgentControllerDTO'
+      responses:
+        '200':
+          description: Updated Agent Controller
+          content:
+            application/json:
+              schema:
+                description: DTO of an individual Agent Controller for Agent Proxy management
+                $ref: '#/components/schemas/AgentControllerDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+  /api/v1/agent-controllers/{id}:
+    get:
+      tags:
+      - Agent Controller
+      summary: Get an Agent Controller
+      description: Get an Agent Controller identified by its ID.
+      operationId: get-agent-controller
+      parameters:
+      - name: id
+        in: path
+        description: ID of Agent Controller
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Agent Controller
+          content:
+            application/json:
+              schema:
+                description: DTO of an individual Agent Controller for Agent Proxy management
+                $ref: '#/components/schemas/AgentControllerDTO'
+        '204':
+          description: Agent Controller Not Found
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    patch:
+      tags:
+      - Agent Controller
+      summary: Patch an Agent Controller
+      description: Patch an Agent Controller identified by its ID.
+      operationId: patch-agent-controller
+      parameters:
+      - name: id
+        in: path
+        description: ID of Agent Controller
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: AgentControllerPatchDTO
+        content:
+          application/json:
+            schema:
+              description: Patch Request DTO for individual Agent Controller
+              $ref: '#/components/schemas/AgentControllerPatchDTO'
+      responses:
+        '200':
+          description: Patched Agent Controller
+          content:
+            application/json:
+              schema:
+                description: DTO of an individual Agent Controller for Agent Proxy management
+                $ref: '#/components/schemas/AgentControllerDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+    delete:
+      tags:
+      - Agent Controller
+      summary: Delete an Agent Controller
+      description: Delete an Agent Controller identified by its ID.
+      operationId: delete-agent-controller
+      parameters:
+      - name: id
+        in: path
+        description: ID of Agent Controller
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '201':
+          description: Successfully deleted Agent Controller
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+  /api/v1/agent-controllers/{agentControllerExternalId}/device-code:
+    post:
+      tags:
+      - Agent Controller
+      summary: Generate a Device Code for an Agent Controller
+      description: Generate a Device Code for an Agent Controller.
+      operationId: post-agent-controller-device-code
+      parameters:
+      - name: agentControllerExternalId
+        in: path
+        description: ID of Agent Controller
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '201':
+          description: Agent Controller Device Code
+          content:
+            application/json:
+              schema:
+                description: DTO of an individual Agent Controller Device Code
+                $ref: '#/components/schemas/AgentControllerDeviceCodeDTO'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authenticated
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: DTO for a Generic API Response
+                $ref: '#/components/schemas/GenericResponseDTO'
+components:
+  schemas:
+    AgentControllerDTO:
+      required:
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID of the Agent Controller
+          format: int
+        externalId:
+          type: string
+          description: ID of the Agent Controller
+          format: uuid
+        createdAt:
+          type: string
+          description: Agent Controller creation Timestamp
+          format: date
+        version:
+          type:
+          - 'null'
+          - string
+          description: Last reported software version of the Agent Controller
+        isActive:
+          type: boolean
+          description: Active status of the Agent Controller
+          format: boolean
+        name:
+          maxLength: 128
+          minLength: 1
+          type: string
+          description: Name of the Agent Controller
+        description:
+          type:
+          - 'null'
+          - string
+          description: Description of the Agent Controller
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Agent Controller Tag key and value
+            $ref: '#/components/schemas/AgentControllerTagDTO'
+          description: Tags assigned to the Agent Controller
+        tlsCertificates:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Agent Controller TLS Certificate information
+            $ref: '#/components/schemas/AgentControllerTlsCertificateDTO'
+          description: TLS Certificates associated with the Agent Controller
+        trustProviderId:
+          type:
+          - 'null'
+          - string
+          description: Trust Provider ID of the Agent Controller used for attested authentication
+          format: uuid
+        trustProvider:
+          description: Trust Provider of the Agent Controller used for attested authentication
+          $ref: '#/components/schemas/TrustProviderDTO'
+        modifiedAt:
+          type: string
+          description: Agent Controller modification Timestamp
+          format: date
+        isHealthy:
+          type: boolean
+          description: Recently reported Agent Controller Health Status
+          format: boolean
+        lastReportedUptime:
+          type: integer
+          description: Last Reported Agent Controller Uptime (in seconds)
+          format: int64
+        lastReportedHealthTime:
+          type:
+          - 'null'
+          - string
+          description: Last Reported Agent Controller Health Time
+          format: date
+        allowedTlsHostname:
+          maxLength: 256
+          type:
+          - 'null'
+          - string
+          description: Allowed TLS Hostname for Aembit Managed TLS
+      additionalProperties: false
+      description: DTO of an individual Agent Controller for Agent Proxy management
+    AgentControllerTlsCertificateDTO:
+      required:
+      - createdAt
+      - hostName
+      - notAfter
+      - notBefore
+      - serialNumber
+      - subject
+      - thumbprint
+      type: object
+      properties:
+        subject:
+          type: string
+          description: Subject of the Certificate
+        serialNumber:
+          minLength: 1
+          type: string
+          description: Serial Number of the Certificate
+        thumbprint:
+          minLength: 1
+          type: string
+          description: Thumbprint of the Certificate
+        notBefore:
+          type: string
+          description: Creation Timestamp of the Certificate
+          format: date-time
+        notAfter:
+          type: string
+          description: Expiration Timestamp of the Certificate
+          format: date-time
+        hostName:
+          minLength: 1
+          type: string
+          description: Last reported Hostname for the Agent Controller
+        createdAt:
+          type: string
+          description: Creation Timestamp for this Agent Controller TLS Certificate
+          format: date-time
+        isManagedByAembit:
+          type: boolean
+          description: True if the Agent Controller TLS Certificate is managed by Aembit
+          format: boolean
+      additionalProperties: false
+      description: Agent Controller TLS Certificate information
+    AgentControllerPatchDTO:
+      type: object
+      properties:
+        version:
+          type:
+          - 'null'
+          - string
+        isActive:
+          type:
+          - 'null'
+          - boolean
+          description: New Status for the identified Agent Controller
+          format: boolean
+        trustProviderId:
+          type:
+          - 'null'
+          - string
+          description: New Trust Provider to use for the identified Agent Controller
+          format: uuid
+      additionalProperties: false
+      description: Patch Request DTO for individual Agent Controller
+    PublicKeyValidationDTO:
+      type: object
+      properties:
+        isValidContent:
+          type: boolean
+          description: True if the Public Key was valid, False otherwise
+        thumbprint:
+          type:
+          - 'null'
+          - string
+          description: Thumbprint of the Public Key
+        expirationDate:
+          type:
+          - 'null'
+          - string
+          description: Expiration of the Public Key Certificate
+          format: date-time
+        expirationDateString:
+          type:
+          - 'null'
+          - string
+          description: Expiration of the Public Key Certificate in String Format
+        certificateSubject:
+          type:
+          - 'null'
+          - string
+          description: Subject of the Public Key Certificate
+        serialNumber:
+          type:
+          - 'null'
+          - string
+          description: Serial Number of the Public Key Certificate
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message describing why the Public Key was not valid if IsValidContent is False
+        pemType:
+          type:
+          - 'null'
+          - string
+          description: Certificate or Public Key
+      additionalProperties: false
+      description: Response to a request for Public Key Validation
+    GenericResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
+    TagDTO:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          minLength: 1
+          type: string
+          description: Tag Key
+        value:
+          minLength: 1
+          type: string
+          description: Tag Key Value
+      additionalProperties: false
+      description: Aembit Entity Tag Details
+    AgentControllerListDTO:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Page of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
+          type:
+          - 'null'
+          - string
+          description: Ordering criteria used for the current page
+        statusCode:
+          type: integer
+          description: HTTP StatusCode for the current result
+          format: int32
+        recordsTotal:
+          type: integer
+          description: Total number of AgentControllers available
+          format: int32
+        agentControllers:
+          type:
+          - 'null'
+          - array
+          items:
+            description: DTO of an individual Agent Controller for Agent Proxy management
+            $ref: '#/components/schemas/AgentControllerDTO'
+          description: Page of AgentControllers for this request
+      additionalProperties: false
+      description: Page of Agent Controllers for Agent Proxy management
+    AgentControllerTagDTO:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          minLength: 1
+          type: string
+          description: Key for the Agent Controller Tag
+        value:
+          minLength: 1
+          type: string
+          description: Value for the Agent Controller Tag
+      additionalProperties: false
+      description: Agent Controller Tag key and value
+    TrustProviderDTO:
+      required:
+      - isActive
+      - name
+      - provider
+      - resourceSet
+      type: object
+      properties:
+        externalId:
+          type: string
+          format: uuid
+        name:
+          maxLength: 128
+          minLength: 1
+          type: string
+          description: Name of the Entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: Description of the Entity
+        isActive:
+          type: boolean
+          description: True/False value that determines if this entity is Active or Disabled
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        createdBy:
+          type:
+          - 'null'
+          - string
+        modifiedBy:
+          type:
+          - 'null'
+          - string
+        resourceSet:
+          type: string
+          description: ID of the Resource Set in which this Access Entity exists
+          format: uuid
+        id:
+          type: integer
+          description: Trust Provider Id
+          format: int32
+        provider:
+          minLength: 1
+          type: string
+          description: Trust Provider Type
+        matchRules:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Individual Match Rule to enforce during Trust Provider attestation
+            $ref: '#/components/schemas/TrustProviderMatchRuleDTO'
+          description: Trust Provider Match Rules
+        certificate:
+          type:
+          - 'null'
+          - string
+          description: Trust Provider Certificate or Public Key for cryptographic attestation
+        jwks:
+          type:
+          - 'null'
+          - string
+          description: Jwks Content for cryptographic attestation
+        publicKeyValidation:
+          description: Response to a request for Public Key Validation
+          $ref: '#/components/schemas/PublicKeyValidationDTO'
+        oidcUrl:
+          type:
+          - 'null'
+          - string
+          description: OIDC URL to use for retrieving JWKS Public Keys
+        pemType:
+          type:
+          - 'null'
+          - string
+          description: PEM Input Type
+        accessPolicyCount:
+          type: integer
+          description: Access Policies associated with this Trust Provider
+          format: int32
+        agentControllersCount:
+          type: integer
+          description: Agent Controllers associated with this Trust Provider
+          format: int32
+        agentControllerIds:
+          type:
+          - 'null'
+          - array
+          items:
+            type: string
+            format: uuid
+          description: Agent Controller IDs associated with this Trust Provider
+        isAembitTenantOidcToken:
+          type: boolean
+        metadataUrl:
+          pattern: https://.*
+          type:
+          - 'null'
+          - string
+          description: Metadata URL of the remote SSO Identity Provider
+        metadataXml:
+          type:
+          - 'null'
+          - string
+          description: Metadata XML content of the remote SSO Identity Provider
+      additionalProperties: false
+      description: Individual Trust Provider
+    TrustProviderMatchRuleDTO:
+      required:
+      - attribute
+      - value
+      type: object
+      properties:
+        attribute:
+          minLength: 1
+          type: string
+          description: Match Rule Attribute
+        value:
+          minLength: 1
+          type: string
+          description: Match Rule Attribute Value
+        key:
+          type:
+          - 'null'
+          - string
+          description: Match Rule Attribute Key
+      additionalProperties: false
+      description: Individual Match Rule to enforce during Trust Provider attestation
+    AgentControllerDeviceCodeDTO:
+      type: object
+      properties:
+        device_code:
+          type:
+          - 'null'
+          - string
+          description: One time use OAuth 2 Device Code for use during AgentController deployment and registration
+      additionalProperties: false
+      description: DTO of an individual Agent Controller Device Code
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: Authorization header using the Bearer scheme.
+      scheme: bearer
+      bearerFormat: Reference
