@@ -271,33 +271,25 @@ paths:
                 $ref: '#/components/schemas/GenericResponseDTO'
 components:
   schemas:
-    IntegrationDTO:
-      required:
-      - endpoint
-      - integrationJSON
-      - isActive
-      - name
-      - resourceSet
-      - syncFrequencySeconds
-      - type
+    AccessConditionPatchDTO:
       type: object
       properties:
-        externalId:
-          type: string
-          format: uuid
         name:
           maxLength: 128
-          minLength: 1
-          type: string
-          description: Name of the Entity
+          type:
+          - 'null'
+          - string
+          description: New Name for the identified entity
         description:
           type:
           - 'null'
           - string
-          description: Description of the Entity
+          description: New Description for the identified entity
         isActive:
-          type: boolean
-          description: True/False value that determines if this entity is Active or Disabled
+          type:
+          - 'null'
+          - boolean
+          description: New Status for the identified entity
           format: boolean
         tags:
           type:
@@ -306,72 +298,25 @@ components:
           items:
             description: Aembit Entity Tag Details
             $ref: '#/components/schemas/TagDTO'
-        createdAt:
-          type: string
-          format: date-time
-        modifiedAt:
-          type:
-          - 'null'
-          - string
-          format: date-time
-        createdBy:
-          type:
-          - 'null'
-          - string
-        modifiedBy:
-          type:
-          - 'null'
-          - string
-        resourceSet:
-          type: string
-          description: ID of the Resource Set in which this Access Entity exists
-          format: uuid
-        type:
-          minLength: 1
-          type: string
-        syncFrequencySeconds:
-          maximum: 3600
-          minimum: 300
-          type: integer
-          format: int32
-        lastSync:
-          type:
-          - 'null'
-          - string
-          format: date-time
-        lastSyncStatus:
-          type:
-          - 'null'
-          - string
-        endpoint:
-          minLength: 1
-          type: string
-        integrationJSON:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/JsonNode'
-        accessConditionsCount:
-          type: integer
-          format: int32
+          description: New Tags for the identified entity
       additionalProperties: false
-      description: Integration details for 3rd party data used by Access Conditions
-    GenericResponseDTO:
+      description: Patch Request DTO for individual Access Condition
+    TagDTO:
+      required:
+      - key
+      - value
       type: object
       properties:
-        success:
-          type: boolean
-          description: True if the API call was successful, False otherwise
-        message:
-          type:
-          - 'null'
-          - string
-          description: Message to indicate why the API call failed
-        id:
-          type: integer
-          description: Unique identifier of the API response
-          format: int32
+        key:
+          minLength: 1
+          type: string
+          description: Tag Key
+        value:
+          minLength: 1
+          type: string
+          description: Tag Key Value
       additionalProperties: false
-      description: DTO for a Generic API Response
+      description: Aembit Entity Tag Details
     AccessConditionDTO:
       required:
       - conditions
@@ -480,28 +425,6 @@ components:
           description: Page of Access Conditions
       additionalProperties: false
       description: Page of Access Conditions
-    JsonNodeOptions:
-      type: object
-      properties:
-        propertyNameCaseInsensitive:
-          type: boolean
-      additionalProperties: false
-    TagDTO:
-      required:
-      - key
-      - value
-      type: object
-      properties:
-        key:
-          minLength: 1
-          type: string
-          description: Tag Key
-        value:
-          minLength: 1
-          type: string
-          description: Tag Key Value
-      additionalProperties: false
-      description: Aembit Entity Tag Details
     JsonNode:
       type: object
       properties:
@@ -512,25 +435,33 @@ components:
         root:
           $ref: '#/components/schemas/JsonNode'
       additionalProperties: false
-    AccessConditionPatchDTO:
+    IntegrationDTO:
+      required:
+      - endpoint
+      - integrationJSON
+      - isActive
+      - name
+      - resourceSet
+      - syncFrequencySeconds
+      - type
       type: object
       properties:
+        externalId:
+          type: string
+          format: uuid
         name:
           maxLength: 128
-          type:
-          - 'null'
-          - string
-          description: New Name for the identified entity
+          minLength: 1
+          type: string
+          description: Name of the Entity
         description:
           type:
           - 'null'
           - string
-          description: New Description for the identified entity
+          description: Description of the Entity
         isActive:
-          type:
-          - 'null'
-          - boolean
-          description: New Status for the identified entity
+          type: boolean
+          description: True/False value that determines if this entity is Active or Disabled
           format: boolean
         tags:
           type:
@@ -539,9 +470,78 @@ components:
           items:
             description: Aembit Entity Tag Details
             $ref: '#/components/schemas/TagDTO'
-          description: New Tags for the identified entity
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        createdBy:
+          type:
+          - 'null'
+          - string
+        modifiedBy:
+          type:
+          - 'null'
+          - string
+        resourceSet:
+          type: string
+          description: ID of the Resource Set in which this Access Entity exists
+          format: uuid
+        type:
+          minLength: 1
+          type: string
+        syncFrequencySeconds:
+          maximum: 3600
+          minimum: 300
+          type: integer
+          format: int32
+        lastSync:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        lastSyncStatus:
+          type:
+          - 'null'
+          - string
+        endpoint:
+          minLength: 1
+          type: string
+        integrationJSON:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/JsonNode'
+        accessConditionsCount:
+          type: integer
+          format: int32
       additionalProperties: false
-      description: Patch Request DTO for individual Access Condition
+      description: Integration details for 3rd party data used by Access Conditions
+    GenericResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
+    JsonNodeOptions:
+      type: object
+      properties:
+        propertyNameCaseInsensitive:
+          type: boolean
+      additionalProperties: false
   securitySchemes:
     bearerAuth:
       type: http

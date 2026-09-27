@@ -110,6 +110,110 @@ paths:
       - {}
 components:
   schemas:
+    AwsEcsDTO:
+      type: object
+      properties:
+        containerMetadata:
+          type:
+          - 'null'
+          - string
+          description: JSON string containing AWS ECS container metadata
+        taskMetadata:
+          type:
+          - 'null'
+          - string
+          description: JSON string containing AWS ECS task metadata
+      additionalProperties: false
+      description: AWS ECS container and task metadata for workload attestation
+    EnvironmentDTO:
+      type: object
+      properties:
+        K8S_POD_NAME:
+          type:
+          - 'null'
+          - string
+          description: Kubernetes pod name environment variable
+        CLIENT_WORKLOAD_ID:
+          type:
+          - 'null'
+          - string
+          description: Aembit Client Workload identifier environment variable
+        KUBERNETES_PROVIDER_ID:
+          type:
+          - 'null'
+          - string
+          description: Kubernetes Trust Provider identifier environment variable
+        AEMBIT_RESOURCE_SET_ID:
+          type:
+          - 'null'
+          - string
+          description: Aembit Resource Set identifier environment variable
+      additionalProperties: false
+      description: Environment variables available to the Client Workload
+    ClientWorkloadDetails:
+      type: object
+      properties:
+        sourceIP:
+          type:
+          - 'null'
+          - string
+          description: IP address of the requesting Client Workload
+        aws:
+          description: AWS-specific attestation data for Client Workload identification
+          $ref: '#/components/schemas/AwsDTO'
+        azure:
+          description: Azure-specific attestation data for Client Workload identification
+          $ref: '#/components/schemas/AzureAttestationDTO'
+        gcp:
+          description: GCP-specific attestation data for Client Workload identification
+          $ref: '#/components/schemas/GcpAttestationDTO'
+        os:
+          description: Operating system environment information for Client Workload attestation
+          $ref: '#/components/schemas/OsDTO'
+        k8s:
+          description: Kubernetes-specific attestation data for Kubernetes pod identification
+          $ref: '#/components/schemas/K8sDTO'
+        host:
+          description: Host system information for Client Workload attestation
+          $ref: '#/components/schemas/HostDTO'
+        github:
+          description: JWT-based identity token attestation for CI/CD platforms
+          $ref: '#/components/schemas/IdentityTokenAttestationDTO'
+        terraform:
+          description: JWT-based identity token attestation for CI/CD platforms
+          $ref: '#/components/schemas/IdentityTokenAttestationDTO'
+        gitlab:
+          description: JWT-based identity token attestation for CI/CD platforms
+          $ref: '#/components/schemas/IdentityTokenAttestationDTO'
+        oidc:
+          description: JWT-based identity token attestation for CI/CD platforms
+          $ref: '#/components/schemas/IdentityTokenAttestationDTO'
+      additionalProperties: false
+      description: Identity and attestation information for a Client Workload requesting credentials
+    AwsDTO:
+      type: object
+      properties:
+        instanceIdentityDocument:
+          type:
+          - 'null'
+          - string
+          description: Base64-encoded AWS instance identity document
+        instanceIdentityDocumentSignature:
+          type:
+          - 'null'
+          - string
+          description: Base64-encoded signature for AWS instance identity document verification
+        lambda:
+          description: AWS Lambda function information for serverless workload attestation
+          $ref: '#/components/schemas/LambdaDTO'
+        ecs:
+          description: AWS ECS container and task metadata for workload attestation
+          $ref: '#/components/schemas/AwsEcsDTO'
+        stsGetCallerIdentity:
+          description: AWS STS GetCallerIdentity request data for identity verification
+          $ref: '#/components/schemas/StsGetCallerIdentityDTO'
+      additionalProperties: false
+      description: AWS-specific attestation data for Client Workload identification
     ProcessDTO:
       type: object
       properties:
@@ -148,50 +252,6 @@ components:
           description: Executable hash of the process
       additionalProperties: false
       description: Process information for Client Workload identification
-    StsGetCallerIdentityDTO:
-      type: object
-      properties:
-        headers:
-          type:
-          - 'null'
-          - object
-          additionalProperties:
-            type:
-            - 'null'
-            - string
-          description: HTTP headers for AWS STS GetCallerIdentity request
-        region:
-          type:
-          - 'null'
-          - string
-          description: AWS region for STS GetCallerIdentity request
-      additionalProperties: false
-      description: AWS STS GetCallerIdentity request data for identity verification
-    GenericResponseDTO:
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: True if the API call was successful, False otherwise
-        message:
-          type:
-          - 'null'
-          - string
-          description: Message to indicate why the API call failed
-        id:
-          type: integer
-          description: Unique identifier of the API response
-          format: int32
-      additionalProperties: false
-      description: DTO for a Generic API Response
-    AzureAttestationDTO:
-      type: object
-      properties:
-        attestedDocument:
-          description: Azure Instance Metadata Service (IMDS) Attested Data document.
-          $ref: '#/components/schemas/AzureAttestedDocumentDTO'
-      additionalProperties: false
-      description: Azure-specific attestation data for Client Workload identification
     K8sDTO:
       type: object
       properties:
@@ -202,93 +262,22 @@ components:
           description: Kubernetes service account JWT token
       additionalProperties: false
       description: Kubernetes-specific attestation data for Kubernetes pod identification
-    CrowdStrikeDTO:
+    AuthRequest:
+      title: AuthRequest
+      required:
+      - client
+      - clientId
       type: object
       properties:
-        agentId:
-          type:
-          - 'null'
-          - string
-          description: Unique identifier for the CrowdStrike agent
+        clientId:
+          minLength: 1
+          type: string
+          description: "The Aembit ARN of the Trust Provider configured to attest this workload.\nFormat: 'aembit:{stack}:{tenant}:identity:{type}:{uuid}'\nWhere to find it:\nIn the Aembit Admin UI, navigate to 'Trust Providers', select your provider, \nand copy the value from the 'ID' field."
+        client:
+          description: Client Workload identifiers for authentication
+          $ref: '#/components/schemas/ClientWorkloadDetails'
       additionalProperties: false
-      description: CrowdStrike agent information for endpoint security attestation
-    AwsDTO:
-      type: object
-      properties:
-        instanceIdentityDocument:
-          type:
-          - 'null'
-          - string
-          description: Base64-encoded AWS instance identity document
-        instanceIdentityDocumentSignature:
-          type:
-          - 'null'
-          - string
-          description: Base64-encoded signature for AWS instance identity document verification
-        lambda:
-          description: AWS Lambda function information for serverless workload attestation
-          $ref: '#/components/schemas/LambdaDTO'
-        ecs:
-          description: AWS ECS container and task metadata for workload attestation
-          $ref: '#/components/schemas/AwsEcsDTO'
-        stsGetCallerIdentity:
-          description: AWS STS GetCallerIdentity request data for identity verification
-          $ref: '#/components/schemas/StsGetCallerIdentityDTO'
-      additionalProperties: false
-      description: AWS-specific attestation data for Client Workload identification
-    EnvironmentDTO:
-      type: object
-      properties:
-        K8S_POD_NAME:
-          type:
-          - 'null'
-          - string
-          description: Kubernetes pod name environment variable
-        CLIENT_WORKLOAD_ID:
-          type:
-          - 'null'
-          - string
-          description: Aembit Client Workload identifier environment variable
-        KUBERNETES_PROVIDER_ID:
-          type:
-          - 'null'
-          - string
-          description: Kubernetes Trust Provider identifier environment variable
-        AEMBIT_RESOURCE_SET_ID:
-          type:
-          - 'null'
-          - string
-          description: Aembit Resource Set identifier environment variable
-      additionalProperties: false
-      description: Environment variables available to the Client Workload
-    NetworkInterfacesDTO:
-      type: object
-      properties:
-        name:
-          type:
-          - 'null'
-          - string
-          description: Name of the network interface
-        macAddress:
-          type:
-          - 'null'
-          - string
-          description: MAC address of the network interface
-        ipv4Addresses:
-          type:
-          - 'null'
-          - array
-          items:
-            type: string
-          description: List of IPv4 addresses
-        ipv6Addresses:
-          type:
-          - 'null'
-          - array
-          items:
-            type: string
-          description: List of IPv6 addresses
-      additionalProperties: false
+      description: "Identity and attestation information for Client Workload authentication. \nThis request initiates a session with the Aembit Edge API by providing proof of \nworkload identity via a configured Trust Provider."
     HostDTO:
       type: object
       properties:
@@ -331,6 +320,91 @@ components:
           description: Identity token for workload attestation
       additionalProperties: false
       description: JWT-based identity token attestation for CI/CD platforms
+    LambdaDTO:
+      type: object
+      properties:
+        arn:
+          type:
+          - 'null'
+          - string
+          description: AWS Lambda function ARN
+      additionalProperties: false
+      description: AWS Lambda function information for serverless workload attestation
+    GenericResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
+    CrowdStrikeDTO:
+      type: object
+      properties:
+        agentId:
+          type:
+          - 'null'
+          - string
+          description: Unique identifier for the CrowdStrike agent
+      additionalProperties: false
+      description: CrowdStrike agent information for endpoint security attestation
+    AzureAttestedDocumentDTO:
+      type: object
+      properties:
+        encoding:
+          type:
+          - 'null'
+          - string
+          description: The encoding of the IMDS document.
+        signature:
+          type:
+          - 'null'
+          - string
+          description: The Base64-encoded signature (PKCS7 container) returned by the Azure IMDS 'document' field.
+        nonce:
+          type:
+          - 'null'
+          - string
+          description: The cryptographic nonce passed to the IMDS endpoint.
+      additionalProperties: false
+      description: Azure Instance Metadata Service (IMDS) Attested Data document.
+    NetworkInterfacesDTO:
+      type: object
+      properties:
+        name:
+          type:
+          - 'null'
+          - string
+          description: Name of the network interface
+        macAddress:
+          type:
+          - 'null'
+          - string
+          description: MAC address of the network interface
+        ipv4Addresses:
+          type:
+          - 'null'
+          - array
+          items:
+            type: string
+          description: List of IPv4 addresses
+        ipv6Addresses:
+          type:
+          - 'null'
+          - array
+          items:
+            type: string
+          description: List of IPv6 addresses
+      additionalProperties: false
     GcpAttestationDTO:
       type: object
       properties:
@@ -346,80 +420,6 @@ components:
           description: Base64-encoded GCP instance identity document
       additionalProperties: false
       description: GCP-specific attestation data for Client Workload identification
-    SensorsDTO:
-      type: object
-      properties:
-        crowdStrike:
-          description: CrowdStrike agent information for endpoint security attestation
-          $ref: '#/components/schemas/CrowdStrikeDTO'
-      additionalProperties: false
-      description: Security sensor data for enhanced Client Workload attestation
-    AuthRequest:
-      title: AuthRequest
-      required:
-      - client
-      - clientId
-      type: object
-      properties:
-        clientId:
-          minLength: 1
-          type: string
-          description: "The Aembit ARN of the Trust Provider configured to attest this workload.\nFormat: 'aembit:{stack}:{tenant}:identity:{type}:{uuid}'\nWhere to find it:\nIn the Aembit Admin UI, navigate to 'Trust Providers', select your provider, \nand copy the value from the 'ID' field."
-        client:
-          description: Client Workload identifiers for authentication
-          $ref: '#/components/schemas/ClientWorkloadDetails'
-      additionalProperties: false
-      description: "Identity and attestation information for Client Workload authentication. \nThis request initiates a session with the Aembit Edge API by providing proof of \nworkload identity via a configured Trust Provider."
-    LambdaDTO:
-      type: object
-      properties:
-        arn:
-          type:
-          - 'null'
-          - string
-          description: AWS Lambda function ARN
-      additionalProperties: false
-      description: AWS Lambda function information for serverless workload attestation
-    ClientWorkloadDetails:
-      type: object
-      properties:
-        sourceIP:
-          type:
-          - 'null'
-          - string
-          description: IP address of the requesting Client Workload
-        aws:
-          description: AWS-specific attestation data for Client Workload identification
-          $ref: '#/components/schemas/AwsDTO'
-        azure:
-          description: Azure-specific attestation data for Client Workload identification
-          $ref: '#/components/schemas/AzureAttestationDTO'
-        gcp:
-          description: GCP-specific attestation data for Client Workload identification
-          $ref: '#/components/schemas/GcpAttestationDTO'
-        os:
-          description: Operating system environment information for Client Workload attestation
-          $ref: '#/components/schemas/OsDTO'
-        k8s:
-          description: Kubernetes-specific attestation data for Kubernetes pod identification
-          $ref: '#/components/schemas/K8sDTO'
-        host:
-          description: Host system information for Client Workload attestation
-          $ref: '#/components/schemas/HostDTO'
-        github:
-          description: JWT-based identity token attestation for CI/CD platforms
-          $ref: '#/components/schemas/IdentityTokenAttestationDTO'
-        terraform:
-          description: JWT-based identity token attestation for CI/CD platforms
-          $ref: '#/components/schemas/IdentityTokenAttestationDTO'
-        gitlab:
-          description: JWT-based identity token attestation for CI/CD platforms
-          $ref: '#/components/schemas/IdentityTokenAttestationDTO'
-        oidc:
-          description: JWT-based identity token attestation for CI/CD platforms
-          $ref: '#/components/schemas/IdentityTokenAttestationDTO'
-      additionalProperties: false
-      description: Identity and attestation information for a Client Workload requesting credentials
     OsDTO:
       type: object
       properties:
@@ -428,21 +428,14 @@ components:
           $ref: '#/components/schemas/EnvironmentDTO'
       additionalProperties: false
       description: Operating system environment information for Client Workload attestation
-    AwsEcsDTO:
+    SensorsDTO:
       type: object
       properties:
-        containerMetadata:
-          type:
-          - 'null'
-          - string
-          description: JSON string containing AWS ECS container metadata
-        taskMetadata:
-          type:
-          - 'null'
-          - string
-          description: JSON string containing AWS ECS task metadata
+        crowdStrike:
+          description: CrowdStrike agent information for endpoint security attestation
+          $ref: '#/components/schemas/CrowdStrikeDTO'
       additionalProperties: false
-      description: AWS ECS container and task metadata for workload attestation
+      description: Security sensor data for enhanced Client Workload attestation
     TokenDTO:
       required:
       - accessToken
@@ -469,26 +462,33 @@ components:
           format: int32
       additionalProperties: false
       description: OAuth2-style access token response with expiration details
-    AzureAttestedDocumentDTO:
+    StsGetCallerIdentityDTO:
       type: object
       properties:
-        encoding:
+        headers:
+          type:
+          - 'null'
+          - object
+          additionalProperties:
+            type:
+            - 'null'
+            - string
+          description: HTTP headers for AWS STS GetCallerIdentity request
+        region:
           type:
           - 'null'
           - string
-          description: The encoding of the IMDS document.
-        signature:
-          type:
-          - 'null'
-          - string
-          description: The Base64-encoded signature (PKCS7 container) returned by the Azure IMDS 'document' field.
-        nonce:
-          type:
-          - 'null'
-          - string
-          description: The cryptographic nonce passed to the IMDS endpoint.
+          description: AWS region for STS GetCallerIdentity request
       additionalProperties: false
-      description: Azure Instance Metadata Service (IMDS) Attested Data document.
+      description: AWS STS GetCallerIdentity request data for identity verification
+    AzureAttestationDTO:
+      type: object
+      properties:
+        attestedDocument:
+          description: Azure Instance Metadata Service (IMDS) Attested Data document.
+          $ref: '#/components/schemas/AzureAttestedDocumentDTO'
+      additionalProperties: false
+      description: Azure-specific attestation data for Client Workload identification
   securitySchemes:
     EdgeApiAuth:
       type: http

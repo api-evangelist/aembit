@@ -286,36 +286,6 @@ paths:
           description: Not Authenticated
 components:
   schemas:
-    ClientWorkloadListDTO:
-      type: object
-      properties:
-        page:
-          type: integer
-          description: Page of entities
-          format: int32
-        perPage:
-          type: integer
-          description: Number of entities requested for the current page
-          format: int32
-        order:
-          type:
-          - 'null'
-          - string
-          description: Ordering criteria used for the current page
-        statusCode:
-          type: integer
-          format: int32
-        recordsTotal:
-          type: integer
-          format: int32
-        clientWorkloads:
-          type:
-          - 'null'
-          - array
-          items:
-            $ref: '#/components/schemas/ClientWorkloadExternalDTO'
-      additionalProperties: false
-      description: Page of Client Workloads
     ClientIdentifierExternalDTO:
       type: object
       properties:
@@ -334,23 +304,6 @@ components:
         isSupported:
           type: boolean
       additionalProperties: false
-    GenericResponseDTO:
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: True if the API call was successful, False otherwise
-        message:
-          type:
-          - 'null'
-          - string
-          description: Message to indicate why the API call failed
-        id:
-          type: integer
-          description: Unique identifier of the API response
-          format: int32
-      additionalProperties: false
-      description: DTO for a Generic API Response
     ClientWorkloadIdentityDTO:
       required:
       - value
@@ -468,6 +421,23 @@ components:
             type: string
             format: uuid
       additionalProperties: false
+    GenericResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
     ClientWorkloadPatchDTO:
       type: object
       properties:
@@ -503,6 +473,36 @@ components:
           items:
             $ref: '#/components/schemas/ClientWorkloadIdentityDTO'
       additionalProperties: false
+    ClientWorkloadListDTO:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Page of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
+          type:
+          - 'null'
+          - string
+          description: Ordering criteria used for the current page
+        statusCode:
+          type: integer
+          format: int32
+        recordsTotal:
+          type: integer
+          format: int32
+        clientWorkloads:
+          type:
+          - 'null'
+          - array
+          items:
+            $ref: '#/components/schemas/ClientWorkloadExternalDTO'
+      additionalProperties: false
+      description: Page of Client Workloads
   securitySchemes:
     bearerAuth:
       type: http

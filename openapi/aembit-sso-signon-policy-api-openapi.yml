@@ -19,7 +19,7 @@ paths:
       - SSO SignOn Policy
       summary: Update a SSO SignOn Policy
       description: Update a SSO SignOn Policy.
-      operationId: put-SSO-signon Policy
+      operationId: put-SSO-signonPolicy
       requestBody:
         description: SSOSignInPolicyDTO
         content:
@@ -44,8 +44,16 @@ paths:
               schema:
                 description: DTO for a Generic API Response
                 $ref: '#/components/schemas/GenericResponseDTO'
+      x-operation-id-source: normalized
+      x-operation-id-original: put-SSO-signon Policy
 components:
   schemas:
+    SSOSignInPolicyDTO:
+      type: object
+      properties:
+        ssoRequired:
+          type: boolean
+      additionalProperties: false
     GenericResponseDTO:
       type: object
       properties:
@@ -63,12 +71,6 @@ components:
           format: int32
       additionalProperties: false
       description: DTO for a Generic API Response
-    SSOSignInPolicyDTO:
-      type: object
-      properties:
-        ssoRequired:
-          type: boolean
-      additionalProperties: false
   securitySchemes:
     bearerAuth:
       type: http

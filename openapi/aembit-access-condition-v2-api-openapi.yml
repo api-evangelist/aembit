@@ -295,128 +295,6 @@ paths:
                 $ref: '#/components/schemas/GenericResponseDTO'
 components:
   schemas:
-    GenericResponseDTO:
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: True if the API call was successful, False otherwise
-        message:
-          type:
-          - 'null'
-          - string
-          description: Message to indicate why the API call failed
-        id:
-          type: integer
-          description: Unique identifier of the API response
-          format: int32
-      additionalProperties: false
-      description: DTO for a Generic API Response
-    TimeAccessConditionTimezoneDTO:
-      type: object
-      properties:
-        group:
-          type:
-          - 'null'
-          - string
-        label:
-          type:
-          - 'null'
-          - string
-        timezone:
-          type:
-          - 'null'
-          - string
-      additionalProperties: false
-    CrowdStrikeAccessConditionDTO:
-      allOf:
-      - $ref: '#/components/schemas/AccessConditionV2DTO'
-      - type: object
-        properties:
-          matchLocalIP:
-            type: boolean
-          matchHostname:
-            type: boolean
-          matchMacAddress:
-            type: boolean
-          matchSerialNumber:
-            type: boolean
-          preventRestrictedFunctionalityMode:
-            type: boolean
-        additionalProperties: false
-    AccessConditionV2DTOAccessConditionListDTO:
-      type: object
-      properties:
-        page:
-          type: integer
-          description: Page of entities
-          format: int32
-        perPage:
-          type: integer
-          description: Number of entities requested for the current page
-          format: int32
-        order:
-          type:
-          - 'null'
-          - string
-          description: Ordering criteria used for the current page
-        statusCode:
-          type: integer
-          description: HTTP Status Code of the response
-          format: int32
-        recordsTotal:
-          type: integer
-          description: Total number of Access Conditions
-          format: int32
-        accessConditions:
-          type:
-          - 'null'
-          - array
-          items:
-            oneOf:
-            - $ref: '#/components/schemas/AccessConditionV2DTO'
-            - $ref: '#/components/schemas/CrowdStrikeAccessConditionDTO'
-            - $ref: '#/components/schemas/WizAccessConditionDTO'
-            - $ref: '#/components/schemas/GeoIPAccessConditionDTO'
-            - $ref: '#/components/schemas/TimeAccessConditionDTO'
-          description: Page of Access Conditions
-      additionalProperties: false
-      description: Page of Access Conditions
-    CrowdStrikeIntegrationDTO:
-      allOf:
-      - $ref: '#/components/schemas/IntegrationV2DTO'
-      - type: object
-        properties:
-          clientId:
-            type:
-            - 'null'
-            - string
-          tokenUrl:
-            type:
-            - 'null'
-            - string
-          clientSecret:
-            type:
-            - 'null'
-            - string
-          audience:
-            type:
-            - 'null'
-            - string
-        additionalProperties: false
-      description: Integration details for 3rd party data used by Access Conditions
-    GeoIPAccessConditionDTO:
-      allOf:
-      - $ref: '#/components/schemas/AccessConditionV2DTO'
-      - type: object
-        properties:
-          locations:
-            type:
-            - 'null'
-            - array
-            items:
-              $ref: '#/components/schemas/GeoIPAccessConditionLocationDTO'
-        additionalProperties: false
     GeoIPAccessConditionLocationDTO:
       required:
       - shortName
@@ -442,58 +320,73 @@ components:
           type: integer
           format: int32
       additionalProperties: false
-    TimeIntegrationDTO:
+    CrowdStrikeIntegrationDTO:
+      allOf:
+      - $ref: '#/components/schemas/IntegrationV2DTO'
+      - type: object
+        properties:
+          clientId:
+            type:
+            - 'null'
+            - string
+          tokenUrl:
+            type:
+            - 'null'
+            - string
+          clientSecret:
+            type:
+            - 'null'
+            - string
+          audience:
+            type:
+            - 'null'
+            - string
+        additionalProperties: false
+      description: Integration details for 3rd party data used by Access Conditions
+    CrowdStrikeAccessConditionDTO:
+      allOf:
+      - $ref: '#/components/schemas/AccessConditionV2DTO'
+      - type: object
+        properties:
+          matchLocalIP:
+            type: boolean
+          matchHostname:
+            type: boolean
+          matchMacAddress:
+            type: boolean
+          matchSerialNumber:
+            type: boolean
+          preventRestrictedFunctionalityMode:
+            type: boolean
+        additionalProperties: false
+    GeoIPAccessConditionDTO:
+      allOf:
+      - $ref: '#/components/schemas/AccessConditionV2DTO'
+      - type: object
+        properties:
+          locations:
+            type:
+            - 'null'
+            - array
+            items:
+              $ref: '#/components/schemas/GeoIPAccessConditionLocationDTO'
+        additionalProperties: false
+    WizAccessConditionDTO:
+      allOf:
+      - $ref: '#/components/schemas/AccessConditionV2DTO'
+      - type: object
+        properties:
+          serverless:
+            type: boolean
+          containerClusterConnected:
+            type: boolean
+        additionalProperties: false
+    GeoIPIntegrationDTO:
       allOf:
       - $ref: '#/components/schemas/IntegrationV2DTO'
       - type: object
         additionalProperties: false
       description: Integration details for 3rd party data used by Access Conditions
-    AccessConditionPatchDTO:
-      type: object
-      properties:
-        name:
-          maxLength: 128
-          type:
-          - 'null'
-          - string
-          description: New Name for the identified entity
-        description:
-          type:
-          - 'null'
-          - string
-          description: New Description for the identified entity
-        isActive:
-          type:
-          - 'null'
-          - boolean
-          description: New Status for the identified entity
-          format: boolean
-        tags:
-          type:
-          - 'null'
-          - array
-          items:
-            description: Aembit Entity Tag Details
-            $ref: '#/components/schemas/TagDTO'
-          description: New Tags for the identified entity
-      additionalProperties: false
-      description: Patch Request DTO for individual Access Condition
-    TagDTO:
-      required:
-      - key
-      - value
-      type: object
-      properties:
-        key:
-          minLength: 1
-          type: string
-          description: Tag Key
-        value:
-          minLength: 1
-          type: string
-          description: Tag Key Value
-      additionalProperties: false
-      description: Aembit Entity Tag Details
     AccessConditionV2DTO:
       required:
       - integrationType
@@ -579,34 +472,162 @@ components:
           WizIntegrationApi: '#/components/schemas/WizAccessConditionDTO'
           AembitGeoIPCondition: '#/components/schemas/GeoIPAccessConditionDTO'
           AembitTimeCondition: '#/components/schemas/TimeAccessConditionDTO'
-    GeoIPIntegrationDTO:
+    WeekDayDTO:
+      type: object
+      properties:
+        name:
+          type:
+          - 'null'
+          - string
+        ordinal:
+          type: integer
+          format: int32
+      additionalProperties: false
+    GenericResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
+    TimeAccessConditionDTO:
+      allOf:
+      - $ref: '#/components/schemas/AccessConditionV2DTO'
+      - type: object
+        properties:
+          schedule:
+            type:
+            - 'null'
+            - array
+            items:
+              $ref: '#/components/schemas/TimeAccessConditionScheduleDTO'
+          timezone:
+            $ref: '#/components/schemas/TimeAccessConditionTimezoneDTO'
+        additionalProperties: false
+    AccessConditionPatchDTO:
+      type: object
+      properties:
+        name:
+          maxLength: 128
+          type:
+          - 'null'
+          - string
+          description: New Name for the identified entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: New Description for the identified entity
+        isActive:
+          type:
+          - 'null'
+          - boolean
+          description: New Status for the identified entity
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+          description: New Tags for the identified entity
+      additionalProperties: false
+      description: Patch Request DTO for individual Access Condition
+    TagDTO:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          minLength: 1
+          type: string
+          description: Tag Key
+        value:
+          minLength: 1
+          type: string
+          description: Tag Key Value
+      additionalProperties: false
+      description: Aembit Entity Tag Details
+    TimeAccessConditionTimezoneDTO:
+      type: object
+      properties:
+        group:
+          type:
+          - 'null'
+          - string
+        label:
+          type:
+          - 'null'
+          - string
+        timezone:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+    WizIntegrationDTO:
+      allOf:
+      - $ref: '#/components/schemas/IntegrationV2DTO'
+      - type: object
+        properties:
+          clientId:
+            type:
+            - 'null'
+            - string
+          tokenUrl:
+            type:
+            - 'null'
+            - string
+          clientSecret:
+            type:
+            - 'null'
+            - string
+          audience:
+            type:
+            - 'null'
+            - string
+        additionalProperties: false
+      description: Integration details for 3rd party data used by Access Conditions
+    GeoIPAccessConditionSubdivisionDTO:
+      required:
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          minLength: 1
+          type: string
+        alpha2Code:
+          type:
+          - 'null'
+          - string
+        subdivisionCode:
+          type:
+          - 'null'
+          - string
+        geoIPAccessConditionLocationId:
+          type: integer
+          format: int32
+      additionalProperties: false
+    TimeIntegrationDTO:
       allOf:
       - $ref: '#/components/schemas/IntegrationV2DTO'
       - type: object
         additionalProperties: false
       description: Integration details for 3rd party data used by Access Conditions
-    TimeAccessConditionScheduleDTO:
-      type: object
-      properties:
-        startTime:
-          type: string
-          format: date-span
-        endTime:
-          type: string
-          format: date-span
-        weekDay:
-          $ref: '#/components/schemas/WeekDayDTO'
-      additionalProperties: false
-    WizAccessConditionDTO:
-      allOf:
-      - $ref: '#/components/schemas/AccessConditionV2DTO'
-      - type: object
-        properties:
-          serverless:
-            type: boolean
-          containerClusterConnected:
-            type: boolean
-        additionalProperties: false
     IntegrationV2DTO:
       required:
       - endpoint
@@ -698,77 +719,56 @@ components:
           WizIntegrationApi: '#/components/schemas/WizIntegrationDTO'
           AembitGeoIPCondition: '#/components/schemas/GeoIPIntegrationDTO'
           AembitTimeCondition: '#/components/schemas/TimeIntegrationDTO'
-    GeoIPAccessConditionSubdivisionDTO:
-      required:
-      - name
+    TimeAccessConditionScheduleDTO:
       type: object
       properties:
-        id:
-          type: integer
-          format: int32
-        name:
-          minLength: 1
+        startTime:
           type: string
-        alpha2Code:
-          type:
-          - 'null'
-          - string
-        subdivisionCode:
-          type:
-          - 'null'
-          - string
-        geoIPAccessConditionLocationId:
-          type: integer
-          format: int32
+          format: date-span
+        endTime:
+          type: string
+          format: date-span
+        weekDay:
+          $ref: '#/components/schemas/WeekDayDTO'
       additionalProperties: false
-    TimeAccessConditionDTO:
-      allOf:
-      - $ref: '#/components/schemas/AccessConditionV2DTO'
-      - type: object
-        properties:
-          schedule:
-            type:
-            - 'null'
-            - array
-            items:
-              $ref: '#/components/schemas/TimeAccessConditionScheduleDTO'
-          timezone:
-            $ref: '#/components/schemas/TimeAccessConditionTimezoneDTO'
-        additionalProperties: false
-    WizIntegrationDTO:
-      allOf:
-      - $ref: '#/components/schemas/IntegrationV2DTO'
-      - type: object
-        properties:
-          clientId:
-            type:
-            - 'null'
-            - string
-          tokenUrl:
-            type:
-            - 'null'
-            - string
-          clientSecret:
-            type:
-            - 'null'
-            - string
-          audience:
-            type:
-            - 'null'
-            - string
-        additionalProperties: false
-      description: Integration details for 3rd party data used by Access Conditions
-    WeekDayDTO:
+    AccessConditionV2DTOAccessConditionListDTO:
       type: object
       properties:
-        name:
+        page:
+          type: integer
+          description: Page of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
           type:
           - 'null'
           - string
-        ordinal:
+          description: Ordering criteria used for the current page
+        statusCode:
           type: integer
+          description: HTTP Status Code of the response
           format: int32
+        recordsTotal:
+          type: integer
+          description: Total number of Access Conditions
+          format: int32
+        accessConditions:
+          type:
+          - 'null'
+          - array
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/AccessConditionV2DTO'
+            - $ref: '#/components/schemas/CrowdStrikeAccessConditionDTO'
+            - $ref: '#/components/schemas/WizAccessConditionDTO'
+            - $ref: '#/components/schemas/GeoIPAccessConditionDTO'
+            - $ref: '#/components/schemas/TimeAccessConditionDTO'
+          description: Page of Access Conditions
       additionalProperties: false
+      description: Page of Access Conditions
   securitySchemes:
     bearerAuth:
       type: http

@@ -269,126 +269,6 @@ paths:
                 $ref: '#/components/schemas/GenericResponseDTO'
 components:
   schemas:
-    UserDTO:
-      required:
-      - email
-      - firstName
-      - lastName
-      type: object
-      properties:
-        email:
-          minLength: 1
-          type: string
-          format: email
-        externalId:
-          type: string
-          format: uuid
-        roles:
-          type:
-          - 'null'
-          - array
-          items:
-            type: string
-            format: uuid
-        rolesDetails:
-          type:
-          - 'null'
-          - array
-          items:
-            description: Individual Role
-            $ref: '#/components/schemas/RoleDTO'
-        firstName:
-          maxLength: 64
-          minLength: 2
-          type: string
-        lastName:
-          maxLength: 64
-          minLength: 2
-          type: string
-        phoneNumber:
-          type:
-          - 'null'
-          - string
-        createdAt:
-          type: string
-          format: date-time
-        isActive:
-          type: boolean
-        twoFactorEnabled:
-          type: boolean
-        isLocked:
-          type: boolean
-        tags:
-          type:
-          - 'null'
-          - array
-          items:
-            description: Aembit Entity Tag Details
-            $ref: '#/components/schemas/TagDTO'
-        userTokens:
-          type:
-          - 'null'
-          - array
-          items:
-            $ref: '#/components/schemas/UserTokensDTO'
-      additionalProperties: false
-    UserPatchDTO:
-      type: object
-      properties:
-        email:
-          type:
-          - 'null'
-          - string
-        firstName:
-          type:
-          - 'null'
-          - string
-        lastName:
-          type:
-          - 'null'
-          - string
-        phoneNumber:
-          type:
-          - 'null'
-          - string
-        isActive:
-          type:
-          - 'null'
-          - boolean
-      additionalProperties: false
-    UserTokensDTO:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type:
-          - 'null'
-          - string
-        verified:
-          type: boolean
-        createdAt:
-          type: string
-          format: date-time
-      additionalProperties: false
-    GenericResponseDTO:
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: True if the API call was successful, False otherwise
-        message:
-          type:
-          - 'null'
-          - string
-          description: Message to indicate why the API call failed
-        id:
-          type: integer
-          description: Unique identifier of the API response
-          format: int32
-      additionalProperties: false
-      description: DTO for a Generic API Response
     ResourceSetDTO:
       required:
       - isActive
@@ -518,6 +398,50 @@ components:
           description: Tag Key Value
       additionalProperties: false
       description: Aembit Entity Tag Details
+    UserTokensDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type:
+          - 'null'
+          - string
+        verified:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+      additionalProperties: false
+    PermissionDTO:
+      type: object
+      properties:
+        name:
+          type:
+          - 'null'
+          - string
+          description: Name of the Permission Target
+        read:
+          type: boolean
+          description: True if this permission allows access to Read the Permission Target, False otherwise
+        write:
+          type: boolean
+          description: True if this permission allows access to Write the Permission Target, False otherwise
+        isWritable:
+          type: boolean
+          description: True if this permission allows access to Write the Permission Target, False otherwise
+        isReadable:
+          type: boolean
+          description: True if this permission allows access to Read the Permission Target, False otherwise
+        accessLevel:
+          type:
+          - 'null'
+          - string
+          description: Description of the Permission level
+          readOnly: true
+      additionalProperties: false
+      description: Individual Permission details
     RoleDTO:
       required:
       - isActive
@@ -593,34 +517,23 @@ components:
           description: Resource Sets assigned to this Role
       additionalProperties: false
       description: Individual Role
-    PermissionDTO:
+    GenericResponseDTO:
       type: object
       properties:
-        name:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
           type:
           - 'null'
           - string
-          description: Name of the Permission Target
-        read:
-          type: boolean
-          description: True if this permission allows access to Read the Permission Target, False otherwise
-        write:
-          type: boolean
-          description: True if this permission allows access to Write the Permission Target, False otherwise
-        isWritable:
-          type: boolean
-          description: True if this permission allows access to Write the Permission Target, False otherwise
-        isReadable:
-          type: boolean
-          description: True if this permission allows access to Read the Permission Target, False otherwise
-        accessLevel:
-          type:
-          - 'null'
-          - string
-          description: Description of the Permission level
-          readOnly: true
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
       additionalProperties: false
-      description: Individual Permission details
+      description: DTO for a Generic API Response
     UserListDTO:
       type: object
       properties:
@@ -649,6 +562,93 @@ components:
           - array
           items:
             $ref: '#/components/schemas/UserDTO'
+      additionalProperties: false
+    UserDTO:
+      required:
+      - email
+      - firstName
+      - lastName
+      type: object
+      properties:
+        email:
+          minLength: 1
+          type: string
+          format: email
+        externalId:
+          type: string
+          format: uuid
+        roles:
+          type:
+          - 'null'
+          - array
+          items:
+            type: string
+            format: uuid
+        rolesDetails:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Individual Role
+            $ref: '#/components/schemas/RoleDTO'
+        firstName:
+          maxLength: 64
+          minLength: 2
+          type: string
+        lastName:
+          maxLength: 64
+          minLength: 2
+          type: string
+        phoneNumber:
+          type:
+          - 'null'
+          - string
+        createdAt:
+          type: string
+          format: date-time
+        isActive:
+          type: boolean
+        twoFactorEnabled:
+          type: boolean
+        isLocked:
+          type: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+        userTokens:
+          type:
+          - 'null'
+          - array
+          items:
+            $ref: '#/components/schemas/UserTokensDTO'
+      additionalProperties: false
+    UserPatchDTO:
+      type: object
+      properties:
+        email:
+          type:
+          - 'null'
+          - string
+        firstName:
+          type:
+          - 'null'
+          - string
+        lastName:
+          type:
+          - 'null'
+          - string
+        phoneNumber:
+          type:
+          - 'null'
+          - string
+        isActive:
+          type:
+          - 'null'
+          - boolean
       additionalProperties: false
   securitySchemes:
     bearerAuth:

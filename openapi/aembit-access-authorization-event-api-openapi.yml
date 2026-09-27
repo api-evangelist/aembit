@@ -140,91 +140,42 @@ paths:
                 $ref: '#/components/schemas/GenericResponseDTO'
 components:
   schemas:
-    RequestMetadaGcpDTO:
+    AuthorizationEventCPResultDTO:
       type: object
       properties:
-        serviceAccount:
-          type:
-          - 'null'
-          - string
-      additionalProperties: false
-    RequestMetadaLambdaDTO:
-      type: object
-      properties:
-        arn:
-          type:
-          - 'null'
-          - string
-      additionalProperties: false
-    RequestMetadaAembitDTO:
-      type: object
-      properties:
-        clientId:
-          type:
-          - 'null'
-          - string
-      additionalProperties: false
-    GenericResponseDTO:
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: True if the API call was successful, False otherwise
-        message:
-          type:
-          - 'null'
-          - string
-          description: Message to indicate why the API call failed
         id:
-          type: integer
-          description: Unique identifier of the API response
-          format: int32
+          type: string
+          description: Access Entity ID
+          format: uuid
+        name:
+          type:
+          - 'null'
+          - string
+          description: Access Entity Name
+        result:
+          type:
+          - 'null'
+          - string
+          description: Access Entity processing Result for this Access Authorization Event
+        matches:
+          type:
+          - 'null'
+          - array
+          items:
+            type: string
+          description: List of matched Access Entity Identifiers
+        type:
+          type:
+          - 'null'
+          - string
+          description: Credential Provider Type
+        reason:
+          type:
+          - 'null'
+          - string
+          description: Credential Provider Failure Reason
       additionalProperties: false
-      description: DTO for a Generic API Response
-    RequestMetadaGitlabDTO:
-      type: object
-      properties:
-        namespacePath:
-          type:
-          - 'null'
-          - string
-        projectPath:
-          type:
-          - 'null'
-          - string
-        refPath:
-          type:
-          - 'null'
-          - string
-        subject:
-          type:
-          - 'null'
-          - string
-      additionalProperties: false
-    RequestMetadaHostDTO:
-      type: object
-      properties:
-        hostname:
-          type:
-          - 'null'
-          - string
-      additionalProperties: false
-    RequestMetadaOAuthDTO:
-      type: object
-      properties:
-        redirectUri:
-          type:
-          - 'null'
-          - string
-      additionalProperties: false
-    RequestMetadaNetworkDTO:
-      type: object
-      properties:
-        sourceIP:
-          type:
-          - 'null'
-          - string
-      additionalProperties: false
+      description: Individual Credential Provider Result of an Aembit Access Authorization Event
     AuthorizationEventAtttestationResultDTO:
       type: object
       properties:
@@ -273,25 +224,128 @@ components:
           - string
       additionalProperties: false
       description: Individual Access Entity Attestation Result of an Aembit Access Authorization Event
-    RequestMetadaAwsDTO:
+    RequestMetadaLambdaDTO:
       type: object
       properties:
-        accountId:
+        arn:
           type:
           - 'null'
           - string
-        instanceId:
+      additionalProperties: false
+    RequestMetadataOidcDTO:
+      type: object
+      properties:
+        sub:
           type:
           - 'null'
           - string
-        region:
+        aud:
           type:
           - 'null'
           - string
-        ecs:
-          $ref: '#/components/schemas/RequestMetadaEcsDTO'
-        lambda:
-          $ref: '#/components/schemas/RequestMetadaLambdaDTO'
+        iss:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+    RequestMetadaAzureDTO:
+      type: object
+      properties:
+        vmId:
+          type:
+          - 'null'
+          - string
+        subscriptionId:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+    RequestMetadaEcsDTO:
+      type: object
+      properties:
+        taskFamily:
+          type:
+          - 'null'
+          - string
+        serviceName:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+    AuthorizationEventEnvironmentDataDTO:
+      type: object
+      properties:
+        network:
+          $ref: '#/components/schemas/RequestMetadaNetworkDTO'
+        host:
+          $ref: '#/components/schemas/RequestMetadaHostDTO'
+        process:
+          $ref: '#/components/schemas/RequestMetadaProcessDTO'
+        aembit:
+          $ref: '#/components/schemas/RequestMetadaAembitDTO'
+        aws:
+          $ref: '#/components/schemas/RequestMetadaAwsDTO'
+        gcp:
+          $ref: '#/components/schemas/RequestMetadaGcpDTO'
+        azure:
+          $ref: '#/components/schemas/RequestMetadaAzureDTO'
+        kubernetes:
+          $ref: '#/components/schemas/RequestMetadaKubernetesDTO'
+        gitlab:
+          $ref: '#/components/schemas/RequestMetadaGitlabDTO'
+        github:
+          $ref: '#/components/schemas/RequestMetadaGithubDTO'
+        oidc:
+          $ref: '#/components/schemas/RequestMetadataOidcDTO'
+        terraform:
+          $ref: '#/components/schemas/RequestMetadaTerraformDTO'
+        oauth:
+          $ref: '#/components/schemas/RequestMetadaOAuthDTO'
+      additionalProperties: false
+    ClientRequestDTO:
+      required:
+      - network
+      - version
+      type: object
+      properties:
+        version:
+          minLength: 1
+          type: string
+        network:
+          $ref: '#/components/schemas/NetworkDTO'
+      additionalProperties: false
+    RequestMetadaHostDTO:
+      type: object
+      properties:
+        hostname:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+    GenericResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
+    RequestMetadaAembitDTO:
+      type: object
+      properties:
+        clientId:
+          type:
+          - 'null'
+          - string
       additionalProperties: false
     AuthorizationEventDataMetaDTO:
       type: object
@@ -333,14 +387,22 @@ components:
           description: Severity of the Access Authorization Event (e.g. Info, Warning, Error)
       additionalProperties: false
       description: Metadata DTO for an individual Aembit Access Authorization Event
-    RequestMetadaAzureDTO:
+    RequestMetadaGitlabDTO:
       type: object
       properties:
-        vmId:
+        namespacePath:
           type:
           - 'null'
           - string
-        subscriptionId:
+        projectPath:
+          type:
+          - 'null'
+          - string
+        refPath:
+          type:
+          - 'null'
+          - string
+        subject:
           type:
           - 'null'
           - string
@@ -365,82 +427,6 @@ components:
           - 'null'
           - string
       additionalProperties: false
-    NetworkDTO:
-      required:
-      - proxyPort
-      - sourceIP
-      - sourcePort
-      - transportProtocol
-      type: object
-      properties:
-        sourceIP:
-          minLength: 1
-          type: string
-        sourcePort:
-          type: integer
-          format: int32
-        transportProtocol:
-          minLength: 1
-          type: string
-        proxyPort:
-          type: integer
-          format: int32
-        targetHost:
-          type:
-          - 'null'
-          - string
-        targetPort:
-          type: integer
-          format: int32
-      additionalProperties: false
-    AuthorizationEventCPResultDTO:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Access Entity ID
-          format: uuid
-        name:
-          type:
-          - 'null'
-          - string
-          description: Access Entity Name
-        result:
-          type:
-          - 'null'
-          - string
-          description: Access Entity processing Result for this Access Authorization Event
-        matches:
-          type:
-          - 'null'
-          - array
-          items:
-            type: string
-          description: List of matched Access Entity Identifiers
-        type:
-          type:
-          - 'null'
-          - string
-          description: Credential Provider Type
-        reason:
-          type:
-          - 'null'
-          - string
-          description: Credential Provider Failure Reason
-      additionalProperties: false
-      description: Individual Credential Provider Result of an Aembit Access Authorization Event
-    RequestMetadaGithubDTO:
-      type: object
-      properties:
-        repository:
-          type:
-          - 'null'
-          - string
-        subject:
-          type:
-          - 'null'
-          - string
-      additionalProperties: false
     AuthorizationEventOutcomeDTO:
       type: object
       properties:
@@ -456,56 +442,6 @@ components:
           description: Reason for the Result of an individual Aembit Access Authorization Event
       additionalProperties: false
       description: Outcome of an individual Aembit Access Authorization Event
-    AuthorizationEventEnvironmentDataDTO:
-      type: object
-      properties:
-        network:
-          $ref: '#/components/schemas/RequestMetadaNetworkDTO'
-        host:
-          $ref: '#/components/schemas/RequestMetadaHostDTO'
-        process:
-          $ref: '#/components/schemas/RequestMetadaProcessDTO'
-        aembit:
-          $ref: '#/components/schemas/RequestMetadaAembitDTO'
-        aws:
-          $ref: '#/components/schemas/RequestMetadaAwsDTO'
-        gcp:
-          $ref: '#/components/schemas/RequestMetadaGcpDTO'
-        azure:
-          $ref: '#/components/schemas/RequestMetadaAzureDTO'
-        kubernetes:
-          $ref: '#/components/schemas/RequestMetadaKubernetesDTO'
-        gitlab:
-          $ref: '#/components/schemas/RequestMetadaGitlabDTO'
-        github:
-          $ref: '#/components/schemas/RequestMetadaGithubDTO'
-        oidc:
-          $ref: '#/components/schemas/RequestMetadataOidcDTO'
-        terraform:
-          $ref: '#/components/schemas/RequestMetadaTerraformDTO'
-        oauth:
-          $ref: '#/components/schemas/RequestMetadaOAuthDTO'
-      additionalProperties: false
-    RequestMetadaKubernetesDTO:
-      type: object
-      properties:
-        namespace:
-          type:
-          - 'null'
-          - string
-        podName:
-          type:
-          - 'null'
-          - string
-        serviceAccountName:
-          type:
-          - 'null'
-          - string
-        serviceAccountUID:
-          type:
-          - 'null'
-          - string
-      additionalProperties: false
     AuthorizationEventListDTO:
       type: object
       properties:
@@ -540,64 +476,6 @@ components:
           description: Page of Aembit Access Authorization Events
       additionalProperties: false
       description: Page of Aembit Access Authorization Events
-    RequestMetadaTerraformDTO:
-      type: object
-      properties:
-        workspaceId:
-          type:
-          - 'null'
-          - string
-        organizationId:
-          type:
-          - 'null'
-          - string
-        projectId:
-          type:
-          - 'null'
-          - string
-      additionalProperties: false
-    AuthorizationEventEntityResultDTO:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Access Entity ID
-          format: uuid
-        name:
-          type:
-          - 'null'
-          - string
-          description: Access Entity Name
-        result:
-          type:
-          - 'null'
-          - string
-          description: Access Entity processing Result for this Access Authorization Event
-        matches:
-          type:
-          - 'null'
-          - array
-          items:
-            type: string
-          description: List of matched Access Entity Identifiers
-      additionalProperties: false
-      description: Access Entity Result of an Aembit Access Authorization Event
-    RequestMetadataOidcDTO:
-      type: object
-      properties:
-        sub:
-          type:
-          - 'null'
-          - string
-        aud:
-          type:
-          - 'null'
-          - string
-        iss:
-          type:
-          - 'null'
-          - string
-      additionalProperties: false
     AuthorizationEventDTO:
       type: object
       properties:
@@ -685,29 +563,151 @@ components:
           description: User information of the Aembit Access Authorization Event
       additionalProperties: false
       description: An individual Aembit Access Authorization Event
-    RequestMetadaEcsDTO:
+    NetworkDTO:
+      required:
+      - proxyPort
+      - sourceIP
+      - sourcePort
+      - transportProtocol
       type: object
       properties:
-        taskFamily:
+        sourceIP:
+          minLength: 1
+          type: string
+        sourcePort:
+          type: integer
+          format: int32
+        transportProtocol:
+          minLength: 1
+          type: string
+        proxyPort:
+          type: integer
+          format: int32
+        targetHost:
           type:
           - 'null'
           - string
-        serviceName:
+        targetPort:
+          type: integer
+          format: int32
+      additionalProperties: false
+    RequestMetadaGithubDTO:
+      type: object
+      properties:
+        repository:
+          type:
+          - 'null'
+          - string
+        subject:
           type:
           - 'null'
           - string
       additionalProperties: false
-    ClientRequestDTO:
-      required:
-      - network
-      - version
+    RequestMetadaKubernetesDTO:
       type: object
       properties:
-        version:
-          minLength: 1
+        namespace:
+          type:
+          - 'null'
+          - string
+        podName:
+          type:
+          - 'null'
+          - string
+        serviceAccountName:
+          type:
+          - 'null'
+          - string
+        serviceAccountUID:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+    RequestMetadaOAuthDTO:
+      type: object
+      properties:
+        redirectUri:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+    RequestMetadaNetworkDTO:
+      type: object
+      properties:
+        sourceIP:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+    RequestMetadaGcpDTO:
+      type: object
+      properties:
+        serviceAccount:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+    AuthorizationEventEntityResultDTO:
+      type: object
+      properties:
+        id:
           type: string
-        network:
-          $ref: '#/components/schemas/NetworkDTO'
+          description: Access Entity ID
+          format: uuid
+        name:
+          type:
+          - 'null'
+          - string
+          description: Access Entity Name
+        result:
+          type:
+          - 'null'
+          - string
+          description: Access Entity processing Result for this Access Authorization Event
+        matches:
+          type:
+          - 'null'
+          - array
+          items:
+            type: string
+          description: List of matched Access Entity Identifiers
+      additionalProperties: false
+      description: Access Entity Result of an Aembit Access Authorization Event
+    RequestMetadaTerraformDTO:
+      type: object
+      properties:
+        workspaceId:
+          type:
+          - 'null'
+          - string
+        organizationId:
+          type:
+          - 'null'
+          - string
+        projectId:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+    RequestMetadaAwsDTO:
+      type: object
+      properties:
+        accountId:
+          type:
+          - 'null'
+          - string
+        instanceId:
+          type:
+          - 'null'
+          - string
+        region:
+          type:
+          - 'null'
+          - string
+        ecs:
+          $ref: '#/components/schemas/RequestMetadaEcsDTO'
+        lambda:
+          $ref: '#/components/schemas/RequestMetadaLambdaDTO'
       additionalProperties: false
   securitySchemes:
     bearerAuth:

@@ -246,137 +246,6 @@ paths:
                 $ref: '#/components/schemas/GenericResponseDTO'
 components:
   schemas:
-    CrowdStrikeAIDRContentSecurityDTO:
-      allOf:
-      - $ref: '#/components/schemas/ContentSecurityDTO'
-      - required:
-        - baseUrl
-        type: object
-        properties:
-          encryptedToken:
-            type:
-            - 'null'
-            - string
-            description: The encrypted API token or client secret used to authenticate with the CrowdStrike Falcon AIDR (AI Detection and Response) service.
-          baseUrl:
-            minLength: 1
-            type: string
-            description: The base URL of the CrowdStrike Falcon AIDR service endpoint or API gateway.
-          failOpen:
-            type: boolean
-            description: Indicates whether requests should be allowed (fail-open) or blocked (fail-closed) if the CrowdStrike Falcon AIDR service is unreachable or encounters an error.
-          timeoutMs:
-            maximum: 600000
-            minimum: 5000
-            type: integer
-            description: The connection timeout in milliseconds for requests sent to the CrowdStrike Falcon AIDR service.
-            format: int32
-          maxRetries:
-            maximum: 10
-            minimum: 0
-            type: integer
-            description: The maximum number of retry attempts for requests to the CrowdStrike Falcon AIDR service before executing the fail-open or fail-closed policy.
-            format: int32
-        additionalProperties: false
-      description: Individual Content Security
-    GenericResponseDTO:
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: True if the API call was successful, False otherwise
-        message:
-          type:
-          - 'null'
-          - string
-          description: Message to indicate why the API call failed
-        id:
-          type: integer
-          description: Unique identifier of the API response
-          format: int32
-      additionalProperties: false
-      description: DTO for a Generic API Response
-    ContentSecurityDTOListDTO:
-      type: object
-      properties:
-        page:
-          type: integer
-          description: Current page number of entities
-          format: int32
-        perPage:
-          type: integer
-          description: Number of entities requested for the current page
-          format: int32
-        order:
-          type:
-          - 'null'
-          - string
-          description: Ordering criteria used for the current page
-        statusCode:
-          type: integer
-          description: HTTP StatusCode for the current result
-          format: int32
-        recordsTotal:
-          type: integer
-          description: Total number of entities available
-          format: int32
-        entities:
-          type:
-          - 'null'
-          - array
-          items:
-            oneOf:
-            - $ref: '#/components/schemas/ContentSecurityDTO'
-            - $ref: '#/components/schemas/CrowdStrikeAIDRContentSecurityDTO'
-            description: Individual Content Security
-          description: Page of entities for this request
-      additionalProperties: false
-    TagDTO:
-      required:
-      - key
-      - value
-      type: object
-      properties:
-        key:
-          minLength: 1
-          type: string
-          description: Tag Key
-        value:
-          minLength: 1
-          type: string
-          description: Tag Key Value
-      additionalProperties: false
-      description: Aembit Entity Tag Details
-    ContentSecurityPatchDTO:
-      type: object
-      properties:
-        name:
-          maxLength: 128
-          type:
-          - 'null'
-          - string
-          description: New Name for the identified entity
-        description:
-          type:
-          - 'null'
-          - string
-          description: New Description for the identified entity
-        isActive:
-          type:
-          - 'null'
-          - boolean
-          description: New Status for the identified entity
-          format: boolean
-        tags:
-          type:
-          - 'null'
-          - array
-          items:
-            description: Aembit Entity Tag Details
-            $ref: '#/components/schemas/TagDTO'
-          description: New Tags for the identified entity
-      additionalProperties: false
-      description: Patch request for an individual Content Security
     ContentSecurityDTO:
       required:
       - isActive
@@ -443,6 +312,137 @@ components:
         propertyName: type
         mapping:
           CrowdStrikeAIDR: '#/components/schemas/CrowdStrikeAIDRContentSecurityDTO'
+    TagDTO:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          minLength: 1
+          type: string
+          description: Tag Key
+        value:
+          minLength: 1
+          type: string
+          description: Tag Key Value
+      additionalProperties: false
+      description: Aembit Entity Tag Details
+    ContentSecurityPatchDTO:
+      type: object
+      properties:
+        name:
+          maxLength: 128
+          type:
+          - 'null'
+          - string
+          description: New Name for the identified entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: New Description for the identified entity
+        isActive:
+          type:
+          - 'null'
+          - boolean
+          description: New Status for the identified entity
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+          description: New Tags for the identified entity
+      additionalProperties: false
+      description: Patch request for an individual Content Security
+    ContentSecurityDTOListDTO:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
+          type:
+          - 'null'
+          - string
+          description: Ordering criteria used for the current page
+        statusCode:
+          type: integer
+          description: HTTP StatusCode for the current result
+          format: int32
+        recordsTotal:
+          type: integer
+          description: Total number of entities available
+          format: int32
+        entities:
+          type:
+          - 'null'
+          - array
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/ContentSecurityDTO'
+            - $ref: '#/components/schemas/CrowdStrikeAIDRContentSecurityDTO'
+            description: Individual Content Security
+          description: Page of entities for this request
+      additionalProperties: false
+    GenericResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
+    CrowdStrikeAIDRContentSecurityDTO:
+      allOf:
+      - $ref: '#/components/schemas/ContentSecurityDTO'
+      - required:
+        - baseUrl
+        type: object
+        properties:
+          encryptedToken:
+            type:
+            - 'null'
+            - string
+            description: The encrypted API token or client secret used to authenticate with the CrowdStrike Falcon AIDR (AI Detection and Response) service.
+          baseUrl:
+            minLength: 1
+            type: string
+            description: The base URL of the CrowdStrike Falcon AIDR service endpoint or API gateway.
+          failOpen:
+            type: boolean
+            description: Indicates whether requests should be allowed (fail-open) or blocked (fail-closed) if the CrowdStrike Falcon AIDR service is unreachable or encounters an error.
+          timeoutMs:
+            maximum: 600000
+            minimum: 5000
+            type: integer
+            description: The connection timeout in milliseconds for requests sent to the CrowdStrike Falcon AIDR service.
+            format: int32
+          maxRetries:
+            maximum: 10
+            minimum: 0
+            type: integer
+            description: The maximum number of retry attempts for requests to the CrowdStrike Falcon AIDR service before executing the fail-open or fail-closed policy.
+            format: int32
+        additionalProperties: false
+      description: Individual Content Security
   securitySchemes:
     bearerAuth:
       type: http

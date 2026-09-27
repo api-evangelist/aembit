@@ -157,14 +157,6 @@ paths:
                 $ref: '#/components/schemas/GenericResponseDTO'
 components:
   schemas:
-    EventOutcomeDTO:
-      type: object
-      properties:
-        result:
-          type:
-          - 'null'
-          - string
-      additionalProperties: {}
     EventNetworkDTO:
       type: object
       properties:
@@ -190,6 +182,35 @@ components:
           - integer
           format: int32
       additionalProperties: {}
+    EventListDTO:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Page of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
+          type:
+          - 'null'
+          - string
+          description: Ordering criteria used for the current page
+        statusCode:
+          type: integer
+          format: int32
+        recordsTotal:
+          type: integer
+          format: int32
+        workloadEvents:
+          type:
+          - 'null'
+          - array
+          items:
+            $ref: '#/components/schemas/EventDTO'
+      additionalProperties: false
     EventDTO:
       type: object
       properties:
@@ -199,6 +220,14 @@ components:
           $ref: '#/components/schemas/EventNetworkDTO'
         outcome:
           $ref: '#/components/schemas/EventOutcomeDTO'
+      additionalProperties: {}
+    EventOutcomeDTO:
+      type: object
+      properties:
+        result:
+          type:
+          - 'null'
+          - string
       additionalProperties: {}
     GenericResponseDTO:
       type: object
@@ -251,35 +280,6 @@ components:
           - 'null'
           - string
       additionalProperties: {}
-    EventListDTO:
-      type: object
-      properties:
-        page:
-          type: integer
-          description: Page of entities
-          format: int32
-        perPage:
-          type: integer
-          description: Number of entities requested for the current page
-          format: int32
-        order:
-          type:
-          - 'null'
-          - string
-          description: Ordering criteria used for the current page
-        statusCode:
-          type: integer
-          format: int32
-        recordsTotal:
-          type: integer
-          format: int32
-        workloadEvents:
-          type:
-          - 'null'
-          - array
-          items:
-            $ref: '#/components/schemas/EventDTO'
-      additionalProperties: false
   securitySchemes:
     bearerAuth:
       type: http

@@ -268,27 +268,22 @@ paths:
                 $ref: '#/components/schemas/GenericResponseDTO'
 components:
   schemas:
-    WorkloadServiceAuthenticationDTO:
+    TagDTO:
       required:
-      - method
-      - scheme
+      - key
+      - value
       type: object
       properties:
-        method:
+        key:
           minLength: 1
           type: string
-          description: Authentication Method
-        scheme:
+          description: Tag Key
+        value:
           minLength: 1
           type: string
-          description: Authentication Scheme
-        config:
-          type:
-          - 'null'
-          - string
-          description: Authentication Configuration
+          description: Tag Key Value
       additionalProperties: false
-      description: Authentication configuration for a Server Workload
+      description: Aembit Entity Tag Details
     EntityPatchDTO:
       type: object
       properties:
@@ -318,6 +313,54 @@ components:
             $ref: '#/components/schemas/TagDTO'
           description: New Tags for the identified entity
       additionalProperties: false
+    ServerWorkloadListDTO:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Page of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
+          type:
+          - 'null'
+          - string
+          description: Ordering criteria used for the current page
+        statusCode:
+          type: integer
+          format: int32
+        recordsTotal:
+          type: integer
+          format: int32
+        serverWorkloads:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Individual Server Workload
+            $ref: '#/components/schemas/ServerWorkloadExternalDTO'
+      additionalProperties: false
+      description: Page of Server Workloads
+    GenericResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
     ServerWorkloadExternalDTO:
       required:
       - isActive
@@ -384,82 +427,6 @@ components:
           format: int32
       additionalProperties: false
       description: Individual Server Workload
-    GenericResponseDTO:
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: True if the API call was successful, False otherwise
-        message:
-          type:
-          - 'null'
-          - string
-          description: Message to indicate why the API call failed
-        id:
-          type: integer
-          description: Unique identifier of the API response
-          format: int32
-      additionalProperties: false
-      description: DTO for a Generic API Response
-    ServerWorkloadListDTO:
-      type: object
-      properties:
-        page:
-          type: integer
-          description: Page of entities
-          format: int32
-        perPage:
-          type: integer
-          description: Number of entities requested for the current page
-          format: int32
-        order:
-          type:
-          - 'null'
-          - string
-          description: Ordering criteria used for the current page
-        statusCode:
-          type: integer
-          format: int32
-        recordsTotal:
-          type: integer
-          format: int32
-        serverWorkloads:
-          type:
-          - 'null'
-          - array
-          items:
-            description: Individual Server Workload
-            $ref: '#/components/schemas/ServerWorkloadExternalDTO'
-      additionalProperties: false
-      description: Page of Server Workloads
-    TagDTO:
-      required:
-      - key
-      - value
-      type: object
-      properties:
-        key:
-          minLength: 1
-          type: string
-          description: Tag Key
-        value:
-          minLength: 1
-          type: string
-          description: Tag Key Value
-      additionalProperties: false
-      description: Aembit Entity Tag Details
-    StringStringKeyValuePair:
-      type: object
-      properties:
-        key:
-          type:
-          - 'null'
-          - string
-        value:
-          type:
-          - 'null'
-          - string
-      additionalProperties: false
     WorkloadServiceEndpointDTO:
       required:
       - appProtocol
@@ -534,6 +501,39 @@ components:
           description: Static HTTP Headers to include for transmission to the Server Workload
       additionalProperties: false
       description: Service Endpoint for a Server Workload
+    StringStringKeyValuePair:
+      type: object
+      properties:
+        key:
+          type:
+          - 'null'
+          - string
+        value:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+    WorkloadServiceAuthenticationDTO:
+      required:
+      - method
+      - scheme
+      type: object
+      properties:
+        method:
+          minLength: 1
+          type: string
+          description: Authentication Method
+        scheme:
+          minLength: 1
+          type: string
+          description: Authentication Scheme
+        config:
+          type:
+          - 'null'
+          - string
+          description: Authentication Configuration
+      additionalProperties: false
+      description: Authentication configuration for a Server Workload
   securitySchemes:
     bearerAuth:
       type: http

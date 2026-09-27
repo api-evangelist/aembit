@@ -26,7 +26,7 @@ tags:
 - Non-Human Identity
 - Secrets Management
 - Zero Trust
-- Agentic AI
+- AI Agents
 - MCP
 - Authentication
 - Authorization
@@ -64,7 +64,7 @@ apis:
   baseURL: https://{tenantId}.mcp.useast2.aembit.io/mcp
   tags:
   - MCP
-  - Agentic AI
+  - AI Agents
   - Audit
   tags_raw:
   - Model Context Protocol
