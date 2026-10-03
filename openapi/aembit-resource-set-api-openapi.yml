@@ -236,6 +236,39 @@ paths:
                 $ref: '#/components/schemas/GenericResponseDTO'
 components:
   schemas:
+    ResourceSetDTOListDTO:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
+          type:
+          - 'null'
+          - string
+          description: Ordering criteria used for the current page
+        statusCode:
+          type: integer
+          description: HTTP StatusCode for the current result
+          format: int32
+        recordsTotal:
+          type: integer
+          description: Total number of entities available
+          format: int32
+        entities:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Individual Resource Set
+            $ref: '#/components/schemas/ResourceSetDTO'
+          description: Page of entities for this request
+      additionalProperties: false
     ResourceSetDTO:
       required:
       - isActive
@@ -349,80 +382,6 @@ components:
           format: uuid
       additionalProperties: false
       description: Individual Resource Set
-    TagDTO:
-      required:
-      - key
-      - value
-      type: object
-      properties:
-        key:
-          minLength: 1
-          type: string
-          description: Tag Key
-        value:
-          minLength: 1
-          type: string
-          description: Tag Key Value
-      additionalProperties: false
-      description: Aembit Entity Tag Details
-    ResourceSetPatchDTO:
-      type: object
-      properties:
-        name:
-          maxLength: 128
-          type:
-          - 'null'
-          - string
-          description: New Name for the identified entity
-        description:
-          type:
-          - 'null'
-          - string
-          description: New Description for the identified entity
-        isActive:
-          type:
-          - 'null'
-          - boolean
-          description: New Status for the identified entity
-          format: boolean
-        tags:
-          type:
-          - 'null'
-          - array
-          items:
-            description: Aembit Entity Tag Details
-            $ref: '#/components/schemas/TagDTO'
-          description: New Tags for the identified entity
-      additionalProperties: false
-      description: Patch Request for an Individual Resource Set
-    PermissionDTO:
-      type: object
-      properties:
-        name:
-          type:
-          - 'null'
-          - string
-          description: Name of the Permission Target
-        read:
-          type: boolean
-          description: True if this permission allows access to Read the Permission Target, False otherwise
-        write:
-          type: boolean
-          description: True if this permission allows access to Write the Permission Target, False otherwise
-        isWritable:
-          type: boolean
-          description: True if this permission allows access to Write the Permission Target, False otherwise
-        isReadable:
-          type: boolean
-          description: True if this permission allows access to Read the Permission Target, False otherwise
-        accessLevel:
-          type:
-          - 'null'
-          - string
-          description: Description of the Permission level
-          readOnly: true
-      additionalProperties: false
-      description: Individual Permission details
     RoleDTO:
       required:
       - isActive
@@ -498,6 +457,52 @@ components:
           description: Resource Sets assigned to this Role
       additionalProperties: false
       description: Individual Role
+    ResourceSetPatchDTO:
+      type: object
+      properties:
+        name:
+          maxLength: 128
+          type:
+          - 'null'
+          - string
+          description: New Name for the identified entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: New Description for the identified entity
+        isActive:
+          type:
+          - 'null'
+          - boolean
+          description: New Status for the identified entity
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+          description: New Tags for the identified entity
+      additionalProperties: false
+      description: Patch Request for an Individual Resource Set
+    TagDTO:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          minLength: 1
+          type: string
+          description: Tag Key
+        value:
+          minLength: 1
+          type: string
+          description: Tag Key Value
+      additionalProperties: false
+      description: Aembit Entity Tag Details
     GenericResponseDTO:
       type: object
       properties:
@@ -515,39 +520,34 @@ components:
           format: int32
       additionalProperties: false
       description: DTO for a Generic API Response
-    ResourceSetDTOListDTO:
+    PermissionDTO:
       type: object
       properties:
-        page:
-          type: integer
-          description: Current page number of entities
-          format: int32
-        perPage:
-          type: integer
-          description: Number of entities requested for the current page
-          format: int32
-        order:
+        name:
           type:
           - 'null'
           - string
-          description: Ordering criteria used for the current page
-        statusCode:
-          type: integer
-          description: HTTP StatusCode for the current result
-          format: int32
-        recordsTotal:
-          type: integer
-          description: Total number of entities available
-          format: int32
-        entities:
+          description: Name of the Permission Target
+        read:
+          type: boolean
+          description: True if this permission allows access to Read the Permission Target, False otherwise
+        write:
+          type: boolean
+          description: True if this permission allows access to Write the Permission Target, False otherwise
+        isWritable:
+          type: boolean
+          description: True if this permission allows access to Write the Permission Target, False otherwise
+        isReadable:
+          type: boolean
+          description: True if this permission allows access to Read the Permission Target, False otherwise
+        accessLevel:
           type:
           - 'null'
-          - array
-          items:
-            description: Individual Resource Set
-            $ref: '#/components/schemas/ResourceSetDTO'
-          description: Page of entities for this request
+          - string
+          description: Description of the Permission level
+          readOnly: true
       additionalProperties: false
+      description: Individual Permission details
   securitySchemes:
     bearerAuth:
       type: http

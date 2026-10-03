@@ -275,22 +275,6 @@ paths:
                 $ref: '#/components/schemas/GenericResponseDTO'
 components:
   schemas:
-    TagDTO:
-      required:
-      - key
-      - value
-      type: object
-      properties:
-        key:
-          minLength: 1
-          type: string
-          description: Tag Key
-        value:
-          minLength: 1
-          type: string
-          description: Tag Key Value
-      additionalProperties: false
-      description: Aembit Entity Tag Details
     PublicKeyValidationDTO:
       type: object
       properties:
@@ -335,6 +319,142 @@ components:
           description: Certificate or Public Key
       additionalProperties: false
       description: Response to a request for Public Key Validation
+    TagDTO:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          minLength: 1
+          type: string
+          description: Tag Key
+        value:
+          minLength: 1
+          type: string
+          description: Tag Key Value
+      additionalProperties: false
+      description: Aembit Entity Tag Details
+    TrustProviderMatchRuleDTO:
+      required:
+      - attribute
+      - value
+      type: object
+      properties:
+        attribute:
+          minLength: 1
+          type: string
+          description: Match Rule Attribute
+        value:
+          minLength: 1
+          type: string
+          description: Match Rule Attribute Value
+        key:
+          type:
+          - 'null'
+          - string
+          description: Match Rule Attribute Key
+      additionalProperties: false
+      description: Individual Match Rule to enforce during Trust Provider attestation
+    TrustProviderPatchDTO:
+      type: object
+      properties:
+        name:
+          maxLength: 128
+          type:
+          - 'null'
+          - string
+          description: New Name for the identified entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: New Description for the identified entity
+        isActive:
+          type:
+          - 'null'
+          - boolean
+          description: New Status for the identified entity
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+          description: New Tags for the identified entity
+        provider:
+          type:
+          - 'null'
+          - string
+          description: Trust Provider Type
+        matchRules:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Individual Match Rule to enforce during Trust Provider attestation
+            $ref: '#/components/schemas/TrustProviderMatchRuleDTO'
+          description: Trust Provider Match Rules
+        oidcUrl:
+          type:
+          - 'null'
+          - string
+          description: OIDC URL to use for retrieving JWKS Public Keys
+        pemType:
+          type:
+          - 'null'
+          - string
+          description: PEM Input Type
+        certificate:
+          type:
+          - 'null'
+          - string
+          description: Trust Provider Certificate or Public Key for cryptographic attestation
+        jwks:
+          type:
+          - 'null'
+          - string
+          description: Jwks Content for cryptographic attestation
+        symmetricKey:
+          type:
+          - 'null'
+          - string
+          description: Symmetric Key
+        publicKeyValidation:
+          description: Response to a request for Public Key Validation
+          $ref: '#/components/schemas/PublicKeyValidationDTO'
+        metadataUrl:
+          pattern: https://.*
+          type:
+          - 'null'
+          - string
+          description: Metadata URL of the remote SSO Identity Provider
+        metadataXml:
+          type:
+          - 'null'
+          - string
+          description: Metadata XML content of the remote SSO Identity Provider
+      additionalProperties: false
+      description: Patch request for an individual Trust Provider
+    GenericResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
     TrustProviderListDTO:
       type: object
       properties:
@@ -491,126 +611,6 @@ components:
           description: Metadata XML content of the remote SSO Identity Provider
       additionalProperties: false
       description: Individual Trust Provider
-    TrustProviderMatchRuleDTO:
-      required:
-      - attribute
-      - value
-      type: object
-      properties:
-        attribute:
-          minLength: 1
-          type: string
-          description: Match Rule Attribute
-        value:
-          minLength: 1
-          type: string
-          description: Match Rule Attribute Value
-        key:
-          type:
-          - 'null'
-          - string
-          description: Match Rule Attribute Key
-      additionalProperties: false
-      description: Individual Match Rule to enforce during Trust Provider attestation
-    GenericResponseDTO:
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: True if the API call was successful, False otherwise
-        message:
-          type:
-          - 'null'
-          - string
-          description: Message to indicate why the API call failed
-        id:
-          type: integer
-          description: Unique identifier of the API response
-          format: int32
-      additionalProperties: false
-      description: DTO for a Generic API Response
-    TrustProviderPatchDTO:
-      type: object
-      properties:
-        name:
-          maxLength: 128
-          type:
-          - 'null'
-          - string
-          description: New Name for the identified entity
-        description:
-          type:
-          - 'null'
-          - string
-          description: New Description for the identified entity
-        isActive:
-          type:
-          - 'null'
-          - boolean
-          description: New Status for the identified entity
-          format: boolean
-        tags:
-          type:
-          - 'null'
-          - array
-          items:
-            description: Aembit Entity Tag Details
-            $ref: '#/components/schemas/TagDTO'
-          description: New Tags for the identified entity
-        provider:
-          type:
-          - 'null'
-          - string
-          description: Trust Provider Type
-        matchRules:
-          type:
-          - 'null'
-          - array
-          items:
-            description: Individual Match Rule to enforce during Trust Provider attestation
-            $ref: '#/components/schemas/TrustProviderMatchRuleDTO'
-          description: Trust Provider Match Rules
-        oidcUrl:
-          type:
-          - 'null'
-          - string
-          description: OIDC URL to use for retrieving JWKS Public Keys
-        pemType:
-          type:
-          - 'null'
-          - string
-          description: PEM Input Type
-        certificate:
-          type:
-          - 'null'
-          - string
-          description: Trust Provider Certificate or Public Key for cryptographic attestation
-        jwks:
-          type:
-          - 'null'
-          - string
-          description: Jwks Content for cryptographic attestation
-        symmetricKey:
-          type:
-          - 'null'
-          - string
-          description: Symmetric Key
-        publicKeyValidation:
-          description: Response to a request for Public Key Validation
-          $ref: '#/components/schemas/PublicKeyValidationDTO'
-        metadataUrl:
-          pattern: https://.*
-          type:
-          - 'null'
-          - string
-          description: Metadata URL of the remote SSO Identity Provider
-        metadataXml:
-          type:
-          - 'null'
-          - string
-          description: Metadata XML content of the remote SSO Identity Provider
-      additionalProperties: false
-      description: Patch request for an individual Trust Provider
   securitySchemes:
     bearerAuth:
       type: http

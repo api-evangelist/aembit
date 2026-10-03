@@ -42,14 +42,6 @@ paths:
                 $ref: '#/components/schemas/GenericResponseDTO'
 components:
   schemas:
-    GetSignInPolicyDTO:
-      type: object
-      properties:
-        ssoRequired:
-          type: boolean
-        mfaRequired:
-          type: boolean
-      additionalProperties: false
     GenericResponseDTO:
       type: object
       properties:
@@ -67,6 +59,14 @@ components:
           format: int32
       additionalProperties: false
       description: DTO for a Generic API Response
+    GetSignInPolicyDTO:
+      type: object
+      properties:
+        ssoRequired:
+          type: boolean
+        mfaRequired:
+          type: boolean
+      additionalProperties: false
   securitySchemes:
     bearerAuth:
       type: http

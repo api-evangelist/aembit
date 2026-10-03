@@ -55,12 +55,6 @@ paths:
       x-operation-id-original: put-mfa-signon Policy
 components:
   schemas:
-    MFASignInPolicyDTO:
-      type: object
-      properties:
-        mfaRequired:
-          type: boolean
-      additionalProperties: false
     GenericResponseDTO:
       type: object
       properties:
@@ -78,6 +72,12 @@ components:
           format: int32
       additionalProperties: false
       description: DTO for a Generic API Response
+    MFASignInPolicyDTO:
+      type: object
+      properties:
+        mfaRequired:
+          type: boolean
+      additionalProperties: false
   securitySchemes:
     bearerAuth:
       type: http

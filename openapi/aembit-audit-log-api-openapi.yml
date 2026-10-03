@@ -140,26 +140,6 @@ paths:
                 $ref: '#/components/schemas/GenericResponseDTO'
 components:
   schemas:
-    EventResultDTO:
-      type: object
-      properties:
-        reason:
-          type:
-          - 'null'
-          - string
-        attribute:
-          type:
-          - 'null'
-          - string
-        expectedValue:
-          type:
-          - 'null'
-          - string
-        actualValue:
-          type:
-          - 'null'
-          - string
-      additionalProperties: false
     AuditClientDTO:
       type: object
       properties:
@@ -173,71 +153,6 @@ components:
           $ref: '#/components/schemas/UserAgentDTO'
       additionalProperties: false
       description: DTO for the Client details of an Aembit Audit Log
-    AuditOutcomeDTO:
-      type: object
-      properties:
-        reason:
-          type:
-          - 'null'
-          - string
-          description: Reason for the outcome of this Aembit Audit Log
-        result:
-          type:
-          - 'null'
-          - string
-          description: Outcome of the action associated with this Aembit Audit Log
-      additionalProperties: false
-      description: DTO for the Outcome of an individual Aembit Audit Log
-    GenericResponseDTO:
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: True if the API call was successful, False otherwise
-        message:
-          type:
-          - 'null'
-          - string
-          description: Message to indicate why the API call failed
-        id:
-          type: integer
-          description: Unique identifier of the API response
-          format: int32
-      additionalProperties: false
-      description: DTO for a Generic API Response
-    AuditActorDTO:
-      type: object
-      properties:
-        type:
-          type:
-          - 'null'
-          - string
-          description: The type of Audit Log actor (e.g. User, System, or Role)
-        displayName:
-          type:
-          - 'null'
-          - string
-          description: Fully qualified Audit Log Actor name
-        userName:
-          type:
-          - 'null'
-          - string
-        email:
-          type:
-          - 'null'
-          - string
-        credentialProviderId:
-          type:
-          - 'null'
-          - string
-          description: Credential Provider ID that was used to generate the Role-based Access Token for this Audit Log action
-        accessPolicyId:
-          type:
-          - 'null'
-          - string
-          description: Access Policy ID that was used to generate the Role-based Access Token for this Audit Log action
-      additionalProperties: false
-      description: DTO for the Actor details of an Aembit Audit Log
     AuditLogListDTO:
       type: object
       properties:
@@ -272,6 +187,78 @@ components:
           description: Page of Aembit Audit Logs
       additionalProperties: false
       description: Page of Aembit Audit Logs
+    UserAgentDTO:
+      type: object
+      properties:
+        browser:
+          type:
+          - 'null'
+          - string
+          description: The browser as determined from the HTTP User Agent
+        operatingSystem:
+          type:
+          - 'null'
+          - string
+          description: The operating system as determined from the HTTP User Agent
+        raw:
+          type:
+          - 'null'
+          - string
+          description: The raw HTTP User Agent
+      additionalProperties: false
+      description: DTO for the HTTP User Agent of an individual Aembit Audit Log
+    AuditOutcomeDTO:
+      type: object
+      properties:
+        reason:
+          type:
+          - 'null'
+          - string
+          description: Reason for the outcome of this Aembit Audit Log
+        result:
+          type:
+          - 'null'
+          - string
+          description: Outcome of the action associated with this Aembit Audit Log
+      additionalProperties: false
+      description: DTO for the Outcome of an individual Aembit Audit Log
+    EventResultDTO:
+      type: object
+      properties:
+        reason:
+          type:
+          - 'null'
+          - string
+        attribute:
+          type:
+          - 'null'
+          - string
+        expectedValue:
+          type:
+          - 'null'
+          - string
+        actualValue:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+    GenericResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
     AuditLogDTO:
       type: object
       properties:
@@ -321,26 +308,39 @@ components:
           format: date-time
       additionalProperties: false
       description: DTO for an individual Aembit Audit Log
-    UserAgentDTO:
+    AuditActorDTO:
       type: object
       properties:
-        browser:
+        type:
           type:
           - 'null'
           - string
-          description: The browser as determined from the HTTP User Agent
-        operatingSystem:
+          description: The type of Audit Log actor (e.g. User, System, or Role)
+        displayName:
           type:
           - 'null'
           - string
-          description: The operating system as determined from the HTTP User Agent
-        raw:
+          description: Fully qualified Audit Log Actor name
+        userName:
           type:
           - 'null'
           - string
-          description: The raw HTTP User Agent
+        email:
+          type:
+          - 'null'
+          - string
+        credentialProviderId:
+          type:
+          - 'null'
+          - string
+          description: Credential Provider ID that was used to generate the Role-based Access Token for this Audit Log action
+        accessPolicyId:
+          type:
+          - 'null'
+          - string
+          description: Access Policy ID that was used to generate the Role-based Access Token for this Audit Log action
       additionalProperties: false
-      description: DTO for the HTTP User Agent of an individual Aembit Audit Log
+      description: DTO for the Actor details of an Aembit Audit Log
   securitySchemes:
     bearerAuth:
       type: http

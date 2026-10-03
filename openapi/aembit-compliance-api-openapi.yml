@@ -69,6 +69,19 @@ paths:
                 $ref: '#/components/schemas/GenericResponseDTO'
 components:
   schemas:
+    SettingDTO:
+      required:
+      - name
+      - value
+      type: object
+      properties:
+        name:
+          minLength: 1
+          type: string
+        value:
+          minLength: 1
+          type: string
+      additionalProperties: false
     GenericResponseDTO:
       type: object
       properties:
@@ -86,19 +99,6 @@ components:
           format: int32
       additionalProperties: false
       description: DTO for a Generic API Response
-    SettingDTO:
-      required:
-      - name
-      - value
-      type: object
-      properties:
-        name:
-          minLength: 1
-          type: string
-        value:
-          minLength: 1
-          type: string
-      additionalProperties: false
   securitySchemes:
     bearerAuth:
       type: http

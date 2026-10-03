@@ -286,59 +286,41 @@ paths:
           description: Not Authenticated
 components:
   schemas:
-    ClientIdentifierExternalDTO:
+    ClientWorkloadPatchDTO:
       type: object
       properties:
         name:
+          maxLength: 128
           type:
           - 'null'
           - string
-        displayName:
+          description: New Name for the identified entity
+        description:
           type:
           - 'null'
           - string
-        environmentPath:
+          description: New Description for the identified entity
+        isActive:
           type:
           - 'null'
-          - string
-        isSupported:
-          type: boolean
+          - boolean
+          description: New Status for the identified entity
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+          description: New Tags for the identified entity
+        identities:
+          type:
+          - 'null'
+          - array
+          items:
+            $ref: '#/components/schemas/ClientWorkloadIdentityDTO'
       additionalProperties: false
-    ClientWorkloadIdentityDTO:
-      required:
-      - value
-      type: object
-      properties:
-        type:
-          maxLength: 255
-          type:
-          - 'null'
-          - string
-        value:
-          minLength: 1
-          type: string
-        key:
-          maxLength: 255
-          type:
-          - 'null'
-          - string
-      additionalProperties: false
-    TagDTO:
-      required:
-      - key
-      - value
-      type: object
-      properties:
-        key:
-          minLength: 1
-          type: string
-          description: Tag Key
-        value:
-          minLength: 1
-          type: string
-          description: Tag Key Value
-      additionalProperties: false
-      description: Aembit Entity Tag Details
     ClientWorkloadExternalDTO:
       required:
       - isActive
@@ -421,58 +403,41 @@ components:
             type: string
             format: uuid
       additionalProperties: false
-    GenericResponseDTO:
+    ClientWorkloadIdentityDTO:
+      required:
+      - value
       type: object
       properties:
-        success:
-          type: boolean
-          description: True if the API call was successful, False otherwise
-        message:
+        type:
+          maxLength: 255
           type:
           - 'null'
           - string
-          description: Message to indicate why the API call failed
-        id:
-          type: integer
-          description: Unique identifier of the API response
-          format: int32
+        value:
+          minLength: 1
+          type: string
+        key:
+          maxLength: 255
+          type:
+          - 'null'
+          - string
       additionalProperties: false
-      description: DTO for a Generic API Response
-    ClientWorkloadPatchDTO:
+    TagDTO:
+      required:
+      - key
+      - value
       type: object
       properties:
-        name:
-          maxLength: 128
-          type:
-          - 'null'
-          - string
-          description: New Name for the identified entity
-        description:
-          type:
-          - 'null'
-          - string
-          description: New Description for the identified entity
-        isActive:
-          type:
-          - 'null'
-          - boolean
-          description: New Status for the identified entity
-          format: boolean
-        tags:
-          type:
-          - 'null'
-          - array
-          items:
-            description: Aembit Entity Tag Details
-            $ref: '#/components/schemas/TagDTO'
-          description: New Tags for the identified entity
-        identities:
-          type:
-          - 'null'
-          - array
-          items:
-            $ref: '#/components/schemas/ClientWorkloadIdentityDTO'
+        key:
+          minLength: 1
+          type: string
+          description: Tag Key
+        value:
+          minLength: 1
+          type: string
+          description: Tag Key Value
       additionalProperties: false
+      description: Aembit Entity Tag Details
     ClientWorkloadListDTO:
       type: object
       properties:
@@ -503,6 +468,41 @@ components:
             $ref: '#/components/schemas/ClientWorkloadExternalDTO'
       additionalProperties: false
       description: Page of Client Workloads
+    ClientIdentifierExternalDTO:
+      type: object
+      properties:
+        name:
+          type:
+          - 'null'
+          - string
+        displayName:
+          type:
+          - 'null'
+          - string
+        environmentPath:
+          type:
+          - 'null'
+          - string
+        isSupported:
+          type: boolean
+      additionalProperties: false
+    GenericResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
   securitySchemes:
     bearerAuth:
       type: http

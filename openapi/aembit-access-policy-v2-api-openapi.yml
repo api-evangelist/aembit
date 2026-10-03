@@ -386,26 +386,6 @@ paths:
                 $ref: '#/components/schemas/GenericResponseDTO'
 components:
   schemas:
-    EntityMetaDTO:
-      type: object
-      properties:
-        externalId:
-          type: string
-          format: uuid
-        name:
-          type:
-          - 'null'
-          - string
-        isActive:
-          type: boolean
-        tags:
-          type:
-          - 'null'
-          - array
-          items:
-            description: Aembit Entity Tag Details
-            $ref: '#/components/schemas/TagDTO'
-      additionalProperties: false
     PolicyCredentialMappingDTO:
       required:
       - credentialProviderId
@@ -463,6 +443,191 @@ components:
           description: HttpBody Field Value
       additionalProperties: false
       description: Access Policy Credential Mappings
+    PolicyNoteDTOListDTO:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
+          type:
+          - 'null'
+          - string
+          description: Ordering criteria used for the current page
+        statusCode:
+          type: integer
+          description: HTTP StatusCode for the current result
+          format: int32
+        recordsTotal:
+          type: integer
+          description: Total number of entities available
+          format: int32
+        entities:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Individual Note created for an Access Policy
+            $ref: '#/components/schemas/PolicyNoteDTO'
+          description: Page of entities for this request
+      additionalProperties: false
+    PolicyNoteDTO:
+      required:
+      - note
+      type: object
+      properties:
+        note:
+          maxLength: 1024
+          minLength: 1
+          type: string
+          description: Note added to an Access Policy by a User
+        createdAt:
+          type: string
+          description: Timestamp the Note was created
+          format: date-time
+        createdBy:
+          type:
+          - 'null'
+          - string
+          description: Email address of the User who created the Access Policy Note
+      additionalProperties: false
+      description: Individual Note created for an Access Policy
+    GetPolicyDTOListDTO:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
+          type:
+          - 'null'
+          - string
+          description: Ordering criteria used for the current page
+        statusCode:
+          type: integer
+          description: HTTP StatusCode for the current result
+          format: int32
+        recordsTotal:
+          type: integer
+          description: Total number of entities available
+          format: int32
+        entities:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Individual Access Policy
+            $ref: '#/components/schemas/GetPolicyDTO'
+          description: Page of entities for this request
+      additionalProperties: false
+    EntityMetaDTO:
+      type: object
+      properties:
+        externalId:
+          type: string
+          format: uuid
+        name:
+          type:
+          - 'null'
+          - string
+        isActive:
+          type: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+      additionalProperties: false
+    PatchPolicyV2DTO:
+      type: object
+      properties:
+        name:
+          maxLength: 128
+          type:
+          - 'null'
+          - string
+          description: New Name for the identified entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: New Description for the identified entity
+        isActive:
+          type:
+          - 'null'
+          - boolean
+          description: New Status for the identified entity
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+          description: New Tags for the identified entity
+        clientWorkload:
+          type: string
+          description: Client Workload associated with this Access Policy
+          format: uuid
+        serverWorkload:
+          type: string
+          description: Server Workload associated with this Access Policy
+          format: uuid
+        credentialProviders:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Access Policy Credential Mappings
+            $ref: '#/components/schemas/PolicyCredentialMappingDTO'
+          description: Credential Providers associated with this Access Policy
+        trustProviders:
+          type:
+          - 'null'
+          - array
+          items:
+            type: string
+            format: uuid
+          description: Trust Providers associated with this Access Policy
+        accessConditions:
+          type:
+          - 'null'
+          - array
+          items:
+            type: string
+            format: uuid
+          description: Access Conditions associated with this Access Policy
+        contentSecurity:
+          type:
+          - 'null'
+          - array
+          items:
+            type: string
+            format: uuid
+          description: Content Security associated with this Access Policy
+      additionalProperties: false
+      description: Patch request for an Access Policy
+    PolicyCredentialProviderMappingTypes:
+      enum:
+      - None
+      - AccountName
+      - HttpHeader
+      - HttpBody
+      - AccessKeyId
+      type: string
     TagDTO:
       required:
       - key
@@ -566,105 +731,6 @@ components:
           description: Content Security associated with this Access Policy
       additionalProperties: false
       description: Individual Access Policy
-    PatchPolicyV2DTO:
-      type: object
-      properties:
-        name:
-          maxLength: 128
-          type:
-          - 'null'
-          - string
-          description: New Name for the identified entity
-        description:
-          type:
-          - 'null'
-          - string
-          description: New Description for the identified entity
-        isActive:
-          type:
-          - 'null'
-          - boolean
-          description: New Status for the identified entity
-          format: boolean
-        tags:
-          type:
-          - 'null'
-          - array
-          items:
-            description: Aembit Entity Tag Details
-            $ref: '#/components/schemas/TagDTO'
-          description: New Tags for the identified entity
-        clientWorkload:
-          type: string
-          description: Client Workload associated with this Access Policy
-          format: uuid
-        serverWorkload:
-          type: string
-          description: Server Workload associated with this Access Policy
-          format: uuid
-        credentialProviders:
-          type:
-          - 'null'
-          - array
-          items:
-            description: Access Policy Credential Mappings
-            $ref: '#/components/schemas/PolicyCredentialMappingDTO'
-          description: Credential Providers associated with this Access Policy
-        trustProviders:
-          type:
-          - 'null'
-          - array
-          items:
-            type: string
-            format: uuid
-          description: Trust Providers associated with this Access Policy
-        accessConditions:
-          type:
-          - 'null'
-          - array
-          items:
-            type: string
-            format: uuid
-          description: Access Conditions associated with this Access Policy
-        contentSecurity:
-          type:
-          - 'null'
-          - array
-          items:
-            type: string
-            format: uuid
-          description: Content Security associated with this Access Policy
-      additionalProperties: false
-      description: Patch request for an Access Policy
-    PolicyCredentialProviderMappingTypes:
-      enum:
-      - None
-      - AccountName
-      - HttpHeader
-      - HttpBody
-      - AccessKeyId
-      type: string
-    PolicyNoteDTO:
-      required:
-      - note
-      type: object
-      properties:
-        note:
-          maxLength: 1024
-          minLength: 1
-          type: string
-          description: Note added to an Access Policy by a User
-        createdAt:
-          type: string
-          description: Timestamp the Note was created
-          format: date-time
-        createdBy:
-          type:
-          - 'null'
-          - string
-          description: Email address of the User who created the Access Policy Note
-      additionalProperties: false
-      description: Individual Note created for an Access Policy
     GenericResponseDTO:
       type: object
       properties:
@@ -682,72 +748,6 @@ components:
           format: int32
       additionalProperties: false
       description: DTO for a Generic API Response
-    PolicyNoteDTOListDTO:
-      type: object
-      properties:
-        page:
-          type: integer
-          description: Current page number of entities
-          format: int32
-        perPage:
-          type: integer
-          description: Number of entities requested for the current page
-          format: int32
-        order:
-          type:
-          - 'null'
-          - string
-          description: Ordering criteria used for the current page
-        statusCode:
-          type: integer
-          description: HTTP StatusCode for the current result
-          format: int32
-        recordsTotal:
-          type: integer
-          description: Total number of entities available
-          format: int32
-        entities:
-          type:
-          - 'null'
-          - array
-          items:
-            description: Individual Note created for an Access Policy
-            $ref: '#/components/schemas/PolicyNoteDTO'
-          description: Page of entities for this request
-      additionalProperties: false
-    GetPolicyDTOListDTO:
-      type: object
-      properties:
-        page:
-          type: integer
-          description: Current page number of entities
-          format: int32
-        perPage:
-          type: integer
-          description: Number of entities requested for the current page
-          format: int32
-        order:
-          type:
-          - 'null'
-          - string
-          description: Ordering criteria used for the current page
-        statusCode:
-          type: integer
-          description: HTTP StatusCode for the current result
-          format: int32
-        recordsTotal:
-          type: integer
-          description: Total number of entities available
-          format: int32
-        entities:
-          type:
-          - 'null'
-          - array
-          items:
-            description: Individual Access Policy
-            $ref: '#/components/schemas/GetPolicyDTO'
-          description: Page of entities for this request
-      additionalProperties: false
     CreatePolicyDTO:
       required:
       - isActive

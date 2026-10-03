@@ -232,73 +232,6 @@ paths:
                 $ref: '#/components/schemas/GenericResponseDTO'
 components:
   schemas:
-    DiscoveryIntegrationListDTO:
-      type: object
-      properties:
-        page:
-          type: integer
-          description: Page of entities
-          format: int32
-        perPage:
-          type: integer
-          description: Number of entities requested for the current page
-          format: int32
-        order:
-          type:
-          - 'null'
-          - string
-          description: Ordering criteria used for the current page
-        statusCode:
-          type: integer
-          description: HTTP Status Code of the response
-          format: int32
-        recordsTotal:
-          type: integer
-          description: Total number of Integrations
-          format: int32
-        integrations:
-          type:
-          - 'null'
-          - array
-          items:
-            description: Integration details for 3rd party data used by Discovery
-            $ref: '#/components/schemas/DiscoveryIntegrationDTO'
-          description: Page of Integrations
-      additionalProperties: false
-      description: Page of Integrations
-    TagDTO:
-      required:
-      - key
-      - value
-      type: object
-      properties:
-        key:
-          minLength: 1
-          type: string
-          description: Tag Key
-        value:
-          minLength: 1
-          type: string
-          description: Tag Key Value
-      additionalProperties: false
-      description: Aembit Entity Tag Details
-    GenericResponseDTO:
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: True if the API call was successful, False otherwise
-        message:
-          type:
-          - 'null'
-          - string
-          description: Message to indicate why the API call failed
-        id:
-          type: integer
-          description: Unique identifier of the API response
-          format: int32
-      additionalProperties: false
-      description: DTO for a Generic API Response
     DiscoveryIntegrationDTO:
       required:
       - discoveryIntegrationJSON
@@ -379,6 +312,40 @@ components:
           type: string
       additionalProperties: false
       description: Integration details for 3rd party data used by Discovery
+    DiscoveryIntegrationListDTO:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Page of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
+          type:
+          - 'null'
+          - string
+          description: Ordering criteria used for the current page
+        statusCode:
+          type: integer
+          description: HTTP Status Code of the response
+          format: int32
+        recordsTotal:
+          type: integer
+          description: Total number of Integrations
+          format: int32
+        integrations:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Integration details for 3rd party data used by Discovery
+            $ref: '#/components/schemas/DiscoveryIntegrationDTO'
+          description: Page of Integrations
+      additionalProperties: false
+      description: Page of Integrations
     DiscoveryIntegrationPatchDTO:
       type: object
       properties:
@@ -409,6 +376,39 @@ components:
           description: New Tags for the identified entity
       additionalProperties: false
       description: Patch request for an individual Integration
+    TagDTO:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          minLength: 1
+          type: string
+          description: Tag Key
+        value:
+          minLength: 1
+          type: string
+          description: Tag Key Value
+      additionalProperties: false
+      description: Aembit Entity Tag Details
+    GenericResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
   securitySchemes:
     bearerAuth:
       type: http

@@ -294,7 +294,121 @@ paths:
                 $ref: '#/components/schemas/GenericResponseDTO'
 components:
   schemas:
+    IntegrationV2DTOIntegrationListDTO:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Page of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
+          type:
+          - 'null'
+          - string
+          description: Ordering criteria used for the current page
+        statusCode:
+          type: integer
+          description: HTTP Status Code of the response
+          format: int32
+        recordsTotal:
+          type: integer
+          description: Total number of Integrations
+          format: int32
+        integrations:
+          type:
+          - 'null'
+          - array
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/IntegrationV2DTO'
+            - $ref: '#/components/schemas/CrowdStrikeIntegrationDTO'
+            - $ref: '#/components/schemas/WizIntegrationDTO'
+            - $ref: '#/components/schemas/GeoIPIntegrationDTO'
+            - $ref: '#/components/schemas/TimeIntegrationDTO'
+            description: Integration details for 3rd party data used by Access Conditions
+          description: Page of Integrations
+      additionalProperties: false
+      description: Page of Integrations
+    IntegrationPatchDTO:
+      type: object
+      properties:
+        name:
+          maxLength: 128
+          type:
+          - 'null'
+          - string
+          description: New Name for the identified entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: New Description for the identified entity
+        isActive:
+          type:
+          - 'null'
+          - boolean
+          description: New Status for the identified entity
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+          description: New Tags for the identified entity
+      additionalProperties: false
+      description: Patch request for an individual Integration
     GeoIPIntegrationDTO:
+      allOf:
+      - $ref: '#/components/schemas/IntegrationV2DTO'
+      - type: object
+        additionalProperties: false
+      description: Integration details for 3rd party data used by Access Conditions
+    TagDTO:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          minLength: 1
+          type: string
+          description: Tag Key
+        value:
+          minLength: 1
+          type: string
+          description: Tag Key Value
+      additionalProperties: false
+      description: Aembit Entity Tag Details
+    CrowdStrikeIntegrationDTO:
+      allOf:
+      - $ref: '#/components/schemas/IntegrationV2DTO'
+      - type: object
+        properties:
+          clientId:
+            type:
+            - 'null'
+            - string
+          tokenUrl:
+            type:
+            - 'null'
+            - string
+          clientSecret:
+            type:
+            - 'null'
+            - string
+          audience:
+            type:
+            - 'null'
+            - string
+        additionalProperties: false
+      description: Integration details for 3rd party data used by Access Conditions
+    TimeIntegrationDTO:
       allOf:
       - $ref: '#/components/schemas/IntegrationV2DTO'
       - type: object
@@ -391,90 +505,6 @@ components:
           WizIntegrationApi: '#/components/schemas/WizIntegrationDTO'
           AembitGeoIPCondition: '#/components/schemas/GeoIPIntegrationDTO'
           AembitTimeCondition: '#/components/schemas/TimeIntegrationDTO'
-    TimeIntegrationDTO:
-      allOf:
-      - $ref: '#/components/schemas/IntegrationV2DTO'
-      - type: object
-        additionalProperties: false
-      description: Integration details for 3rd party data used by Access Conditions
-    TagDTO:
-      required:
-      - key
-      - value
-      type: object
-      properties:
-        key:
-          minLength: 1
-          type: string
-          description: Tag Key
-        value:
-          minLength: 1
-          type: string
-          description: Tag Key Value
-      additionalProperties: false
-      description: Aembit Entity Tag Details
-    CrowdStrikeIntegrationDTO:
-      allOf:
-      - $ref: '#/components/schemas/IntegrationV2DTO'
-      - type: object
-        properties:
-          clientId:
-            type:
-            - 'null'
-            - string
-          tokenUrl:
-            type:
-            - 'null'
-            - string
-          clientSecret:
-            type:
-            - 'null'
-            - string
-          audience:
-            type:
-            - 'null'
-            - string
-        additionalProperties: false
-      description: Integration details for 3rd party data used by Access Conditions
-    IntegrationV2DTOIntegrationListDTO:
-      type: object
-      properties:
-        page:
-          type: integer
-          description: Page of entities
-          format: int32
-        perPage:
-          type: integer
-          description: Number of entities requested for the current page
-          format: int32
-        order:
-          type:
-          - 'null'
-          - string
-          description: Ordering criteria used for the current page
-        statusCode:
-          type: integer
-          description: HTTP Status Code of the response
-          format: int32
-        recordsTotal:
-          type: integer
-          description: Total number of Integrations
-          format: int32
-        integrations:
-          type:
-          - 'null'
-          - array
-          items:
-            oneOf:
-            - $ref: '#/components/schemas/IntegrationV2DTO'
-            - $ref: '#/components/schemas/CrowdStrikeIntegrationDTO'
-            - $ref: '#/components/schemas/WizIntegrationDTO'
-            - $ref: '#/components/schemas/GeoIPIntegrationDTO'
-            - $ref: '#/components/schemas/TimeIntegrationDTO'
-            description: Integration details for 3rd party data used by Access Conditions
-          description: Page of Integrations
-      additionalProperties: false
-      description: Page of Integrations
     GenericResponseDTO:
       type: object
       properties:
@@ -492,36 +522,6 @@ components:
           format: int32
       additionalProperties: false
       description: DTO for a Generic API Response
-    IntegrationPatchDTO:
-      type: object
-      properties:
-        name:
-          maxLength: 128
-          type:
-          - 'null'
-          - string
-          description: New Name for the identified entity
-        description:
-          type:
-          - 'null'
-          - string
-          description: New Description for the identified entity
-        isActive:
-          type:
-          - 'null'
-          - boolean
-          description: New Status for the identified entity
-          format: boolean
-        tags:
-          type:
-          - 'null'
-          - array
-          items:
-            description: Aembit Entity Tag Details
-            $ref: '#/components/schemas/TagDTO'
-          description: New Tags for the identified entity
-      additionalProperties: false
-      description: Patch request for an individual Integration
     WizIntegrationDTO:
       allOf:
       - $ref: '#/components/schemas/IntegrationV2DTO'

@@ -269,6 +269,30 @@ paths:
                 $ref: '#/components/schemas/GenericResponseDTO'
 components:
   schemas:
+    UserPatchDTO:
+      type: object
+      properties:
+        email:
+          type:
+          - 'null'
+          - string
+        firstName:
+          type:
+          - 'null'
+          - string
+        lastName:
+          type:
+          - 'null'
+          - string
+        phoneNumber:
+          type:
+          - 'null'
+          - string
+        isActive:
+          type:
+          - 'null'
+          - boolean
+      additionalProperties: false
     ResourceSetDTO:
       required:
       - isActive
@@ -382,66 +406,6 @@ components:
           format: uuid
       additionalProperties: false
       description: Individual Resource Set
-    TagDTO:
-      required:
-      - key
-      - value
-      type: object
-      properties:
-        key:
-          minLength: 1
-          type: string
-          description: Tag Key
-        value:
-          minLength: 1
-          type: string
-          description: Tag Key Value
-      additionalProperties: false
-      description: Aembit Entity Tag Details
-    UserTokensDTO:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type:
-          - 'null'
-          - string
-        verified:
-          type: boolean
-        createdAt:
-          type: string
-          format: date-time
-      additionalProperties: false
-    PermissionDTO:
-      type: object
-      properties:
-        name:
-          type:
-          - 'null'
-          - string
-          description: Name of the Permission Target
-        read:
-          type: boolean
-          description: True if this permission allows access to Read the Permission Target, False otherwise
-        write:
-          type: boolean
-          description: True if this permission allows access to Write the Permission Target, False otherwise
-        isWritable:
-          type: boolean
-          description: True if this permission allows access to Write the Permission Target, False otherwise
-        isReadable:
-          type: boolean
-          description: True if this permission allows access to Read the Permission Target, False otherwise
-        accessLevel:
-          type:
-          - 'null'
-          - string
-          description: Description of the Permission level
-          readOnly: true
-      additionalProperties: false
-      description: Individual Permission details
     RoleDTO:
       required:
       - isActive
@@ -517,6 +481,38 @@ components:
           description: Resource Sets assigned to this Role
       additionalProperties: false
       description: Individual Role
+    TagDTO:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          minLength: 1
+          type: string
+          description: Tag Key
+        value:
+          minLength: 1
+          type: string
+          description: Tag Key Value
+      additionalProperties: false
+      description: Aembit Entity Tag Details
+    UserTokensDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type:
+          - 'null'
+          - string
+        verified:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+      additionalProperties: false
     GenericResponseDTO:
       type: object
       properties:
@@ -563,6 +559,34 @@ components:
           items:
             $ref: '#/components/schemas/UserDTO'
       additionalProperties: false
+    PermissionDTO:
+      type: object
+      properties:
+        name:
+          type:
+          - 'null'
+          - string
+          description: Name of the Permission Target
+        read:
+          type: boolean
+          description: True if this permission allows access to Read the Permission Target, False otherwise
+        write:
+          type: boolean
+          description: True if this permission allows access to Write the Permission Target, False otherwise
+        isWritable:
+          type: boolean
+          description: True if this permission allows access to Write the Permission Target, False otherwise
+        isReadable:
+          type: boolean
+          description: True if this permission allows access to Read the Permission Target, False otherwise
+        accessLevel:
+          type:
+          - 'null'
+          - string
+          description: Description of the Permission level
+          readOnly: true
+      additionalProperties: false
+      description: Individual Permission details
     UserDTO:
       required:
       - email
@@ -625,30 +649,6 @@ components:
           - array
           items:
             $ref: '#/components/schemas/UserTokensDTO'
-      additionalProperties: false
-    UserPatchDTO:
-      type: object
-      properties:
-        email:
-          type:
-          - 'null'
-          - string
-        firstName:
-          type:
-          - 'null'
-          - string
-        lastName:
-          type:
-          - 'null'
-          - string
-        phoneNumber:
-          type:
-          - 'null'
-          - string
-        isActive:
-          type:
-          - 'null'
-          - boolean
       additionalProperties: false
   securitySchemes:
     bearerAuth:

@@ -268,6 +268,27 @@ paths:
                 $ref: '#/components/schemas/GenericResponseDTO'
 components:
   schemas:
+    WorkloadServiceAuthenticationDTO:
+      required:
+      - method
+      - scheme
+      type: object
+      properties:
+        method:
+          minLength: 1
+          type: string
+          description: Authentication Method
+        scheme:
+          minLength: 1
+          type: string
+          description: Authentication Scheme
+        config:
+          type:
+          - 'null'
+          - string
+          description: Authentication Configuration
+      additionalProperties: false
+      description: Authentication configuration for a Server Workload
     TagDTO:
       required:
       - key
@@ -284,149 +305,6 @@ components:
           description: Tag Key Value
       additionalProperties: false
       description: Aembit Entity Tag Details
-    EntityPatchDTO:
-      type: object
-      properties:
-        name:
-          maxLength: 128
-          type:
-          - 'null'
-          - string
-          description: New Name for the identified entity
-        description:
-          type:
-          - 'null'
-          - string
-          description: New Description for the identified entity
-        isActive:
-          type:
-          - 'null'
-          - boolean
-          description: New Status for the identified entity
-          format: boolean
-        tags:
-          type:
-          - 'null'
-          - array
-          items:
-            description: Aembit Entity Tag Details
-            $ref: '#/components/schemas/TagDTO'
-          description: New Tags for the identified entity
-      additionalProperties: false
-    ServerWorkloadListDTO:
-      type: object
-      properties:
-        page:
-          type: integer
-          description: Page of entities
-          format: int32
-        perPage:
-          type: integer
-          description: Number of entities requested for the current page
-          format: int32
-        order:
-          type:
-          - 'null'
-          - string
-          description: Ordering criteria used for the current page
-        statusCode:
-          type: integer
-          format: int32
-        recordsTotal:
-          type: integer
-          format: int32
-        serverWorkloads:
-          type:
-          - 'null'
-          - array
-          items:
-            description: Individual Server Workload
-            $ref: '#/components/schemas/ServerWorkloadExternalDTO'
-      additionalProperties: false
-      description: Page of Server Workloads
-    GenericResponseDTO:
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: True if the API call was successful, False otherwise
-        message:
-          type:
-          - 'null'
-          - string
-          description: Message to indicate why the API call failed
-        id:
-          type: integer
-          description: Unique identifier of the API response
-          format: int32
-      additionalProperties: false
-      description: DTO for a Generic API Response
-    ServerWorkloadExternalDTO:
-      required:
-      - isActive
-      - name
-      - resourceSet
-      - serviceEndpoint
-      type: object
-      properties:
-        externalId:
-          type: string
-          format: uuid
-        name:
-          maxLength: 128
-          minLength: 1
-          type: string
-          description: Name of the Entity
-        description:
-          type:
-          - 'null'
-          - string
-          description: Description of the Entity
-        isActive:
-          type: boolean
-          description: True/False value that determines if this entity is Active or Disabled
-          format: boolean
-        tags:
-          type:
-          - 'null'
-          - array
-          items:
-            description: Aembit Entity Tag Details
-            $ref: '#/components/schemas/TagDTO'
-        createdAt:
-          type: string
-          format: date-time
-        modifiedAt:
-          type:
-          - 'null'
-          - string
-          format: date-time
-        createdBy:
-          type:
-          - 'null'
-          - string
-        modifiedBy:
-          type:
-          - 'null'
-          - string
-        resourceSet:
-          type: string
-          description: ID of the Resource Set in which this Access Entity exists
-          format: uuid
-        serviceEndpoint:
-          description: Service Endpoint of the Server Workload
-          $ref: '#/components/schemas/WorkloadServiceEndpointDTO'
-        type:
-          type:
-          - 'null'
-          - string
-          description: Type of Server Workload
-        accessPolicyCount:
-          type: integer
-          description: Access Policies associated with this Server Workload
-          format: int32
-      additionalProperties: false
-      description: Individual Server Workload
     WorkloadServiceEndpointDTO:
       required:
       - appProtocol
@@ -513,27 +391,149 @@ components:
           - 'null'
           - string
       additionalProperties: false
-    WorkloadServiceAuthenticationDTO:
-      required:
-      - method
-      - scheme
+    GenericResponseDTO:
       type: object
       properties:
-        method:
-          minLength: 1
-          type: string
-          description: Authentication Method
-        scheme:
-          minLength: 1
-          type: string
-          description: Authentication Scheme
-        config:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
           type:
           - 'null'
           - string
-          description: Authentication Configuration
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
       additionalProperties: false
-      description: Authentication configuration for a Server Workload
+      description: DTO for a Generic API Response
+    ServerWorkloadListDTO:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Page of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
+          type:
+          - 'null'
+          - string
+          description: Ordering criteria used for the current page
+        statusCode:
+          type: integer
+          format: int32
+        recordsTotal:
+          type: integer
+          format: int32
+        serverWorkloads:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Individual Server Workload
+            $ref: '#/components/schemas/ServerWorkloadExternalDTO'
+      additionalProperties: false
+      description: Page of Server Workloads
+    ServerWorkloadExternalDTO:
+      required:
+      - isActive
+      - name
+      - resourceSet
+      - serviceEndpoint
+      type: object
+      properties:
+        externalId:
+          type: string
+          format: uuid
+        name:
+          maxLength: 128
+          minLength: 1
+          type: string
+          description: Name of the Entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: Description of the Entity
+        isActive:
+          type: boolean
+          description: True/False value that determines if this entity is Active or Disabled
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        createdBy:
+          type:
+          - 'null'
+          - string
+        modifiedBy:
+          type:
+          - 'null'
+          - string
+        resourceSet:
+          type: string
+          description: ID of the Resource Set in which this Access Entity exists
+          format: uuid
+        serviceEndpoint:
+          description: Service Endpoint of the Server Workload
+          $ref: '#/components/schemas/WorkloadServiceEndpointDTO'
+        type:
+          type:
+          - 'null'
+          - string
+          description: Type of Server Workload
+        accessPolicyCount:
+          type: integer
+          description: Access Policies associated with this Server Workload
+          format: int32
+      additionalProperties: false
+      description: Individual Server Workload
+    EntityPatchDTO:
+      type: object
+      properties:
+        name:
+          maxLength: 128
+          type:
+          - 'null'
+          - string
+          description: New Name for the identified entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: New Description for the identified entity
+        isActive:
+          type:
+          - 'null'
+          - boolean
+          description: New Status for the identified entity
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+          description: New Tags for the identified entity
+      additionalProperties: false
   securitySchemes:
     bearerAuth:
       type: http

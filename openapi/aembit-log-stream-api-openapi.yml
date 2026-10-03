@@ -256,151 +256,6 @@ paths:
                 $ref: '#/components/schemas/GenericResponseDTO'
 components:
   schemas:
-    TagDTO:
-      required:
-      - key
-      - value
-      type: object
-      properties:
-        key:
-          minLength: 1
-          type: string
-          description: Tag Key
-        value:
-          minLength: 1
-          type: string
-          description: Tag Key Value
-      additionalProperties: false
-      description: Aembit Entity Tag Details
-    LogStreamAWSS3DestinationDTO:
-      allOf:
-      - description: Individual Log Stream
-        $ref: '#/components/schemas/LogStreamDTO'
-      - required:
-        - s3BucketName
-        - s3BucketRegion
-        type: object
-        properties:
-          s3BucketRegion:
-            maxLength: 30
-            minLength: 8
-            pattern: ^[a-z\-\d]+$
-            type: string
-          s3BucketName:
-            maxLength: 63
-            minLength: 3
-            pattern: ^[a-z\d]+[a-z\-\.\d]*[a-z\d]+$
-            type: string
-          s3PathPrefix:
-            maxLength: 800
-            minLength: 3
-            pattern: ^[^\\\{\}\^\%`"'~#\[\]\>\<\|\\\x80-\xff]*$
-            type:
-            - 'null'
-            - string
-        additionalProperties: false
-      description: Individual Log Stream
-    LogStreamGCSBucketDestinationDTO:
-      allOf:
-      - $ref: '#/components/schemas/LogStreamDTO'
-      - type: object
-        properties:
-          gcsBucketName:
-            pattern: (^[a-z\-_\d]{3,63}$)|(^(?=.*\.)[a-z\-\._\d]{3,222}$)
-            type:
-            - 'null'
-            - string
-          gcsPathPrefix:
-            maxLength: 256
-            minLength: 0
-            pattern: ^[^\#\[\]\*\?\:\"\<\>\|]*$
-            type:
-            - 'null'
-            - string
-          audience:
-            maxLength: 256
-            minLength: 0
-            type:
-            - 'null'
-            - string
-          serviceAccountEmail:
-            maxLength: 90
-            minLength: 0
-            type:
-            - 'null'
-            - string
-          tokenLifetime:
-            maximum: 3600
-            minimum: 15
-            type: integer
-            format: int32
-        additionalProperties: false
-      description: Individual Log Stream
-    LogStreamCrowdstrikeDestinationDTO:
-      allOf:
-      - $ref: '#/components/schemas/LogStreamDTO'
-      - required:
-        - apiKey
-        - hecHostPort
-        - hecSourceName
-        type: object
-        properties:
-          hecHostPort:
-            minLength: 1
-            pattern: ^[a-zA-Z0-9\-\.]+:[0-9]{1,5}$
-            type: string
-          apiKey:
-            minLength: 1
-            pattern: ^[a-zA-Z0-9-]{32,40}$
-            type: string
-          hecSourceName:
-            minLength: 1
-            type: string
-          tls:
-            type: boolean
-          tlsVerification:
-            type:
-            - 'null'
-            - string
-        additionalProperties: false
-      description: Individual Log Stream
-    LogStreamDestinationType:
-      enum:
-      - AwsS3Bucket
-      - GcsBucket
-      - SplunkHttpEventCollector
-      - CrowdstrikeHttpEventCollector
-      type: string
-    LogStreamPatchDTO:
-      type: object
-      properties:
-        name:
-          maxLength: 128
-          type:
-          - 'null'
-          - string
-          description: New Name for the identified entity
-        description:
-          type:
-          - 'null'
-          - string
-          description: New Description for the identified entity
-        isActive:
-          type:
-          - 'null'
-          - boolean
-          description: New Status for the identified entity
-          format: boolean
-        tags:
-          type:
-          - 'null'
-          - array
-          items:
-            description: Aembit Entity Tag Details
-            $ref: '#/components/schemas/TagDTO'
-          description: New Tags for the identified entity
-      additionalProperties: false
-      description: Patch Request for an individual of Log Stream
     LogStreamSplunkDestinationDTO:
       allOf:
       - $ref: '#/components/schemas/LogStreamDTO'
@@ -468,23 +323,6 @@ components:
           description: Page of Log Streams
       additionalProperties: false
       description: Page of Log Streams
-    GenericResponseDTO:
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: True if the API call was successful, False otherwise
-        message:
-          type:
-          - 'null'
-          - string
-          description: Message to indicate why the API call failed
-        id:
-          type: integer
-          description: Unique identifier of the API response
-          format: int32
-      additionalProperties: false
-      description: DTO for a Generic API Response
     LogStreamDTO:
       required:
       - dataType
@@ -564,6 +402,168 @@ components:
           GcsBucket: '#/components/schemas/LogStreamGCSBucketDestinationDTO'
           CrowdstrikeHttpEventCollector: '#/components/schemas/LogStreamCrowdstrikeDestinationDTO'
           SplunkHttpEventCollector: '#/components/schemas/LogStreamSplunkDestinationDTO'
+    TagDTO:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          minLength: 1
+          type: string
+          description: Tag Key
+        value:
+          minLength: 1
+          type: string
+          description: Tag Key Value
+      additionalProperties: false
+      description: Aembit Entity Tag Details
+    LogStreamGCSBucketDestinationDTO:
+      allOf:
+      - $ref: '#/components/schemas/LogStreamDTO'
+      - type: object
+        properties:
+          gcsBucketName:
+            pattern: (^[a-z\-_\d]{3,63}$)|(^(?=.*\.)[a-z\-\._\d]{3,222}$)
+            type:
+            - 'null'
+            - string
+          gcsPathPrefix:
+            maxLength: 256
+            minLength: 0
+            pattern: ^[^\#\[\]\*\?\:\"\<\>\|]*$
+            type:
+            - 'null'
+            - string
+          audience:
+            maxLength: 256
+            minLength: 0
+            type:
+            - 'null'
+            - string
+          serviceAccountEmail:
+            maxLength: 90
+            minLength: 0
+            type:
+            - 'null'
+            - string
+          tokenLifetime:
+            maximum: 3600
+            minimum: 15
+            type: integer
+            format: int32
+        additionalProperties: false
+      description: Individual Log Stream
+    LogStreamCrowdstrikeDestinationDTO:
+      allOf:
+      - $ref: '#/components/schemas/LogStreamDTO'
+      - required:
+        - apiKey
+        - hecHostPort
+        - hecSourceName
+        type: object
+        properties:
+          hecHostPort:
+            minLength: 1
+            pattern: ^[a-zA-Z0-9\-\.]+:[0-9]{1,5}$
+            type: string
+          apiKey:
+            minLength: 1
+            pattern: ^[a-zA-Z0-9-]{32,40}$
+            type: string
+          hecSourceName:
+            minLength: 1
+            type: string
+          tls:
+            type: boolean
+          tlsVerification:
+            type:
+            - 'null'
+            - string
+        additionalProperties: false
+      description: Individual Log Stream
+    LogStreamAWSS3DestinationDTO:
+      allOf:
+      - description: Individual Log Stream
+        $ref: '#/components/schemas/LogStreamDTO'
+      - required:
+        - s3BucketName
+        - s3BucketRegion
+        type: object
+        properties:
+          s3BucketRegion:
+            maxLength: 30
+            minLength: 8
+            pattern: ^[a-z\-\d]+$
+            type: string
+          s3BucketName:
+            maxLength: 63
+            minLength: 3
+            pattern: ^[a-z\d]+[a-z\-\.\d]*[a-z\d]+$
+            type: string
+          s3PathPrefix:
+            maxLength: 800
+            minLength: 3
+            pattern: ^[^\\\{\}\^\%`"'~#\[\]\>\<\|\\\x80-\xff]*$
+            type:
+            - 'null'
+            - string
+        additionalProperties: false
+      description: Individual Log Stream
+    LogStreamDestinationType:
+      enum:
+      - AwsS3Bucket
+      - GcsBucket
+      - SplunkHttpEventCollector
+      - CrowdstrikeHttpEventCollector
+      type: string
+    LogStreamPatchDTO:
+      type: object
+      properties:
+        name:
+          maxLength: 128
+          type:
+          - 'null'
+          - string
+          description: New Name for the identified entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: New Description for the identified entity
+        isActive:
+          type:
+          - 'null'
+          - boolean
+          description: New Status for the identified entity
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+          description: New Tags for the identified entity
+      additionalProperties: false
+      description: Patch Request for an individual of Log Stream
+    GenericResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
   securitySchemes:
     bearerAuth:
       type: http
