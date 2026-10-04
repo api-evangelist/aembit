@@ -234,22 +234,78 @@ paths:
                 $ref: '#/components/schemas/GenericResponseDTO'
 components:
   schemas:
-    TagDTO:
+    StandaloneCertificateResponseDTO:
       required:
-      - key
-      - value
+      - isActive
+      - leafLifetime
+      - name
+      - resourceSet
       type: object
       properties:
-        key:
+        externalId:
+          type: string
+          format: uuid
+        name:
+          maxLength: 128
           minLength: 1
           type: string
-          description: Tag Key
-        value:
-          minLength: 1
+          description: Name of the Entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: Description of the Entity
+        isActive:
+          type: boolean
+          description: True/False value that determines if this entity is Active or Disabled
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+        createdAt:
           type: string
-          description: Tag Key Value
+          format: date-time
+        modifiedAt:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        createdBy:
+          type:
+          - 'null'
+          - string
+        modifiedBy:
+          type:
+          - 'null'
+          - string
+        resourceSet:
+          type: string
+          description: ID of the Resource Set in which this Access Entity exists
+          format: uuid
+        leafLifetime:
+          type: integer
+          description: Leaf certificate lifetime value for this Standalone Certificate Authority
+          format: int32
+        notBefore:
+          type: string
+          description: 'Not before value of the Root CA for this Standalone Certificate Authority '
+          format: date-time
+        notAfter:
+          type: string
+          description: Not after value of the Root CA for this Standalone Certificate Authority
+          format: date-time
+        clientWorkloadCount:
+          type:
+          - 'null'
+          - integer
+          description: Client Workloads associated with this Standalone Certificate Authority
+          format: int32
       additionalProperties: false
-      description: Aembit Entity Tag Details
+      description: Individual Standalone Certificate Authority
     StandaloneCertificatePatchDTO:
       type: object
       properties:
@@ -285,6 +341,55 @@ components:
           format: int32
       additionalProperties: false
       description: Patch Request for an Individual Standalone Certificate Authority
+    TagDTO:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          minLength: 1
+          type: string
+          description: Tag Key
+        value:
+          minLength: 1
+          type: string
+          description: Tag Key Value
+      additionalProperties: false
+      description: Aembit Entity Tag Details
+    StandaloneCertificateResponseDTOListDTO:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
+          type:
+          - 'null'
+          - string
+          description: Ordering criteria used for the current page
+        statusCode:
+          type: integer
+          description: HTTP StatusCode for the current result
+          format: int32
+        recordsTotal:
+          type: integer
+          description: Total number of entities available
+          format: int32
+        entities:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Individual Standalone Certificate Authority
+            $ref: '#/components/schemas/StandaloneCertificateResponseDTO'
+          description: Page of entities for this request
+      additionalProperties: false
     StandaloneCertificateRequestDTO:
       required:
       - isActive
@@ -360,111 +465,6 @@ components:
           format: int32
       additionalProperties: false
       description: DTO for a Generic API Response
-    StandaloneCertificateResponseDTO:
-      required:
-      - isActive
-      - leafLifetime
-      - name
-      - resourceSet
-      type: object
-      properties:
-        externalId:
-          type: string
-          format: uuid
-        name:
-          maxLength: 128
-          minLength: 1
-          type: string
-          description: Name of the Entity
-        description:
-          type:
-          - 'null'
-          - string
-          description: Description of the Entity
-        isActive:
-          type: boolean
-          description: True/False value that determines if this entity is Active or Disabled
-          format: boolean
-        tags:
-          type:
-          - 'null'
-          - array
-          items:
-            description: Aembit Entity Tag Details
-            $ref: '#/components/schemas/TagDTO'
-        createdAt:
-          type: string
-          format: date-time
-        modifiedAt:
-          type:
-          - 'null'
-          - string
-          format: date-time
-        createdBy:
-          type:
-          - 'null'
-          - string
-        modifiedBy:
-          type:
-          - 'null'
-          - string
-        resourceSet:
-          type: string
-          description: ID of the Resource Set in which this Access Entity exists
-          format: uuid
-        leafLifetime:
-          type: integer
-          description: Leaf certificate lifetime value for this Standalone Certificate Authority
-          format: int32
-        notBefore:
-          type: string
-          description: 'Not before value of the Root CA for this Standalone Certificate Authority '
-          format: date-time
-        notAfter:
-          type: string
-          description: Not after value of the Root CA for this Standalone Certificate Authority
-          format: date-time
-        clientWorkloadCount:
-          type:
-          - 'null'
-          - integer
-          description: Client Workloads associated with this Standalone Certificate Authority
-          format: int32
-      additionalProperties: false
-      description: Individual Standalone Certificate Authority
-    StandaloneCertificateResponseDTOListDTO:
-      type: object
-      properties:
-        page:
-          type: integer
-          description: Current page number of entities
-          format: int32
-        perPage:
-          type: integer
-          description: Number of entities requested for the current page
-          format: int32
-        order:
-          type:
-          - 'null'
-          - string
-          description: Ordering criteria used for the current page
-        statusCode:
-          type: integer
-          description: HTTP StatusCode for the current result
-          format: int32
-        recordsTotal:
-          type: integer
-          description: Total number of entities available
-          format: int32
-        entities:
-          type:
-          - 'null'
-          - array
-          items:
-            description: Individual Standalone Certificate Authority
-            $ref: '#/components/schemas/StandaloneCertificateResponseDTO'
-          description: Page of entities for this request
-      additionalProperties: false
   securitySchemes:
     bearerAuth:
       type: http

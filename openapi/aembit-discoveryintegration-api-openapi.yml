@@ -312,6 +312,36 @@ components:
           type: string
       additionalProperties: false
       description: Integration details for 3rd party data used by Discovery
+    DiscoveryIntegrationPatchDTO:
+      type: object
+      properties:
+        name:
+          maxLength: 128
+          type:
+          - 'null'
+          - string
+          description: New Name for the identified entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: New Description for the identified entity
+        isActive:
+          type:
+          - 'null'
+          - boolean
+          description: New Status for the identified entity
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+          description: New Tags for the identified entity
+      additionalProperties: false
+      description: Patch request for an individual Integration
     DiscoveryIntegrationListDTO:
       type: object
       properties:
@@ -346,36 +376,6 @@ components:
           description: Page of Integrations
       additionalProperties: false
       description: Page of Integrations
-    DiscoveryIntegrationPatchDTO:
-      type: object
-      properties:
-        name:
-          maxLength: 128
-          type:
-          - 'null'
-          - string
-          description: New Name for the identified entity
-        description:
-          type:
-          - 'null'
-          - string
-          description: New Description for the identified entity
-        isActive:
-          type:
-          - 'null'
-          - boolean
-          description: New Status for the identified entity
-          format: boolean
-        tags:
-          type:
-          - 'null'
-          - array
-          items:
-            description: Aembit Entity Tag Details
-            $ref: '#/components/schemas/TagDTO'
-          description: New Tags for the identified entity
-      additionalProperties: false
-      description: Patch request for an individual Integration
     TagDTO:
       required:
       - key

@@ -216,41 +216,6 @@ components:
           - 'null'
           - string
       additionalProperties: {}
-    GenericResponseDTO:
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: True if the API call was successful, False otherwise
-        message:
-          type:
-          - 'null'
-          - string
-          description: Message to indicate why the API call failed
-        id:
-          type: integer
-          description: Unique identifier of the API response
-          format: int32
-      additionalProperties: false
-      description: DTO for a Generic API Response
-    EventOutcomeDTO:
-      type: object
-      properties:
-        result:
-          type:
-          - 'null'
-          - string
-      additionalProperties: {}
-    EventDTO:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/EventMetaDTO'
-        network:
-          $ref: '#/components/schemas/EventNetworkDTO'
-        outcome:
-          $ref: '#/components/schemas/EventOutcomeDTO'
-      additionalProperties: {}
     EventListDTO:
       type: object
       properties:
@@ -280,6 +245,41 @@ components:
           items:
             $ref: '#/components/schemas/EventDTO'
       additionalProperties: false
+    EventOutcomeDTO:
+      type: object
+      properties:
+        result:
+          type:
+          - 'null'
+          - string
+      additionalProperties: {}
+    EventDTO:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/EventMetaDTO'
+        network:
+          $ref: '#/components/schemas/EventNetworkDTO'
+        outcome:
+          $ref: '#/components/schemas/EventOutcomeDTO'
+      additionalProperties: {}
+    GenericResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
   securitySchemes:
     bearerAuth:
       type: http

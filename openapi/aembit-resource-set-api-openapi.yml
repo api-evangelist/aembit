@@ -236,6 +236,81 @@ paths:
                 $ref: '#/components/schemas/GenericResponseDTO'
 components:
   schemas:
+    RoleDTO:
+      required:
+      - isActive
+      - name
+      type: object
+      properties:
+        externalId:
+          type: string
+          format: uuid
+        name:
+          maxLength: 128
+          minLength: 1
+          type: string
+          description: Name of the Entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: Description of the Entity
+        isActive:
+          type: boolean
+          description: True/False value that determines if this entity is Active or Disabled
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        createdBy:
+          type:
+          - 'null'
+          - string
+        modifiedBy:
+          type:
+          - 'null'
+          - string
+        usersCount:
+          type: integer
+          description: Number of Users associated with this Role
+          format: int32
+        credentialProvidersCount:
+          type: integer
+          description: Number of Credential Providers associated with this Role
+          format: int32
+        isSystem:
+          type: boolean
+          description: True if this is a system included Role (e.g. SuperAdmin or Auditor)
+        permissions:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Individual Permission details
+            $ref: '#/components/schemas/PermissionDTO'
+          description: Permissions assigned to this Role
+        resourceSets:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Individual Resource Set
+            $ref: '#/components/schemas/ResourceSetDTO'
+          description: Resource Sets assigned to this Role
+      additionalProperties: false
+      description: Individual Role
     ResourceSetDTOListDTO:
       type: object
       properties:
@@ -269,6 +344,34 @@ components:
             $ref: '#/components/schemas/ResourceSetDTO'
           description: Page of entities for this request
       additionalProperties: false
+    PermissionDTO:
+      type: object
+      properties:
+        name:
+          type:
+          - 'null'
+          - string
+          description: Name of the Permission Target
+        read:
+          type: boolean
+          description: True if this permission allows access to Read the Permission Target, False otherwise
+        write:
+          type: boolean
+          description: True if this permission allows access to Write the Permission Target, False otherwise
+        isWritable:
+          type: boolean
+          description: True if this permission allows access to Write the Permission Target, False otherwise
+        isReadable:
+          type: boolean
+          description: True if this permission allows access to Read the Permission Target, False otherwise
+        accessLevel:
+          type:
+          - 'null'
+          - string
+          description: Description of the Permission level
+          readOnly: true
+      additionalProperties: false
+      description: Individual Permission details
     ResourceSetDTO:
       required:
       - isActive
@@ -382,81 +485,23 @@ components:
           format: uuid
       additionalProperties: false
       description: Individual Resource Set
-    RoleDTO:
-      required:
-      - isActive
-      - name
+    GenericResponseDTO:
       type: object
       properties:
-        externalId:
-          type: string
-          format: uuid
-        name:
-          maxLength: 128
-          minLength: 1
-          type: string
-          description: Name of the Entity
-        description:
-          type:
-          - 'null'
-          - string
-          description: Description of the Entity
-        isActive:
+        success:
           type: boolean
-          description: True/False value that determines if this entity is Active or Disabled
-          format: boolean
-        tags:
-          type:
-          - 'null'
-          - array
-          items:
-            description: Aembit Entity Tag Details
-            $ref: '#/components/schemas/TagDTO'
-        createdAt:
-          type: string
-          format: date-time
-        modifiedAt:
+          description: True if the API call was successful, False otherwise
+        message:
           type:
           - 'null'
           - string
-          format: date-time
-        createdBy:
-          type:
-          - 'null'
-          - string
-        modifiedBy:
-          type:
-          - 'null'
-          - string
-        usersCount:
+          description: Message to indicate why the API call failed
+        id:
           type: integer
-          description: Number of Users associated with this Role
+          description: Unique identifier of the API response
           format: int32
-        credentialProvidersCount:
-          type: integer
-          description: Number of Credential Providers associated with this Role
-          format: int32
-        isSystem:
-          type: boolean
-          description: True if this is a system included Role (e.g. SuperAdmin or Auditor)
-        permissions:
-          type:
-          - 'null'
-          - array
-          items:
-            description: Individual Permission details
-            $ref: '#/components/schemas/PermissionDTO'
-          description: Permissions assigned to this Role
-        resourceSets:
-          type:
-          - 'null'
-          - array
-          items:
-            description: Individual Resource Set
-            $ref: '#/components/schemas/ResourceSetDTO'
-          description: Resource Sets assigned to this Role
       additionalProperties: false
-      description: Individual Role
+      description: DTO for a Generic API Response
     ResourceSetPatchDTO:
       type: object
       properties:
@@ -503,51 +548,6 @@ components:
           description: Tag Key Value
       additionalProperties: false
       description: Aembit Entity Tag Details
-    GenericResponseDTO:
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: True if the API call was successful, False otherwise
-        message:
-          type:
-          - 'null'
-          - string
-          description: Message to indicate why the API call failed
-        id:
-          type: integer
-          description: Unique identifier of the API response
-          format: int32
-      additionalProperties: false
-      description: DTO for a Generic API Response
-    PermissionDTO:
-      type: object
-      properties:
-        name:
-          type:
-          - 'null'
-          - string
-          description: Name of the Permission Target
-        read:
-          type: boolean
-          description: True if this permission allows access to Read the Permission Target, False otherwise
-        write:
-          type: boolean
-          description: True if this permission allows access to Write the Permission Target, False otherwise
-        isWritable:
-          type: boolean
-          description: True if this permission allows access to Write the Permission Target, False otherwise
-        isReadable:
-          type: boolean
-          description: True if this permission allows access to Read the Permission Target, False otherwise
-        accessLevel:
-          type:
-          - 'null'
-          - string
-          description: Description of the Permission level
-          readOnly: true
-      additionalProperties: false
-      description: Individual Permission details
   securitySchemes:
     bearerAuth:
       type: http

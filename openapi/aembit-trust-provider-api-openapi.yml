@@ -275,87 +275,6 @@ paths:
                 $ref: '#/components/schemas/GenericResponseDTO'
 components:
   schemas:
-    PublicKeyValidationDTO:
-      type: object
-      properties:
-        isValidContent:
-          type: boolean
-          description: True if the Public Key was valid, False otherwise
-        thumbprint:
-          type:
-          - 'null'
-          - string
-          description: Thumbprint of the Public Key
-        expirationDate:
-          type:
-          - 'null'
-          - string
-          description: Expiration of the Public Key Certificate
-          format: date-time
-        expirationDateString:
-          type:
-          - 'null'
-          - string
-          description: Expiration of the Public Key Certificate in String Format
-        certificateSubject:
-          type:
-          - 'null'
-          - string
-          description: Subject of the Public Key Certificate
-        serialNumber:
-          type:
-          - 'null'
-          - string
-          description: Serial Number of the Public Key Certificate
-        message:
-          type:
-          - 'null'
-          - string
-          description: Message describing why the Public Key was not valid if IsValidContent is False
-        pemType:
-          type:
-          - 'null'
-          - string
-          description: Certificate or Public Key
-      additionalProperties: false
-      description: Response to a request for Public Key Validation
-    TagDTO:
-      required:
-      - key
-      - value
-      type: object
-      properties:
-        key:
-          minLength: 1
-          type: string
-          description: Tag Key
-        value:
-          minLength: 1
-          type: string
-          description: Tag Key Value
-      additionalProperties: false
-      description: Aembit Entity Tag Details
-    TrustProviderMatchRuleDTO:
-      required:
-      - attribute
-      - value
-      type: object
-      properties:
-        attribute:
-          minLength: 1
-          type: string
-          description: Match Rule Attribute
-        value:
-          minLength: 1
-          type: string
-          description: Match Rule Attribute Value
-        key:
-          type:
-          - 'null'
-          - string
-          description: Match Rule Attribute Key
-      additionalProperties: false
-      description: Individual Match Rule to enforce during Trust Provider attestation
     TrustProviderPatchDTO:
       type: object
       properties:
@@ -438,57 +357,71 @@ components:
           description: Metadata XML content of the remote SSO Identity Provider
       additionalProperties: false
       description: Patch request for an individual Trust Provider
-    GenericResponseDTO:
+    TrustProviderMatchRuleDTO:
+      required:
+      - attribute
+      - value
       type: object
       properties:
-        success:
+        attribute:
+          minLength: 1
+          type: string
+          description: Match Rule Attribute
+        value:
+          minLength: 1
+          type: string
+          description: Match Rule Attribute Value
+        key:
+          type:
+          - 'null'
+          - string
+          description: Match Rule Attribute Key
+      additionalProperties: false
+      description: Individual Match Rule to enforce during Trust Provider attestation
+    PublicKeyValidationDTO:
+      type: object
+      properties:
+        isValidContent:
           type: boolean
-          description: True if the API call was successful, False otherwise
+          description: True if the Public Key was valid, False otherwise
+        thumbprint:
+          type:
+          - 'null'
+          - string
+          description: Thumbprint of the Public Key
+        expirationDate:
+          type:
+          - 'null'
+          - string
+          description: Expiration of the Public Key Certificate
+          format: date-time
+        expirationDateString:
+          type:
+          - 'null'
+          - string
+          description: Expiration of the Public Key Certificate in String Format
+        certificateSubject:
+          type:
+          - 'null'
+          - string
+          description: Subject of the Public Key Certificate
+        serialNumber:
+          type:
+          - 'null'
+          - string
+          description: Serial Number of the Public Key Certificate
         message:
           type:
           - 'null'
           - string
-          description: Message to indicate why the API call failed
-        id:
-          type: integer
-          description: Unique identifier of the API response
-          format: int32
-      additionalProperties: false
-      description: DTO for a Generic API Response
-    TrustProviderListDTO:
-      type: object
-      properties:
-        page:
-          type: integer
-          description: Page of entities
-          format: int32
-        perPage:
-          type: integer
-          description: Number of entities requested for the current page
-          format: int32
-        order:
+          description: Message describing why the Public Key was not valid if IsValidContent is False
+        pemType:
           type:
           - 'null'
           - string
-          description: Ordering criteria used for the current page
-        statusCode:
-          type: integer
-          description: HTTP Status Code of the response
-          format: int32
-        recordsTotal:
-          type: integer
-          description: Total number of Trust Providers
-          format: int32
-        trustProviders:
-          type:
-          - 'null'
-          - array
-          items:
-            description: Individual Trust Provider
-            $ref: '#/components/schemas/TrustProviderDTO'
-          description: Page of Trust Providers
+          description: Certificate or Public Key
       additionalProperties: false
-      description: Page of Trust Providers
+      description: Response to a request for Public Key Validation
     TrustProviderDTO:
       required:
       - isActive
@@ -611,6 +544,73 @@ components:
           description: Metadata XML content of the remote SSO Identity Provider
       additionalProperties: false
       description: Individual Trust Provider
+    TrustProviderListDTO:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Page of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
+          type:
+          - 'null'
+          - string
+          description: Ordering criteria used for the current page
+        statusCode:
+          type: integer
+          description: HTTP Status Code of the response
+          format: int32
+        recordsTotal:
+          type: integer
+          description: Total number of Trust Providers
+          format: int32
+        trustProviders:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Individual Trust Provider
+            $ref: '#/components/schemas/TrustProviderDTO'
+          description: Page of Trust Providers
+      additionalProperties: false
+      description: Page of Trust Providers
+    TagDTO:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          minLength: 1
+          type: string
+          description: Tag Key
+        value:
+          minLength: 1
+          type: string
+          description: Tag Key Value
+      additionalProperties: false
+      description: Aembit Entity Tag Details
+    GenericResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
   securitySchemes:
     bearerAuth:
       type: http

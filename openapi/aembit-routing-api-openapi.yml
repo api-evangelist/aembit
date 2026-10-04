@@ -212,6 +212,39 @@ paths:
                 $ref: '#/components/schemas/GenericResponseDTO'
 components:
   schemas:
+    RoutingDTOListDTO:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
+          type:
+          - 'null'
+          - string
+          description: Ordering criteria used for the current page
+        statusCode:
+          type: integer
+          description: HTTP StatusCode for the current result
+          format: int32
+        recordsTotal:
+          type: integer
+          description: Total number of entities available
+          format: int32
+        entities:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Individual Routing
+            $ref: '#/components/schemas/RoutingDTO'
+          description: Page of entities for this request
+      additionalProperties: false
     RoutingPatchDTO:
       type: object
       properties:
@@ -301,39 +334,6 @@ components:
           description: URL of the proxy. The format is http(s)://server:port
       additionalProperties: false
       description: Individual Routing
-    RoutingDTOListDTO:
-      type: object
-      properties:
-        page:
-          type: integer
-          description: Current page number of entities
-          format: int32
-        perPage:
-          type: integer
-          description: Number of entities requested for the current page
-          format: int32
-        order:
-          type:
-          - 'null'
-          - string
-          description: Ordering criteria used for the current page
-        statusCode:
-          type: integer
-          description: HTTP StatusCode for the current result
-          format: int32
-        recordsTotal:
-          type: integer
-          description: Total number of entities available
-          format: int32
-        entities:
-          type:
-          - 'null'
-          - array
-          items:
-            description: Individual Routing
-            $ref: '#/components/schemas/RoutingDTO'
-          description: Page of entities for this request
-      additionalProperties: false
     TagDTO:
       required:
       - key

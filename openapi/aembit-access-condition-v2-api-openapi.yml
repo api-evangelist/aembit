@@ -295,32 +295,6 @@ paths:
                 $ref: '#/components/schemas/GenericResponseDTO'
 components:
   schemas:
-    WizAccessConditionDTO:
-      allOf:
-      - $ref: '#/components/schemas/AccessConditionV2DTO'
-      - type: object
-        properties:
-          serverless:
-            type: boolean
-          containerClusterConnected:
-            type: boolean
-        additionalProperties: false
-    CrowdStrikeAccessConditionDTO:
-      allOf:
-      - $ref: '#/components/schemas/AccessConditionV2DTO'
-      - type: object
-        properties:
-          matchLocalIP:
-            type: boolean
-          matchHostname:
-            type: boolean
-          matchMacAddress:
-            type: boolean
-          matchSerialNumber:
-            type: boolean
-          preventRestrictedFunctionalityMode:
-            type: boolean
-        additionalProperties: false
     GeoIPAccessConditionLocationDTO:
       required:
       - shortName
@@ -346,178 +320,6 @@ components:
           type: integer
           format: int32
       additionalProperties: false
-    GeoIPAccessConditionDTO:
-      allOf:
-      - $ref: '#/components/schemas/AccessConditionV2DTO'
-      - type: object
-        properties:
-          locations:
-            type:
-            - 'null'
-            - array
-            items:
-              $ref: '#/components/schemas/GeoIPAccessConditionLocationDTO'
-        additionalProperties: false
-    WizIntegrationDTO:
-      allOf:
-      - $ref: '#/components/schemas/IntegrationV2DTO'
-      - type: object
-        properties:
-          clientId:
-            type:
-            - 'null'
-            - string
-          tokenUrl:
-            type:
-            - 'null'
-            - string
-          clientSecret:
-            type:
-            - 'null'
-            - string
-          audience:
-            type:
-            - 'null'
-            - string
-        additionalProperties: false
-      description: Integration details for 3rd party data used by Access Conditions
-    GeoIPIntegrationDTO:
-      allOf:
-      - $ref: '#/components/schemas/IntegrationV2DTO'
-      - type: object
-        additionalProperties: false
-      description: Integration details for 3rd party data used by Access Conditions
-    CrowdStrikeIntegrationDTO:
-      allOf:
-      - $ref: '#/components/schemas/IntegrationV2DTO'
-      - type: object
-        properties:
-          clientId:
-            type:
-            - 'null'
-            - string
-          tokenUrl:
-            type:
-            - 'null'
-            - string
-          clientSecret:
-            type:
-            - 'null'
-            - string
-          audience:
-            type:
-            - 'null'
-            - string
-        additionalProperties: false
-      description: Integration details for 3rd party data used by Access Conditions
-    WeekDayDTO:
-      type: object
-      properties:
-        name:
-          type:
-          - 'null'
-          - string
-        ordinal:
-          type: integer
-          format: int32
-      additionalProperties: false
-    TimeAccessConditionScheduleDTO:
-      type: object
-      properties:
-        startTime:
-          type: string
-          format: date-span
-        endTime:
-          type: string
-          format: date-span
-        weekDay:
-          $ref: '#/components/schemas/WeekDayDTO'
-      additionalProperties: false
-    TagDTO:
-      required:
-      - key
-      - value
-      type: object
-      properties:
-        key:
-          minLength: 1
-          type: string
-          description: Tag Key
-        value:
-          minLength: 1
-          type: string
-          description: Tag Key Value
-      additionalProperties: false
-      description: Aembit Entity Tag Details
-    TimeAccessConditionTimezoneDTO:
-      type: object
-      properties:
-        group:
-          type:
-          - 'null'
-          - string
-        label:
-          type:
-          - 'null'
-          - string
-        timezone:
-          type:
-          - 'null'
-          - string
-      additionalProperties: false
-    GeoIPAccessConditionSubdivisionDTO:
-      required:
-      - name
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-        name:
-          minLength: 1
-          type: string
-        alpha2Code:
-          type:
-          - 'null'
-          - string
-        subdivisionCode:
-          type:
-          - 'null'
-          - string
-        geoIPAccessConditionLocationId:
-          type: integer
-          format: int32
-      additionalProperties: false
-    AccessConditionPatchDTO:
-      type: object
-      properties:
-        name:
-          maxLength: 128
-          type:
-          - 'null'
-          - string
-          description: New Name for the identified entity
-        description:
-          type:
-          - 'null'
-          - string
-          description: New Description for the identified entity
-        isActive:
-          type:
-          - 'null'
-          - boolean
-          description: New Status for the identified entity
-          format: boolean
-        tags:
-          type:
-          - 'null'
-          - array
-          items:
-            description: Aembit Entity Tag Details
-            $ref: '#/components/schemas/TagDTO'
-          description: New Tags for the identified entity
-      additionalProperties: false
-      description: Patch Request DTO for individual Access Condition
     AccessConditionV2DTOAccessConditionListDTO:
       type: object
       properties:
@@ -556,6 +358,273 @@ components:
           description: Page of Access Conditions
       additionalProperties: false
       description: Page of Access Conditions
+    AccessConditionPatchDTO:
+      type: object
+      properties:
+        name:
+          maxLength: 128
+          type:
+          - 'null'
+          - string
+          description: New Name for the identified entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: New Description for the identified entity
+        isActive:
+          type:
+          - 'null'
+          - boolean
+          description: New Status for the identified entity
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+          description: New Tags for the identified entity
+      additionalProperties: false
+      description: Patch Request DTO for individual Access Condition
+    WizIntegrationDTO:
+      allOf:
+      - $ref: '#/components/schemas/IntegrationV2DTO'
+      - type: object
+        properties:
+          clientId:
+            type:
+            - 'null'
+            - string
+          tokenUrl:
+            type:
+            - 'null'
+            - string
+          clientSecret:
+            type:
+            - 'null'
+            - string
+          audience:
+            type:
+            - 'null'
+            - string
+        additionalProperties: false
+      description: Integration details for 3rd party data used by Access Conditions
+    TimeIntegrationDTO:
+      allOf:
+      - $ref: '#/components/schemas/IntegrationV2DTO'
+      - type: object
+        additionalProperties: false
+      description: Integration details for 3rd party data used by Access Conditions
+    WeekDayDTO:
+      type: object
+      properties:
+        name:
+          type:
+          - 'null'
+          - string
+        ordinal:
+          type: integer
+          format: int32
+      additionalProperties: false
+    AccessConditionV2DTO:
+      required:
+      - integrationType
+      - isActive
+      - name
+      - resourceSet
+      type: object
+      properties:
+        integrationType:
+          type:
+          - 'null'
+          - string
+        externalId:
+          type: string
+          format: uuid
+        name:
+          maxLength: 128
+          minLength: 1
+          type: string
+          description: Name of the Entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: Description of the Entity
+        isActive:
+          type: boolean
+          description: True/False value that determines if this entity is Active or Disabled
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        createdBy:
+          type:
+          - 'null'
+          - string
+        modifiedBy:
+          type:
+          - 'null'
+          - string
+        resourceSet:
+          type: string
+          description: ID of the Resource Set in which this Access Entity exists
+          format: uuid
+        integrationID:
+          type: string
+          description: ID of the Integration Entity used by this Access Condition
+          format: uuid
+        integration:
+          type: 'null'
+          oneOf:
+          - description: Integration details for 3rd party data used by Access Conditions
+            $ref: '#/components/schemas/IntegrationV2DTO'
+          - $ref: '#/components/schemas/CrowdStrikeIntegrationDTO'
+          - $ref: '#/components/schemas/WizIntegrationDTO'
+          - $ref: '#/components/schemas/GeoIPIntegrationDTO'
+          - $ref: '#/components/schemas/TimeIntegrationDTO'
+          description: Integration Entity used by this Access Condition
+        maxLastSeenSeconds:
+          type: integer
+          format: int32
+        accessPolicyCount:
+          type: integer
+          description: Access Policies associated with this Access Condition
+          format: int32
+      additionalProperties: false
+      discriminator:
+        propertyName: integrationType
+        mapping:
+          CrowdStrike: '#/components/schemas/CrowdStrikeAccessConditionDTO'
+          WizIntegrationApi: '#/components/schemas/WizAccessConditionDTO'
+          AembitGeoIPCondition: '#/components/schemas/GeoIPAccessConditionDTO'
+          AembitTimeCondition: '#/components/schemas/TimeAccessConditionDTO'
+    CrowdStrikeAccessConditionDTO:
+      allOf:
+      - $ref: '#/components/schemas/AccessConditionV2DTO'
+      - type: object
+        properties:
+          matchLocalIP:
+            type: boolean
+          matchHostname:
+            type: boolean
+          matchMacAddress:
+            type: boolean
+          matchSerialNumber:
+            type: boolean
+          preventRestrictedFunctionalityMode:
+            type: boolean
+        additionalProperties: false
+    TimeAccessConditionTimezoneDTO:
+      type: object
+      properties:
+        group:
+          type:
+          - 'null'
+          - string
+        label:
+          type:
+          - 'null'
+          - string
+        timezone:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+    TagDTO:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          minLength: 1
+          type: string
+          description: Tag Key
+        value:
+          minLength: 1
+          type: string
+          description: Tag Key Value
+      additionalProperties: false
+      description: Aembit Entity Tag Details
+    GeoIPIntegrationDTO:
+      allOf:
+      - $ref: '#/components/schemas/IntegrationV2DTO'
+      - type: object
+        additionalProperties: false
+      description: Integration details for 3rd party data used by Access Conditions
+    CrowdStrikeIntegrationDTO:
+      allOf:
+      - $ref: '#/components/schemas/IntegrationV2DTO'
+      - type: object
+        properties:
+          clientId:
+            type:
+            - 'null'
+            - string
+          tokenUrl:
+            type:
+            - 'null'
+            - string
+          clientSecret:
+            type:
+            - 'null'
+            - string
+          audience:
+            type:
+            - 'null'
+            - string
+        additionalProperties: false
+      description: Integration details for 3rd party data used by Access Conditions
+    GeoIPAccessConditionSubdivisionDTO:
+      required:
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          minLength: 1
+          type: string
+        alpha2Code:
+          type:
+          - 'null'
+          - string
+        subdivisionCode:
+          type:
+          - 'null'
+          - string
+        geoIPAccessConditionLocationId:
+          type: integer
+          format: int32
+      additionalProperties: false
+    TimeAccessConditionScheduleDTO:
+      type: object
+      properties:
+        startTime:
+          type: string
+          format: date-span
+        endTime:
+          type: string
+          format: date-span
+        weekDay:
+          $ref: '#/components/schemas/WeekDayDTO'
+      additionalProperties: false
     TimeAccessConditionDTO:
       allOf:
       - $ref: '#/components/schemas/AccessConditionV2DTO'
@@ -661,12 +730,28 @@ components:
           WizIntegrationApi: '#/components/schemas/WizIntegrationDTO'
           AembitGeoIPCondition: '#/components/schemas/GeoIPIntegrationDTO'
           AembitTimeCondition: '#/components/schemas/TimeIntegrationDTO'
-    TimeIntegrationDTO:
+    GeoIPAccessConditionDTO:
       allOf:
-      - $ref: '#/components/schemas/IntegrationV2DTO'
+      - $ref: '#/components/schemas/AccessConditionV2DTO'
       - type: object
+        properties:
+          locations:
+            type:
+            - 'null'
+            - array
+            items:
+              $ref: '#/components/schemas/GeoIPAccessConditionLocationDTO'
         additionalProperties: false
-      description: Integration details for 3rd party data used by Access Conditions
+    WizAccessConditionDTO:
+      allOf:
+      - $ref: '#/components/schemas/AccessConditionV2DTO'
+      - type: object
+        properties:
+          serverless:
+            type: boolean
+          containerClusterConnected:
+            type: boolean
+        additionalProperties: false
     GenericResponseDTO:
       type: object
       properties:
@@ -684,91 +769,6 @@ components:
           format: int32
       additionalProperties: false
       description: DTO for a Generic API Response
-    AccessConditionV2DTO:
-      required:
-      - integrationType
-      - isActive
-      - name
-      - resourceSet
-      type: object
-      properties:
-        integrationType:
-          type:
-          - 'null'
-          - string
-        externalId:
-          type: string
-          format: uuid
-        name:
-          maxLength: 128
-          minLength: 1
-          type: string
-          description: Name of the Entity
-        description:
-          type:
-          - 'null'
-          - string
-          description: Description of the Entity
-        isActive:
-          type: boolean
-          description: True/False value that determines if this entity is Active or Disabled
-          format: boolean
-        tags:
-          type:
-          - 'null'
-          - array
-          items:
-            description: Aembit Entity Tag Details
-            $ref: '#/components/schemas/TagDTO'
-        createdAt:
-          type: string
-          format: date-time
-        modifiedAt:
-          type:
-          - 'null'
-          - string
-          format: date-time
-        createdBy:
-          type:
-          - 'null'
-          - string
-        modifiedBy:
-          type:
-          - 'null'
-          - string
-        resourceSet:
-          type: string
-          description: ID of the Resource Set in which this Access Entity exists
-          format: uuid
-        integrationID:
-          type: string
-          description: ID of the Integration Entity used by this Access Condition
-          format: uuid
-        integration:
-          type: 'null'
-          oneOf:
-          - description: Integration details for 3rd party data used by Access Conditions
-            $ref: '#/components/schemas/IntegrationV2DTO'
-          - $ref: '#/components/schemas/CrowdStrikeIntegrationDTO'
-          - $ref: '#/components/schemas/WizIntegrationDTO'
-          - $ref: '#/components/schemas/GeoIPIntegrationDTO'
-          - $ref: '#/components/schemas/TimeIntegrationDTO'
-          description: Integration Entity used by this Access Condition
-        maxLastSeenSeconds:
-          type: integer
-          format: int32
-        accessPolicyCount:
-          type: integer
-          description: Access Policies associated with this Access Condition
-          format: int32
-      additionalProperties: false
-      discriminator:
-        propertyName: integrationType
-        mapping:
-          CrowdStrike: '#/components/schemas/CrowdStrikeAccessConditionDTO'
-          WizIntegrationApi: '#/components/schemas/WizAccessConditionDTO'
-          AembitGeoIPCondition: '#/components/schemas/GeoIPAccessConditionDTO'
-          AembitTimeCondition: '#/components/schemas/TimeAccessConditionDTO'
   securitySchemes:
     bearerAuth:
       type: http

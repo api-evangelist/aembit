@@ -271,22 +271,6 @@ paths:
                 $ref: '#/components/schemas/GenericResponseDTO'
 components:
   schemas:
-    TagDTO:
-      required:
-      - key
-      - value
-      type: object
-      properties:
-        key:
-          minLength: 1
-          type: string
-          description: Tag Key
-        value:
-          minLength: 1
-          type: string
-          description: Tag Key Value
-      additionalProperties: false
-      description: Aembit Entity Tag Details
     IntegrationDTO:
       required:
       - endpoint
@@ -445,23 +429,16 @@ components:
           - string
       additionalProperties: false
       description: DTO of an individual Access Condition for enforcement during Access Policy evaluation
-    GenericResponseDTO:
+    JsonNode:
       type: object
       properties:
-        success:
-          type: boolean
-          description: True if the API call was successful, False otherwise
-        message:
-          type:
-          - 'null'
-          - string
-          description: Message to indicate why the API call failed
-        id:
-          type: integer
-          description: Unique identifier of the API response
-          format: int32
+        options:
+          $ref: '#/components/schemas/JsonNodeOptions'
+        parent:
+          $ref: '#/components/schemas/JsonNode'
+        root:
+          $ref: '#/components/schemas/JsonNode'
       additionalProperties: false
-      description: DTO for a Generic API Response
     AccessConditionPatchDTO:
       type: object
       properties:
@@ -492,6 +469,22 @@ components:
           description: New Tags for the identified entity
       additionalProperties: false
       description: Patch Request DTO for individual Access Condition
+    TagDTO:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          minLength: 1
+          type: string
+          description: Tag Key
+        value:
+          minLength: 1
+          type: string
+          description: Tag Key Value
+      additionalProperties: false
+      description: Aembit Entity Tag Details
     JsonNodeOptions:
       type: object
       properties:
@@ -532,16 +525,23 @@ components:
           description: Page of Access Conditions
       additionalProperties: false
       description: Page of Access Conditions
-    JsonNode:
+    GenericResponseDTO:
       type: object
       properties:
-        options:
-          $ref: '#/components/schemas/JsonNodeOptions'
-        parent:
-          $ref: '#/components/schemas/JsonNode'
-        root:
-          $ref: '#/components/schemas/JsonNode'
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
       additionalProperties: false
+      description: DTO for a Generic API Response
   securitySchemes:
     bearerAuth:
       type: http
