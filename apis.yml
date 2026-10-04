@@ -830,6 +830,9 @@ apis:
   - type: SDKs
     url: https://docs.aembit.io/dev-guide/sdk/edge/
 common:
+- type: CapabilityMap
+  url: capabilities/aembit-capability-edges.yml
+  name: Aembit Business Capability Map
 - type: Website
   url: https://aembit.io/
 - type: DeveloperPortal

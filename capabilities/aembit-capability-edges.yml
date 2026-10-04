@@ -1,0 +1,226 @@
+slug: aembit
+provider: Aembit
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 22
+edges:
+- tag: Access Policy (Deprecated)
+  spec_file: aembit-access-policy-deprecated-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.92
+  evidence: POST /api/v1/access-policies  Create an Access Policy; get-access-policy-by-workloads with
+    ClientWorkloadExternalDTO, ServerWorkloadExternalDTO, CredentialProviderDTO
+  reason: Lifecycle of access policies binding client workloads to server workloads and credential providers
+    — the core access-control policy surface of a Workload IAM platform.
+- tag: Access Policy v2
+  spec_file: aembit-access-policy-v2-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.92
+  evidence: GET /api/v2/access-policies/{id}/credential-mappings  Gets a credential mappings of Access
+    Policy
+  reason: v2 access policy CRUD plus credential mappings controlling which workload identities obtain
+    which credentials; unambiguously Identity & Access Management.
+- tag: Access Condition v2
+  spec_file: aembit-access-condition-v2-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.9
+  evidence: GeoIPAccessConditionDTO, CrowdStrikeAccessConditionDTO, TimeAccessConditionScheduleDTO
+  reason: 'Same surface at v2: conditional access policy objects based on geo-IP, device posture and time
+    windows that determine whether a workload may access a resource — conditional access under Identity
+    & Access Management.'
+- tag: Credentials
+  spec_file: aembit-credentials-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.9
+  evidence: POST /edge/v1/credentials 'Get credentials for a Client Workload'; schemas IdentityTokenAttestationDTO,
+    AzureAttestationDTO, EdgeCredentials
+  reason: Runtime issuance of short-lived access credentials to an attested workload — directly realises
+    identity and access management for non-human identities.
+- tag: Role
+  spec_file: aembit-role-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.9
+  evidence: '"Create a new Role" with schemas RoleDTO, PermissionDTO, ResourceSetDTO'
+  reason: Role and permission administration is core identity and access management, not HR job roles.
+- tag: SSO Identity Provider
+  spec_file: aembit-sso-identity-provider-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.9
+  evidence: '"Create a SSO Identity Provider", schemas SamlIdentityProviderDTO, OidcIdentityProviderDTO,
+    SsoStatementRoleMappingDTO'
+  reason: SAML/OIDC identity provider federation and role mapping is identity federation — IAM.
+- tag: Trust Provider
+  spec_file: aembit-trust-provider-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.9
+  evidence: 'POST /api/v1/trust-providers  post-trust-provider  Create a Trust Provider; schemas: TrustProviderMatchRuleDTO,
+    PublicKeyValidationDTO'
+  reason: CRUD over Trust Providers that attest workload identity (AWS, Kubernetes, OIDC, SPIFFE) — this
+    is identity federation/attestation configuration, squarely Identity & Access Management.
+- tag: Access Condition
+  spec_file: aembit-access-condition-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.88
+  evidence: POST /api/v1/access-conditions  Create an Access Condition, schema AccessConditionDTO
+  reason: CRUD over conditional-access rules used to gate workload access in Aembit's Workload IAM product;
+    this is policy-based access control, i.e. Identity & Access Management.
+- tag: MFA SignOn Policy
+  spec_file: aembit-mfa-signon-policy-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.88
+  evidence: PUT /api/v1/signin-policies/mfa  "Update a MFA SignOn Policy", schema MFASignInPolicyDTO
+  reason: Multi-factor sign-on policy configuration is squarely identity and access management within
+    cybersecurity.
+- tag: Client Workload
+  spec_file: aembit-client-workload-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.85
+  evidence: POST /api/v1/client-workloads 'Create a Client Workload'; schemas ClientWorkloadIdentityDTO,
+    ClientIdentifierExternalDTO
+  reason: Operations manage the registry of non-human workload identities (and their identifiers) that
+    the platform attests and authorises — identity & access management of machine identities, not an industry
+    business object.
+- tag: Credential Provider (Deprecated)
+  spec_file: aembit-credential-provider-deprecated-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.85
+  evidence: '''Create a Credential Provider'', ''Get a Credential Provider Authorization URL'', ''Verify
+    the Credential Provider'''
+  reason: Manages credential providers that issue access credentials to workloads — credential/identity
+    and access administration, the core of IAM.
+- tag: Credential Provider v2
+  spec_file: aembit-credential-provider-v2-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.85
+  evidence: '''Create a Credential Provider'' (v2); schemas CPTypeOAuth2ClientCredentialsUIV2DTO, CPTypeVaultClientTokenV2DTO,
+    CPAwsStsV2DTO'
+  reason: Versioned surface for defining how access credentials (OAuth2, STS, vault tokens, API keys)
+    are issued — identity and access/credential management.
+- tag: SSO SignOn Policy
+  spec_file: aembit-sso-signon-policy-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.85
+  evidence: PUT /api/v1/signin-policies/sso  "Update a SSO SignOn Policy", schema SSOSignInPolicyDTO
+  reason: Single sign-on policy configuration governs authentication to the platform — IAM.
+- tag: SignOn Policy
+  spec_file: aembit-signon-policy-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.85
+  evidence: GET /api/v1/signin-policies  "Get a SignOn Policy", schema GetSignInPolicyDTO
+  reason: Retrieval of sign-in policy configuration — authentication policy administration within IAM.
+- tag: User
+  spec_file: aembit-user-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.85
+  evidence: 'POST /api/v1/users/{id}/unlock  post-user-unlock  Unlock a User; schemas: RoleDTO, PermissionDTO,
+    ResourceSetDTO'
+  reason: Administrative user lifecycle with roles, permissions and account unlock in a security platform
+    — classic identity and access administration rather than HR employee records.
+- tag: Access Authorization Event
+  spec_file: aembit-access-authorization-event-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.8
+  evidence: GET /api/v1/authorization-events  Get a page of Access Authorization Events, schemas AuthorizationEventOutcomeDTO,
+    AuthorizationEventEntityResultDTO
+  reason: Records of access authorization decisions for workload (non-human) identities in a Workload
+    IAM platform — the audit trail of access control, squarely Identity & Access Management rather than
+    observability or financial alerting.
+- tag: Credential Provider Integration
+  spec_file: aembit-credential-provider-integration-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.8
+  evidence: '''Create a Credential Provider Integration''; schemas AwsIamRoleCpiDTO, AzureEntraFederationCredentialProviderIntegrationDTO'
+  reason: Configures federation/IAM-role integrations used to obtain credentials for workloads — identity
+    federation and access management, not generic plumbing.
+- tag: Trust Provider Secret
+  spec_file: aembit-trust-provider-secret-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.8
+  evidence: POST /api/v1/trust-providers/{tpId}/secrets  post-trust-provider-secret  Create a Trust Provider
+    Secret
+  reason: Manages secrets/credentials attached to identity trust providers used for workload attestation
+    — credential material within the IAM surface. Could alternatively be read as secrets management, hence
+    0.8.
+- tag: Resource Set
+  spec_file: aembit-resource-set-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.75
+  evidence: schemas ResourceSetDTO, RoleDTO, PermissionDTO with "Create a Resource Set"
+  reason: Resource sets group resources against roles and permissions — authorisation scoping in an access-management
+    platform.
+- tag: Standalone Certificate Authority
+  spec_file: aembit-standalone-certificate-authority-api-openapi.yml
+  capability_id: BC-620
+  capability_id_l1: BC-620
+  capability_name: Cybersecurity Management
+  confidence: 0.72
+  evidence: '"Create a Standalone Certificate Authority", schemas StandaloneCertificateRequestDTO, StandaloneCertificateResponseDTO'
+  reason: Lifecycle management of certificate authorities / certificates is a cybersecurity cryptographic-trust
+    capability; ambiguous between identity credential issuance and security architecture, so no L2 asserted.
+- tag: Agent Controller
+  spec_file: aembit-agent-controller-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.7
+  evidence: POST /api/v1/agent-controllers/{agentControllerExternalId}/device-code  Generate a Device
+    Code for an Agent Controller; TrustProviderMatchRuleDTO, AgentControllerTlsCertificateDTO
+  reason: Registration and credentialing of the Aembit agent controllers that enforce workload access,
+    including trust-provider match rules and TLS identity. Primarily IAM enforcement-point identity management,
+    though it also has an infrastructure-component management flavour, hence moderate confidence.
+- tag: Server Workload
+  spec_file: aembit-server-workload-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.7
+  evidence: '"Create a Server Workload" with schemas WorkloadServiceAuthenticationDTO, WorkloadServiceEndpointDTO'
+  reason: Defines target server workloads and their service authentication endpoints for the workload
+    access-management policy model; an access-management object rather than general infrastructure inventory.
