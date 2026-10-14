@@ -15,3 +15,28 @@
   relationship: distribution-channel
   status: not-a-workflow
   arazzo: null
+- slug: aembit-crowdstrike-own
+  label: CrowdStrike (own)
+  partner: crowdstrike
+  partner_name: CrowdStrike (own)
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://marketplace.crowdstrike.com/listings/aembit-workload-iam-platform/
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: aembit-okta-own
+  label: Okta (own)
+  partner: okta
+  partner_name: Okta (own)
+  category: Identity Governance and Administration (IGA)
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://www.okta.com/integrations/integrator-6386328_aembit_1/
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null

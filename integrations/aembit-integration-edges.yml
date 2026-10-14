@@ -1,7 +1,9 @@
 generated: '2026-10-13'
 method: searched
 checked:
+- crowdstrike/integrations/crowdstrike-integration-edges.yml
 - https://aws.amazon.com/marketplace/
+- okta/integrations/okta-integration-edges.yml
 marketplace_apps: []
 edges:
 - partner_name: AWS Marketplace
@@ -19,3 +21,44 @@ edges:
   seller_name: Aembit, Inc.
   detected_by: sweep-cloud-marketplaces.py
   detected: '2026-10-13'
+- partner_name: CrowdStrike (own)
+  partner: crowdstrike
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://marketplace.crowdstrike.com/listings/aembit-workload-iam-platform/
+  mirror_of: crowdstrike/integrations/crowdstrike-integration-edges.yml
+  apps:
+  - Aembit Workload IAM Platform
+  listing_count: 1
+  detected: '2026-10-14'
+  detected_by: mirror-platform-listings.py
+- partner_name: Okta (own)
+  partner: okta
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://www.okta.com/integrations/integrator-6386328_aembit_1/
+  mirror_of: okta/integrations/okta-integration-edges.yml
+  apps:
+  - Aembit
+  listing_count: 1
+  detected: '2026-10-14'
+  detected_by: mirror-platform-listings.py
+  category: Identity Governance and Administration (IGA)
+  badges:
+  - OKTA_VERIFIED
+  features:
+  - OIDC
+  - SAML
+source:
+- crowdstrike/integrations/crowdstrike-integration-edges.yml
+- okta/integrations/okta-integration-edges.yml
