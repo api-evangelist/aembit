@@ -269,97 +269,78 @@ paths:
                 $ref: '#/components/schemas/GenericResponseDTO'
 components:
   schemas:
-    UserDTO:
-      required:
-      - email
-      - firstName
-      - lastName
+    UserPatchDTO:
       type: object
       properties:
         email:
-          minLength: 1
-          type: string
-          format: email
-        externalId:
-          type: string
-          format: uuid
-        roles:
           type:
           - 'null'
-          - array
-          items:
-            type: string
-            format: uuid
-        rolesDetails:
-          type:
-          - 'null'
-          - array
-          items:
-            description: Individual Role
-            $ref: '#/components/schemas/RoleDTO'
+          - string
         firstName:
-          maxLength: 64
-          minLength: 2
-          type: string
+          type:
+          - 'null'
+          - string
         lastName:
-          maxLength: 64
-          minLength: 2
-          type: string
+          type:
+          - 'null'
+          - string
         phoneNumber:
           type:
           - 'null'
           - string
-        createdAt:
-          type: string
-          format: date-time
         isActive:
-          type: boolean
-        twoFactorEnabled:
-          type: boolean
-        isLocked:
-          type: boolean
-        tags:
           type:
           - 'null'
-          - array
-          items:
-            description: Aembit Entity Tag Details
-            $ref: '#/components/schemas/TagDTO'
-        userTokens:
-          type:
-          - 'null'
-          - array
-          items:
-            $ref: '#/components/schemas/UserTokensDTO'
+          - boolean
       additionalProperties: false
-    UserListDTO:
+    GenericResponseDTO:
       type: object
       properties:
-        page:
-          type: integer
-          description: Page of entities
-          format: int32
-        perPage:
-          type: integer
-          description: Number of entities requested for the current page
-          format: int32
-        order:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
           type:
           - 'null'
           - string
-          description: Ordering criteria used for the current page
-        statusCode:
+          description: Message to indicate why the API call failed
+        id:
           type: integer
+          description: Unique identifier of the API response
           format: int32
-        recordsTotal:
-          type: integer
-          format: int32
-        users:
+      additionalProperties: false
+      description: DTO for a Generic API Response
+    TagDTO:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          minLength: 1
+          type: string
+          description: Tag Key
+        value:
+          minLength: 1
+          type: string
+          description: Tag Key Value
+      additionalProperties: false
+      description: Aembit Entity Tag Details
+    UserTokensDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
           type:
           - 'null'
-          - array
-          items:
-            $ref: '#/components/schemas/UserDTO'
+          - string
+        verified:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
       additionalProperties: false
     RoleDTO:
       required:
@@ -464,29 +445,68 @@ components:
           readOnly: true
       additionalProperties: false
       description: Individual Permission details
-    UserPatchDTO:
+    UserDTO:
+      required:
+      - email
+      - firstName
+      - lastName
       type: object
       properties:
         email:
+          minLength: 1
+          type: string
+          format: email
+        externalId:
+          type: string
+          format: uuid
+        roles:
           type:
           - 'null'
-          - string
+          - array
+          items:
+            type: string
+            format: uuid
+        rolesDetails:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Individual Role
+            $ref: '#/components/schemas/RoleDTO'
         firstName:
-          type:
-          - 'null'
-          - string
+          maxLength: 64
+          minLength: 2
+          type: string
         lastName:
-          type:
-          - 'null'
-          - string
+          maxLength: 64
+          minLength: 2
+          type: string
         phoneNumber:
           type:
           - 'null'
           - string
+        createdAt:
+          type: string
+          format: date-time
         isActive:
+          type: boolean
+        twoFactorEnabled:
+          type: boolean
+        isLocked:
+          type: boolean
+        tags:
           type:
           - 'null'
-          - boolean
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+        userTokens:
+          type:
+          - 'null'
+          - array
+          items:
+            $ref: '#/components/schemas/UserTokensDTO'
       additionalProperties: false
     ResourceSetDTO:
       required:
@@ -601,54 +621,34 @@ components:
           format: uuid
       additionalProperties: false
       description: Individual Resource Set
-    GenericResponseDTO:
+    UserListDTO:
       type: object
       properties:
-        success:
-          type: boolean
-          description: True if the API call was successful, False otherwise
-        message:
-          type:
-          - 'null'
-          - string
-          description: Message to indicate why the API call failed
-        id:
+        page:
           type: integer
-          description: Unique identifier of the API response
+          description: Page of entities
           format: int32
-      additionalProperties: false
-      description: DTO for a Generic API Response
-    TagDTO:
-      required:
-      - key
-      - value
-      type: object
-      properties:
-        key:
-          minLength: 1
-          type: string
-          description: Tag Key
-        value:
-          minLength: 1
-          type: string
-          description: Tag Key Value
-      additionalProperties: false
-      description: Aembit Entity Tag Details
-    UserTokensDTO:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
           type:
           - 'null'
           - string
-        verified:
-          type: boolean
-        createdAt:
-          type: string
-          format: date-time
+          description: Ordering criteria used for the current page
+        statusCode:
+          type: integer
+          format: int32
+        recordsTotal:
+          type: integer
+          format: int32
+        users:
+          type:
+          - 'null'
+          - array
+          items:
+            $ref: '#/components/schemas/UserDTO'
       additionalProperties: false
   securitySchemes:
     bearerAuth:

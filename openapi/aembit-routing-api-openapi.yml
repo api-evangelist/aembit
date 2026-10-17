@@ -212,39 +212,23 @@ paths:
                 $ref: '#/components/schemas/GenericResponseDTO'
 components:
   schemas:
-    RoutingDTOListDTO:
+    GenericResponseDTO:
       type: object
       properties:
-        page:
-          type: integer
-          description: Current page number of entities
-          format: int32
-        perPage:
-          type: integer
-          description: Number of entities requested for the current page
-          format: int32
-        order:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
           type:
           - 'null'
           - string
-          description: Ordering criteria used for the current page
-        statusCode:
+          description: Message to indicate why the API call failed
+        id:
           type: integer
-          description: HTTP StatusCode for the current result
+          description: Unique identifier of the API response
           format: int32
-        recordsTotal:
-          type: integer
-          description: Total number of entities available
-          format: int32
-        entities:
-          type:
-          - 'null'
-          - array
-          items:
-            description: Individual Routing
-            $ref: '#/components/schemas/RoutingDTO'
-          description: Page of entities for this request
       additionalProperties: false
+      description: DTO for a Generic API Response
     RoutingPatchDTO:
       type: object
       properties:
@@ -275,6 +259,22 @@ components:
           description: New Tags for the identified entity
       additionalProperties: false
       description: Patch request for an individual Routing
+    TagDTO:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          minLength: 1
+          type: string
+          description: Tag Key
+        value:
+          minLength: 1
+          type: string
+          description: Tag Key Value
+      additionalProperties: false
+      description: Aembit Entity Tag Details
     RoutingDTO:
       required:
       - isActive
@@ -334,39 +334,39 @@ components:
           description: URL of the proxy. The format is http(s)://server:port
       additionalProperties: false
       description: Individual Routing
-    TagDTO:
-      required:
-      - key
-      - value
+    RoutingDTOListDTO:
       type: object
       properties:
-        key:
-          minLength: 1
-          type: string
-          description: Tag Key
-        value:
-          minLength: 1
-          type: string
-          description: Tag Key Value
-      additionalProperties: false
-      description: Aembit Entity Tag Details
-    GenericResponseDTO:
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: True if the API call was successful, False otherwise
-        message:
+        page:
+          type: integer
+          description: Current page number of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
           type:
           - 'null'
           - string
-          description: Message to indicate why the API call failed
-        id:
+          description: Ordering criteria used for the current page
+        statusCode:
           type: integer
-          description: Unique identifier of the API response
+          description: HTTP StatusCode for the current result
           format: int32
+        recordsTotal:
+          type: integer
+          description: Total number of entities available
+          format: int32
+        entities:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Individual Routing
+            $ref: '#/components/schemas/RoutingDTO'
+          description: Page of entities for this request
       additionalProperties: false
-      description: DTO for a Generic API Response
   securitySchemes:
     bearerAuth:
       type: http

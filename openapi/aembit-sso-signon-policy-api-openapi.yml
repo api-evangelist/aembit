@@ -48,12 +48,6 @@ paths:
       x-operation-id-original: put-SSO-signon Policy
 components:
   schemas:
-    SSOSignInPolicyDTO:
-      type: object
-      properties:
-        ssoRequired:
-          type: boolean
-      additionalProperties: false
     GenericResponseDTO:
       type: object
       properties:
@@ -71,6 +65,12 @@ components:
           format: int32
       additionalProperties: false
       description: DTO for a Generic API Response
+    SSOSignInPolicyDTO:
+      type: object
+      properties:
+        ssoRequired:
+          type: boolean
+      additionalProperties: false
   securitySchemes:
     bearerAuth:
       type: http

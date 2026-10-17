@@ -286,73 +286,6 @@ paths:
                 $ref: '#/components/schemas/GenericResponseDTO'
 components:
   schemas:
-    SamlIdentityProviderDTO:
-      allOf:
-      - $ref: '#/components/schemas/SSOIdentityProviderDTO'
-      - type: object
-        properties:
-          entityId:
-            type:
-            - 'null'
-            - string
-            description: SAML Entity ID of the remote SSO Identity Provider
-          metadataUrl:
-            pattern: https://.*
-            type:
-            - 'null'
-            - string
-            description: Metadata URL of the remote SSO Identity Provider
-          metadataXml:
-            type:
-            - 'null'
-            - string
-            description: Metadata XML content of the remote SSO Identity Provider
-          serviceProviderEntityId:
-            type:
-            - 'null'
-            - string
-          serviceProviderSsoUrl:
-            type:
-            - 'null'
-            - string
-        additionalProperties: false
-      description: Individual SSO Identity Provider
-    SSOIdentityProviderDTOListDTO:
-      type: object
-      properties:
-        page:
-          type: integer
-          description: Current page number of entities
-          format: int32
-        perPage:
-          type: integer
-          description: Number of entities requested for the current page
-          format: int32
-        order:
-          type:
-          - 'null'
-          - string
-          description: Ordering criteria used for the current page
-        statusCode:
-          type: integer
-          description: HTTP StatusCode for the current result
-          format: int32
-        recordsTotal:
-          type: integer
-          description: Total number of entities available
-          format: int32
-        entities:
-          type:
-          - 'null'
-          - array
-          items:
-            oneOf:
-            - $ref: '#/components/schemas/SSOIdentityProviderDTO'
-            - $ref: '#/components/schemas/SamlIdentityProviderDTO'
-            - $ref: '#/components/schemas/OidcIdentityProviderDTO'
-            description: Individual SSO Identity Provider
-          description: Page of entities for this request
-      additionalProperties: false
     OidcIdentityProviderDTO:
       allOf:
       - $ref: '#/components/schemas/SSOIdentityProviderDTO'
@@ -395,36 +328,39 @@ components:
             - string
         additionalProperties: false
       description: Individual SSO Identity Provider
-    SSOIdentityProviderPatchDTO:
+    GenericResponseDTO:
       type: object
       properties:
-        name:
-          maxLength: 128
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
           type:
           - 'null'
           - string
-          description: New Name for the identified entity
-        description:
-          type:
-          - 'null'
-          - string
-          description: New Description for the identified entity
-        isActive:
-          type:
-          - 'null'
-          - boolean
-          description: New Status for the identified entity
-          format: boolean
-        tags:
-          type:
-          - 'null'
-          - array
-          items:
-            description: Aembit Entity Tag Details
-            $ref: '#/components/schemas/TagDTO'
-          description: New Tags for the identified entity
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
       additionalProperties: false
-      description: Patch request for an individual SSO Identity Provider
+      description: DTO for a Generic API Response
+    TagDTO:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          minLength: 1
+          type: string
+          description: Tag Key
+        value:
+          minLength: 1
+          type: string
+          description: Tag Key Value
+      additionalProperties: false
+      description: Aembit Entity Tag Details
     SsoStatementRoleMappingDTO:
       type: object
       properties:
@@ -513,44 +449,108 @@ components:
         mapping:
           SAMLv2: '#/components/schemas/SamlIdentityProviderDTO'
           OIDCv1: '#/components/schemas/OidcIdentityProviderDTO'
+    SSOIdentityProviderDTOListDTO:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
+          type:
+          - 'null'
+          - string
+          description: Ordering criteria used for the current page
+        statusCode:
+          type: integer
+          description: HTTP StatusCode for the current result
+          format: int32
+        recordsTotal:
+          type: integer
+          description: Total number of entities available
+          format: int32
+        entities:
+          type:
+          - 'null'
+          - array
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/SSOIdentityProviderDTO'
+            - $ref: '#/components/schemas/SamlIdentityProviderDTO'
+            - $ref: '#/components/schemas/OidcIdentityProviderDTO'
+            description: Individual SSO Identity Provider
+          description: Page of entities for this request
+      additionalProperties: false
+    SSOIdentityProviderPatchDTO:
+      type: object
+      properties:
+        name:
+          maxLength: 128
+          type:
+          - 'null'
+          - string
+          description: New Name for the identified entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: New Description for the identified entity
+        isActive:
+          type:
+          - 'null'
+          - boolean
+          description: New Status for the identified entity
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+          description: New Tags for the identified entity
+      additionalProperties: false
+      description: Patch request for an individual SSO Identity Provider
+    SamlIdentityProviderDTO:
+      allOf:
+      - $ref: '#/components/schemas/SSOIdentityProviderDTO'
+      - type: object
+        properties:
+          entityId:
+            type:
+            - 'null'
+            - string
+            description: SAML Entity ID of the remote SSO Identity Provider
+          metadataUrl:
+            pattern: https://.*
+            type:
+            - 'null'
+            - string
+            description: Metadata URL of the remote SSO Identity Provider
+          metadataXml:
+            type:
+            - 'null'
+            - string
+            description: Metadata XML content of the remote SSO Identity Provider
+          serviceProviderEntityId:
+            type:
+            - 'null'
+            - string
+          serviceProviderSsoUrl:
+            type:
+            - 'null'
+            - string
+        additionalProperties: false
+      description: Individual SSO Identity Provider
     OidcClientAuthType:
       enum:
       - KeyPair
       - ClientSecret
       type: string
-    TagDTO:
-      required:
-      - key
-      - value
-      type: object
-      properties:
-        key:
-          minLength: 1
-          type: string
-          description: Tag Key
-        value:
-          minLength: 1
-          type: string
-          description: Tag Key Value
-      additionalProperties: false
-      description: Aembit Entity Tag Details
-    GenericResponseDTO:
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: True if the API call was successful, False otherwise
-        message:
-          type:
-          - 'null'
-          - string
-          description: Message to indicate why the API call failed
-        id:
-          type: integer
-          description: Unique identifier of the API response
-          format: int32
-      additionalProperties: false
-      description: DTO for a Generic API Response
   securitySchemes:
     bearerAuth:
       type: http

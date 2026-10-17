@@ -276,6 +276,37 @@ paths:
                 $ref: '#/components/schemas/GenericResponseDTO'
 components:
   schemas:
+    AgentControllerDeviceCodeDTO:
+      type: object
+      properties:
+        device_code:
+          type:
+          - 'null'
+          - string
+          description: One time use OAuth 2 Device Code for use during AgentController deployment and registration
+      additionalProperties: false
+      description: DTO of an individual Agent Controller Device Code
+    AgentControllerPatchDTO:
+      type: object
+      properties:
+        version:
+          type:
+          - 'null'
+          - string
+        isActive:
+          type:
+          - 'null'
+          - boolean
+          description: New Status for the identified Agent Controller
+          format: boolean
+        trustProviderId:
+          type:
+          - 'null'
+          - string
+          description: New Trust Provider to use for the identified Agent Controller
+          format: uuid
+      additionalProperties: false
+      description: Patch Request DTO for individual Agent Controller
     TrustProviderMatchRuleDTO:
       required:
       - attribute
@@ -297,6 +328,56 @@ components:
           description: Match Rule Attribute Key
       additionalProperties: false
       description: Individual Match Rule to enforce during Trust Provider attestation
+    AgentControllerTagDTO:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          minLength: 1
+          type: string
+          description: Key for the Agent Controller Tag
+        value:
+          minLength: 1
+          type: string
+          description: Value for the Agent Controller Tag
+      additionalProperties: false
+      description: Agent Controller Tag key and value
+    AgentControllerListDTO:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Page of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
+          type:
+          - 'null'
+          - string
+          description: Ordering criteria used for the current page
+        statusCode:
+          type: integer
+          description: HTTP StatusCode for the current result
+          format: int32
+        recordsTotal:
+          type: integer
+          description: Total number of AgentControllers available
+          format: int32
+        agentControllers:
+          type:
+          - 'null'
+          - array
+          items:
+            description: DTO of an individual Agent Controller for Agent Proxy management
+            $ref: '#/components/schemas/AgentControllerDTO'
+          description: Page of AgentControllers for this request
+      additionalProperties: false
+      description: Page of Agent Controllers for Agent Proxy management
     TrustProviderDTO:
       required:
       - isActive
@@ -419,71 +500,83 @@ components:
           description: Metadata XML content of the remote SSO Identity Provider
       additionalProperties: false
       description: Individual Trust Provider
-    PublicKeyValidationDTO:
+    GenericResponseDTO:
       type: object
       properties:
-        isValidContent:
+        success:
           type: boolean
-          description: True if the Public Key was valid, False otherwise
-        thumbprint:
-          type:
-          - 'null'
-          - string
-          description: Thumbprint of the Public Key
-        expirationDate:
-          type:
-          - 'null'
-          - string
-          description: Expiration of the Public Key Certificate
-          format: date-time
-        expirationDateString:
-          type:
-          - 'null'
-          - string
-          description: Expiration of the Public Key Certificate in String Format
-        certificateSubject:
-          type:
-          - 'null'
-          - string
-          description: Subject of the Public Key Certificate
-        serialNumber:
-          type:
-          - 'null'
-          - string
-          description: Serial Number of the Public Key Certificate
+          description: True if the API call was successful, False otherwise
         message:
           type:
           - 'null'
           - string
-          description: Message describing why the Public Key was not valid if IsValidContent is False
-        pemType:
-          type:
-          - 'null'
-          - string
-          description: Certificate or Public Key
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
       additionalProperties: false
-      description: Response to a request for Public Key Validation
-    AgentControllerPatchDTO:
+      description: DTO for a Generic API Response
+    TagDTO:
+      required:
+      - key
+      - value
       type: object
       properties:
-        version:
-          type:
-          - 'null'
-          - string
-        isActive:
-          type:
-          - 'null'
-          - boolean
-          description: New Status for the identified Agent Controller
-          format: boolean
-        trustProviderId:
-          type:
-          - 'null'
-          - string
-          description: New Trust Provider to use for the identified Agent Controller
-          format: uuid
+        key:
+          minLength: 1
+          type: string
+          description: Tag Key
+        value:
+          minLength: 1
+          type: string
+          description: Tag Key Value
       additionalProperties: false
-      description: Patch Request DTO for individual Agent Controller
+      description: Aembit Entity Tag Details
+    AgentControllerTlsCertificateDTO:
+      required:
+      - createdAt
+      - hostName
+      - notAfter
+      - notBefore
+      - serialNumber
+      - subject
+      - thumbprint
+      type: object
+      properties:
+        subject:
+          type: string
+          description: Subject of the Certificate
+        serialNumber:
+          minLength: 1
+          type: string
+          description: Serial Number of the Certificate
+        thumbprint:
+          minLength: 1
+          type: string
+          description: Thumbprint of the Certificate
+        notBefore:
+          type: string
+          description: Creation Timestamp of the Certificate
+          format: date-time
+        notAfter:
+          type: string
+          description: Expiration Timestamp of the Certificate
+          format: date-time
+        hostName:
+          minLength: 1
+          type: string
+          description: Last reported Hostname for the Agent Controller
+        createdAt:
+          type: string
+          description: Creation Timestamp for this Agent Controller TLS Certificate
+          format: date-time
+        isManagedByAembit:
+          type: boolean
+          description: True if the Agent Controller TLS Certificate is managed by Aembit
+          format: boolean
+      additionalProperties: false
+      description: Agent Controller TLS Certificate information
     AgentControllerDTO:
       required:
       - name
@@ -571,143 +664,50 @@ components:
           description: Allowed TLS Hostname for Aembit Managed TLS
       additionalProperties: false
       description: DTO of an individual Agent Controller for Agent Proxy management
-    AgentControllerTagDTO:
-      required:
-      - key
-      - value
+    PublicKeyValidationDTO:
       type: object
       properties:
-        key:
-          minLength: 1
-          type: string
-          description: Key for the Agent Controller Tag
-        value:
-          minLength: 1
-          type: string
-          description: Value for the Agent Controller Tag
-      additionalProperties: false
-      description: Agent Controller Tag key and value
-    GenericResponseDTO:
-      type: object
-      properties:
-        success:
+        isValidContent:
           type: boolean
-          description: True if the API call was successful, False otherwise
+          description: True if the Public Key was valid, False otherwise
+        thumbprint:
+          type:
+          - 'null'
+          - string
+          description: Thumbprint of the Public Key
+        expirationDate:
+          type:
+          - 'null'
+          - string
+          description: Expiration of the Public Key Certificate
+          format: date-time
+        expirationDateString:
+          type:
+          - 'null'
+          - string
+          description: Expiration of the Public Key Certificate in String Format
+        certificateSubject:
+          type:
+          - 'null'
+          - string
+          description: Subject of the Public Key Certificate
+        serialNumber:
+          type:
+          - 'null'
+          - string
+          description: Serial Number of the Public Key Certificate
         message:
           type:
           - 'null'
           - string
-          description: Message to indicate why the API call failed
-        id:
-          type: integer
-          description: Unique identifier of the API response
-          format: int32
-      additionalProperties: false
-      description: DTO for a Generic API Response
-    AgentControllerDeviceCodeDTO:
-      type: object
-      properties:
-        device_code:
+          description: Message describing why the Public Key was not valid if IsValidContent is False
+        pemType:
           type:
           - 'null'
           - string
-          description: One time use OAuth 2 Device Code for use during AgentController deployment and registration
+          description: Certificate or Public Key
       additionalProperties: false
-      description: DTO of an individual Agent Controller Device Code
-    AgentControllerTlsCertificateDTO:
-      required:
-      - createdAt
-      - hostName
-      - notAfter
-      - notBefore
-      - serialNumber
-      - subject
-      - thumbprint
-      type: object
-      properties:
-        subject:
-          type: string
-          description: Subject of the Certificate
-        serialNumber:
-          minLength: 1
-          type: string
-          description: Serial Number of the Certificate
-        thumbprint:
-          minLength: 1
-          type: string
-          description: Thumbprint of the Certificate
-        notBefore:
-          type: string
-          description: Creation Timestamp of the Certificate
-          format: date-time
-        notAfter:
-          type: string
-          description: Expiration Timestamp of the Certificate
-          format: date-time
-        hostName:
-          minLength: 1
-          type: string
-          description: Last reported Hostname for the Agent Controller
-        createdAt:
-          type: string
-          description: Creation Timestamp for this Agent Controller TLS Certificate
-          format: date-time
-        isManagedByAembit:
-          type: boolean
-          description: True if the Agent Controller TLS Certificate is managed by Aembit
-          format: boolean
-      additionalProperties: false
-      description: Agent Controller TLS Certificate information
-    TagDTO:
-      required:
-      - key
-      - value
-      type: object
-      properties:
-        key:
-          minLength: 1
-          type: string
-          description: Tag Key
-        value:
-          minLength: 1
-          type: string
-          description: Tag Key Value
-      additionalProperties: false
-      description: Aembit Entity Tag Details
-    AgentControllerListDTO:
-      type: object
-      properties:
-        page:
-          type: integer
-          description: Page of entities
-          format: int32
-        perPage:
-          type: integer
-          description: Number of entities requested for the current page
-          format: int32
-        order:
-          type:
-          - 'null'
-          - string
-          description: Ordering criteria used for the current page
-        statusCode:
-          type: integer
-          description: HTTP StatusCode for the current result
-          format: int32
-        recordsTotal:
-          type: integer
-          description: Total number of AgentControllers available
-          format: int32
-        agentControllers:
-          type:
-          - 'null'
-          - array
-          items:
-            description: DTO of an individual Agent Controller for Agent Proxy management
-            $ref: '#/components/schemas/AgentControllerDTO'
-          description: Page of AgentControllers for this request
-      additionalProperties: false
-      description: Page of Agent Controllers for Agent Proxy management
+      description: Response to a request for Public Key Validation
   securitySchemes:
     bearerAuth:
       type: http

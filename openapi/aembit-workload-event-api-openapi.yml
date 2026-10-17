@@ -157,30 +157,32 @@ paths:
                 $ref: '#/components/schemas/GenericResponseDTO'
 components:
   schemas:
-    EventNetworkDTO:
+    GenericResponseDTO:
       type: object
       properties:
-        clientWorkloadIP:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
           type:
           - 'null'
           - string
-        clientWorkloadPort:
+          description: Message to indicate why the API call failed
+        id:
           type: integer
+          description: Unique identifier of the API response
           format: int32
-        serverWorkloadIP:
-          type:
-          - 'null'
-          - string
-        serverWorkloadPort:
-          type:
-          - 'null'
-          - integer
-          format: int32
-        proxyPort:
-          type:
-          - 'null'
-          - integer
-          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
+    EventDTO:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/EventMetaDTO'
+        network:
+          $ref: '#/components/schemas/EventNetworkDTO'
+        outcome:
+          $ref: '#/components/schemas/EventOutcomeDTO'
       additionalProperties: {}
     EventMetaDTO:
       type: object
@@ -216,6 +218,39 @@ components:
           - 'null'
           - string
       additionalProperties: {}
+    EventNetworkDTO:
+      type: object
+      properties:
+        clientWorkloadIP:
+          type:
+          - 'null'
+          - string
+        clientWorkloadPort:
+          type: integer
+          format: int32
+        serverWorkloadIP:
+          type:
+          - 'null'
+          - string
+        serverWorkloadPort:
+          type:
+          - 'null'
+          - integer
+          format: int32
+        proxyPort:
+          type:
+          - 'null'
+          - integer
+          format: int32
+      additionalProperties: {}
+    EventOutcomeDTO:
+      type: object
+      properties:
+        result:
+          type:
+          - 'null'
+          - string
+      additionalProperties: {}
     EventListDTO:
       type: object
       properties:
@@ -245,41 +280,6 @@ components:
           items:
             $ref: '#/components/schemas/EventDTO'
       additionalProperties: false
-    EventOutcomeDTO:
-      type: object
-      properties:
-        result:
-          type:
-          - 'null'
-          - string
-      additionalProperties: {}
-    EventDTO:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/EventMetaDTO'
-        network:
-          $ref: '#/components/schemas/EventNetworkDTO'
-        outcome:
-          $ref: '#/components/schemas/EventOutcomeDTO'
-      additionalProperties: {}
-    GenericResponseDTO:
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: True if the API call was successful, False otherwise
-        message:
-          type:
-          - 'null'
-          - string
-          description: Message to indicate why the API call failed
-        id:
-          type: integer
-          description: Unique identifier of the API response
-          format: int32
-      additionalProperties: false
-      description: DTO for a Generic API Response
   securitySchemes:
     bearerAuth:
       type: http

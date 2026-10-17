@@ -256,75 +256,23 @@ paths:
                 $ref: '#/components/schemas/GenericResponseDTO'
 components:
   schemas:
-    LogStreamListDTO:
+    GenericResponseDTO:
       type: object
       properties:
-        page:
-          type: integer
-          description: Page of entities
-          format: int32
-        perPage:
-          type: integer
-          description: Number of entities requested for the current page
-          format: int32
-        order:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
           type:
           - 'null'
           - string
-          description: Ordering criteria used for the current page
-        statusCode:
+          description: Message to indicate why the API call failed
+        id:
           type: integer
-          description: HTTP Status Code of the response
+          description: Unique identifier of the API response
           format: int32
-        recordsTotal:
-          type: integer
-          description: Total number of Log Streams
-          format: int32
-        logStreams:
-          type:
-          - 'null'
-          - array
-          items:
-            oneOf:
-            - description: Individual Log Stream
-              $ref: '#/components/schemas/LogStreamAWSS3DestinationDTO'
-            - $ref: '#/components/schemas/LogStreamGCSBucketDestinationDTO'
-            - $ref: '#/components/schemas/LogStreamCrowdstrikeDestinationDTO'
-            - $ref: '#/components/schemas/LogStreamSplunkDestinationDTO'
-            description: Individual Log Stream
-          description: Page of Log Streams
       additionalProperties: false
-      description: Page of Log Streams
-    LogStreamPatchDTO:
-      type: object
-      properties:
-        name:
-          maxLength: 128
-          type:
-          - 'null'
-          - string
-          description: New Name for the identified entity
-        description:
-          type:
-          - 'null'
-          - string
-          description: New Description for the identified entity
-        isActive:
-          type:
-          - 'null'
-          - boolean
-          description: New Status for the identified entity
-          format: boolean
-        tags:
-          type:
-          - 'null'
-          - array
-          items:
-            description: Aembit Entity Tag Details
-            $ref: '#/components/schemas/TagDTO'
-          description: New Tags for the identified entity
-      additionalProperties: false
-      description: Patch Request for an individual of Log Stream
+      description: DTO for a Generic API Response
     LogStreamDestinationType:
       enum:
       - AwsS3Bucket
@@ -439,6 +387,22 @@ components:
           GcsBucket: '#/components/schemas/LogStreamGCSBucketDestinationDTO'
           CrowdstrikeHttpEventCollector: '#/components/schemas/LogStreamCrowdstrikeDestinationDTO'
           SplunkHttpEventCollector: '#/components/schemas/LogStreamSplunkDestinationDTO'
+    TagDTO:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          minLength: 1
+          type: string
+          description: Tag Key
+        value:
+          minLength: 1
+          type: string
+          description: Tag Key Value
+      additionalProperties: false
+      description: Aembit Entity Tag Details
     LogStreamAWSS3DestinationDTO:
       allOf:
       - description: Individual Log Stream
@@ -462,6 +426,103 @@ components:
             maxLength: 800
             minLength: 3
             pattern: ^[^\\\{\}\^\%`"'~#\[\]\>\<\|\\\x80-\xff]*$
+            type:
+            - 'null'
+            - string
+        additionalProperties: false
+      description: Individual Log Stream
+    LogStreamListDTO:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Page of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
+          type:
+          - 'null'
+          - string
+          description: Ordering criteria used for the current page
+        statusCode:
+          type: integer
+          description: HTTP Status Code of the response
+          format: int32
+        recordsTotal:
+          type: integer
+          description: Total number of Log Streams
+          format: int32
+        logStreams:
+          type:
+          - 'null'
+          - array
+          items:
+            oneOf:
+            - description: Individual Log Stream
+              $ref: '#/components/schemas/LogStreamAWSS3DestinationDTO'
+            - $ref: '#/components/schemas/LogStreamGCSBucketDestinationDTO'
+            - $ref: '#/components/schemas/LogStreamCrowdstrikeDestinationDTO'
+            - $ref: '#/components/schemas/LogStreamSplunkDestinationDTO'
+            description: Individual Log Stream
+          description: Page of Log Streams
+      additionalProperties: false
+      description: Page of Log Streams
+    LogStreamPatchDTO:
+      type: object
+      properties:
+        name:
+          maxLength: 128
+          type:
+          - 'null'
+          - string
+          description: New Name for the identified entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: New Description for the identified entity
+        isActive:
+          type:
+          - 'null'
+          - boolean
+          description: New Status for the identified entity
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+          description: New Tags for the identified entity
+      additionalProperties: false
+      description: Patch Request for an individual of Log Stream
+    LogStreamSplunkDestinationDTO:
+      allOf:
+      - $ref: '#/components/schemas/LogStreamDTO'
+      - required:
+        - authenticationToken
+        - hecHostPort
+        - hecSourceName
+        type: object
+        properties:
+          hecHostPort:
+            minLength: 1
+            pattern: ^[a-zA-Z0-9\-\.]+:[0-9]{1,5}$
+            type: string
+          authenticationToken:
+            minLength: 1
+            pattern: ^[a-fA-F0-9]{8}\-[a-fA-F0-9]{4}\-[a-fA-F0-9]{4}\-[a-fA-F0-9]{4}\-[a-fA-F0-9]{12}$
+            type: string
+          hecSourceName:
+            minLength: 1
+            type: string
+          tls:
+            type: boolean
+          tlsVerification:
             type:
             - 'null'
             - string
@@ -503,67 +564,6 @@ components:
             format: int32
         additionalProperties: false
       description: Individual Log Stream
-    TagDTO:
-      required:
-      - key
-      - value
-      type: object
-      properties:
-        key:
-          minLength: 1
-          type: string
-          description: Tag Key
-        value:
-          minLength: 1
-          type: string
-          description: Tag Key Value
-      additionalProperties: false
-      description: Aembit Entity Tag Details
-    LogStreamSplunkDestinationDTO:
-      allOf:
-      - $ref: '#/components/schemas/LogStreamDTO'
-      - required:
-        - authenticationToken
-        - hecHostPort
-        - hecSourceName
-        type: object
-        properties:
-          hecHostPort:
-            minLength: 1
-            pattern: ^[a-zA-Z0-9\-\.]+:[0-9]{1,5}$
-            type: string
-          authenticationToken:
-            minLength: 1
-            pattern: ^[a-fA-F0-9]{8}\-[a-fA-F0-9]{4}\-[a-fA-F0-9]{4}\-[a-fA-F0-9]{4}\-[a-fA-F0-9]{12}$
-            type: string
-          hecSourceName:
-            minLength: 1
-            type: string
-          tls:
-            type: boolean
-          tlsVerification:
-            type:
-            - 'null'
-            - string
-        additionalProperties: false
-      description: Individual Log Stream
-    GenericResponseDTO:
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: True if the API call was successful, False otherwise
-        message:
-          type:
-          - 'null'
-          - string
-          description: Message to indicate why the API call failed
-        id:
-          type: integer
-          description: Unique identifier of the API response
-          format: int32
-      additionalProperties: false
-      description: DTO for a Generic API Response
   securitySchemes:
     bearerAuth:
       type: http

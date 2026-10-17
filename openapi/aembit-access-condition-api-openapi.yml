@@ -271,6 +271,97 @@ paths:
                 $ref: '#/components/schemas/GenericResponseDTO'
 components:
   schemas:
+    AccessConditionDTO:
+      required:
+      - conditions
+      - isActive
+      - name
+      - resourceSet
+      type: object
+      properties:
+        externalId:
+          type: string
+          format: uuid
+        name:
+          maxLength: 128
+          minLength: 1
+          type: string
+          description: Name of the Entity
+        description:
+          type:
+          - 'null'
+          - string
+          description: Description of the Entity
+        isActive:
+          type: boolean
+          description: True/False value that determines if this entity is Active or Disabled
+          format: boolean
+        tags:
+          type:
+          - 'null'
+          - array
+          items:
+            description: Aembit Entity Tag Details
+            $ref: '#/components/schemas/TagDTO'
+        createdAt:
+          type: string
+          format: date-time
+        modifiedAt:
+          type:
+          - 'null'
+          - string
+          format: date-time
+        createdBy:
+          type:
+          - 'null'
+          - string
+        modifiedBy:
+          type:
+          - 'null'
+          - string
+        resourceSet:
+          type: string
+          description: ID of the Resource Set in which this Access Entity exists
+          format: uuid
+        integrationID:
+          type: string
+          description: ID of the Integration Entity used by this Access Condition
+          format: uuid
+        integration:
+          description: Integration Entity used by this Access Condition
+          $ref: '#/components/schemas/IntegrationDTO'
+        conditions:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/JsonNode'
+          description: Rules which are enforced by the Access Condition
+        accessPolicyCount:
+          type: integer
+          description: Access Policies associated with this Access Condition
+          format: int32
+        integrationType:
+          type:
+          - 'null'
+          - string
+      additionalProperties: false
+      description: DTO of an individual Access Condition for enforcement during Access Policy evaluation
+    GenericResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: True if the API call was successful, False otherwise
+        message:
+          type:
+          - 'null'
+          - string
+          description: Message to indicate why the API call failed
+        id:
+          type: integer
+          description: Unique identifier of the API response
+          format: int32
+      additionalProperties: false
+      description: DTO for a Generic API Response
     IntegrationDTO:
       required:
       - endpoint
@@ -355,80 +446,62 @@ components:
           format: int32
       additionalProperties: false
       description: Integration details for 3rd party data used by Access Conditions
-    AccessConditionDTO:
+    TagDTO:
       required:
-      - conditions
-      - isActive
-      - name
-      - resourceSet
+      - key
+      - value
       type: object
       properties:
-        externalId:
-          type: string
-          format: uuid
-        name:
-          maxLength: 128
+        key:
           minLength: 1
           type: string
-          description: Name of the Entity
-        description:
+          description: Tag Key
+        value:
+          minLength: 1
+          type: string
+          description: Tag Key Value
+      additionalProperties: false
+      description: Aembit Entity Tag Details
+    AccessConditionDTOAccessConditionListDTO:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Page of entities
+          format: int32
+        perPage:
+          type: integer
+          description: Number of entities requested for the current page
+          format: int32
+        order:
           type:
           - 'null'
           - string
-          description: Description of the Entity
-        isActive:
-          type: boolean
-          description: True/False value that determines if this entity is Active or Disabled
-          format: boolean
-        tags:
+          description: Ordering criteria used for the current page
+        statusCode:
+          type: integer
+          description: HTTP Status Code of the response
+          format: int32
+        recordsTotal:
+          type: integer
+          description: Total number of Access Conditions
+          format: int32
+        accessConditions:
           type:
           - 'null'
           - array
           items:
-            description: Aembit Entity Tag Details
-            $ref: '#/components/schemas/TagDTO'
-        createdAt:
-          type: string
-          format: date-time
-        modifiedAt:
-          type:
-          - 'null'
-          - string
-          format: date-time
-        createdBy:
-          type:
-          - 'null'
-          - string
-        modifiedBy:
-          type:
-          - 'null'
-          - string
-        resourceSet:
-          type: string
-          description: ID of the Resource Set in which this Access Entity exists
-          format: uuid
-        integrationID:
-          type: string
-          description: ID of the Integration Entity used by this Access Condition
-          format: uuid
-        integration:
-          description: Integration Entity used by this Access Condition
-          $ref: '#/components/schemas/IntegrationDTO'
-        conditions:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/JsonNode'
-          description: Rules which are enforced by the Access Condition
-        accessPolicyCount:
-          type: integer
-          description: Access Policies associated with this Access Condition
-          format: int32
-        integrationType:
-          type:
-          - 'null'
-          - string
+            description: DTO of an individual Access Condition for enforcement during Access Policy evaluation
+            $ref: '#/components/schemas/AccessConditionDTO'
+          description: Page of Access Conditions
       additionalProperties: false
-      description: DTO of an individual Access Condition for enforcement during Access Policy evaluation
+      description: Page of Access Conditions
+    JsonNodeOptions:
+      type: object
+      properties:
+        propertyNameCaseInsensitive:
+          type: boolean
+      additionalProperties: false
     JsonNode:
       type: object
       properties:
@@ -469,79 +542,6 @@ components:
           description: New Tags for the identified entity
       additionalProperties: false
       description: Patch Request DTO for individual Access Condition
-    TagDTO:
-      required:
-      - key
-      - value
-      type: object
-      properties:
-        key:
-          minLength: 1
-          type: string
-          description: Tag Key
-        value:
-          minLength: 1
-          type: string
-          description: Tag Key Value
-      additionalProperties: false
-      description: Aembit Entity Tag Details
-    JsonNodeOptions:
-      type: object
-      properties:
-        propertyNameCaseInsensitive:
-          type: boolean
-      additionalProperties: false
-    AccessConditionDTOAccessConditionListDTO:
-      type: object
-      properties:
-        page:
-          type: integer
-          description: Page of entities
-          format: int32
-        perPage:
-          type: integer
-          description: Number of entities requested for the current page
-          format: int32
-        order:
-          type:
-          - 'null'
-          - string
-          description: Ordering criteria used for the current page
-        statusCode:
-          type: integer
-          description: HTTP Status Code of the response
-          format: int32
-        recordsTotal:
-          type: integer
-          description: Total number of Access Conditions
-          format: int32
-        accessConditions:
-          type:
-          - 'null'
-          - array
-          items:
-            description: DTO of an individual Access Condition for enforcement during Access Policy evaluation
-            $ref: '#/components/schemas/AccessConditionDTO'
-          description: Page of Access Conditions
-      additionalProperties: false
-      description: Page of Access Conditions
-    GenericResponseDTO:
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: True if the API call was successful, False otherwise
-        message:
-          type:
-          - 'null'
-          - string
-          description: Message to indicate why the API call failed
-        id:
-          type: integer
-          description: Unique identifier of the API response
-          format: int32
-      additionalProperties: false
-      description: DTO for a Generic API Response
   securitySchemes:
     bearerAuth:
       type: http
