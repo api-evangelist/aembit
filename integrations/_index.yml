@@ -15,31 +15,6 @@
   relationship: distribution-channel
   status: not-a-workflow
   arazzo: null
-- slug: aembit-crowdstrike-own
-  label: CrowdStrike (own)
-  partner: crowdstrike
-  partner_name: CrowdStrike (own)
-  type: marketplace
-  marketplace: own
-  channel: partner-built
-  evidence: https://marketplace.crowdstrike.com/listings/aembit-workload-iam-platform/
-  source: edge
-  relationship: platform-app
-  status: not-a-workflow
-  arazzo: null
-- slug: aembit-okta-own
-  label: Okta (own)
-  partner: okta
-  partner_name: Okta (own)
-  category: Identity Governance and Administration (IGA)
-  type: marketplace
-  marketplace: own
-  channel: partner-built
-  evidence: https://www.okta.com/integrations/integrator-6386328_aembit_1/
-  source: edge
-  relationship: platform-app
-  status: not-a-workflow
-  arazzo: null
 - slug: aembit-npm-registry
   label: npm registry
   partner: npm
@@ -102,5 +77,43 @@
       categories, tier and projects are CONTEXT, never read (breadth is not credit)'
     detected_by: sweep-cloud-native.py
     detected: '2026-10-19'
+  status: not-a-workflow
+  arazzo: null
+- slug: aembit-crowdstrike-own
+  label: CrowdStrike (own)
+  partner: crowdstrike
+  partner_name: CrowdStrike (own)
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://marketplace.crowdstrike.com/listings/aembit-workload-iam-platform/
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: aembit-okta-own
+  label: Okta (own)
+  partner: okta
+  partner_name: Okta (own)
+  category: Identity Governance and Administration (IGA)
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://www.okta.com/integrations/integrator-6386328_aembit_1/
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: aembit-terraform-terraform-registry
+  label: Terraform (terraform-registry)
+  partner: terraform
+  partner_name: Terraform (terraform-registry)
+  category: infrastructure-as-code provider registry listing
+  type: marketplace
+  marketplace: terraform-registry
+  channel: partner-built
+  evidence: https://registry.terraform.io/providers/Aembit/aembit
+  source: edge
+  relationship: platform-app
   status: not-a-workflow
   arazzo: null
