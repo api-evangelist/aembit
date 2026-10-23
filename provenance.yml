@@ -12,6 +12,9 @@ artifacts:
   authentication/aembit-authentication.yml:
     method: searched
     evidence: declared in the artifact
+  capabilities/aembit-capability-edges.yml:
+    method: unknown
+    evidence: no authorship recorded
   changelog/aembit-changelog.yml:
     method: searched
     evidence: declared in the artifact
@@ -33,10 +36,13 @@ artifacts:
   front-door-ai/2026-09-17.yml:
     method: unknown
     evidence: no authorship recorded
-  kin/checks-2026-09-24T161608.yml:
+  integrations/_index.yml:
     method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-10T222408.yml:
+    evidence: carries an API Evangelist house phrase
+  integrations/aembit-integration-edges.yml:
+    method: searched
+    evidence: declared in the artifact
+  kin/checks-2026-10-11T110117.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
   kin/score-2026-09-12T062655.yml:
@@ -118,6 +124,21 @@ artifacts:
     method: generated
     evidence: Kin Score snapshot written by score.rb
   kin/score-2026-09-24T161608.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-25T210408.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-25T232841.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-03T000835.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-03T024842.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-11T110117.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
   lifecycle/aembit-lifecycle.yml:
@@ -251,10 +272,121 @@ artifacts:
   openapi/aembit-workload-event-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  overlays/aembit-access-authorization-event-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/aembit-access-condition-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/aembit-access-condition-v2-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/aembit-access-policy-deprecated-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/aembit-access-policy-v2-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/aembit-agent-controller-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/aembit-audit-log-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/aembit-auth-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/aembit-client-workload-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
   overlays/aembit-cloud-overlay.yaml:
+    method: derived
+    evidence: an API Evangelist overlay (title) over the provider's contract
+  overlays/aembit-compliance-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/aembit-content-security-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/aembit-credential-provider-deprecated-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/aembit-credential-provider-integration-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/aembit-credential-provider-v2-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/aembit-credentials-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/aembit-discoveryintegration-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/aembit-discoveryserverworkloaddraft-api-phrasing-overlay.yaml:
     method: generated
     evidence: declared in the artifact
   overlays/aembit-edge-overlay.yaml:
+    method: derived
+    evidence: an API Evangelist overlay (title) over the provider's contract
+  overlays/aembit-health-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/aembit-integration-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/aembit-integration-v2-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/aembit-log-stream-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/aembit-mfa-signon-policy-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/aembit-policy-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/aembit-resource-set-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/aembit-role-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/aembit-routing-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/aembit-server-workload-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/aembit-signon-policy-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/aembit-sso-identity-provider-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/aembit-sso-signon-policy-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/aembit-standalone-certificate-authority-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/aembit-standalone-tls-decrypt-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/aembit-tls-decrypt-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/aembit-trust-provider-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/aembit-trust-provider-secret-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/aembit-user-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/aembit-workload-event-api-phrasing-overlay.yaml:
     method: generated
     evidence: declared in the artifact
   packages/aembit-packages.yml:
