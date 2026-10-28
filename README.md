@@ -1,4 +1,4 @@
-# AEMBIT
+# Aembit
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,43 +64,201 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Aembit is a Workload Identity and Access Management (Workload IAM) platform for non-human
-identities — AI agents, applications, microservices, CI/CD pipelines and service accounts.
-Rather than storing long-lived secrets, Aembit cryptographically attests a workload against a
-Trust Provider, evaluates an Access Policy, and injects a short-lived credential just in time.
+Aembit is a Workload Identity and Access Management (Workload IAM) platform for non-human identities — AI agents, applications, microservices, CI/CD pipelines, scripts and service accounts. Instead of long-lived, hard-coded secrets, Aembit cryptographically attests a workload against a Trust Provider (AWS, Azure, GCP, GitHub Actions, GitLab, Kubernetes, Terraform Cloud, OIDC, SPIFFE, Kerberos), evaluates an Access Policy with optional conditional-access signals from CrowdStrike and Wiz, and injects a short-lived credential just-in-time so the application never stores one. The platform is delivered as a SaaS control plane (Aembit Cloud) plus a distributed enforcement layer (Aembit Edge — Agent Proxy, Agent Injector, AWS Lambda extension, CLI and Edge SDKs). Aembit publishes two OpenAPI 3.1.1 contracts — the Aembit Cloud API for managing every platform resource and the Aembit Edge API for workload authentication and credential retrieval — alongside a hosted, read-only MCP Server for querying audit, authorization and workload events, an MCP Identity Gateway and an MCP Authorization Server for governing AI-agent access to MCP servers.
 
-## What Aembit publishes
+**Areas:** Security · Identity · Identity and Access Management · Workload Identity · Non-Human Identity · Secrets Management · Zero Trust · AI Agents · MCP · Authentication · Authorization · DevSecOps
 
-| Surface | Where |
+## Aembit on APIs.io
+
+Everything profiled for Aembit is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/aembit/](https://apis.io/providers/aembit/)** — or go straight to one of the APIs or properties below.
+
+### APIs (38)
+
+- [Aembit MCP Server](https://apis.io/apis/aembit/aembit-mcp-server/) — A first-party hosted Model Context Protocol server that gives AI agents and MCP clients read-only access to a tenant's Aembit event logs. Three tools —…
+- [Aembit Access Authorization Event API](https://apis.io/apis/aembit/aembit-access-authorization-event-api/) — The Access Authorization Event API from Aembit — 2 operation(s) for access authorization event.
+- [Aembit Access Condition API](https://apis.io/apis/aembit/aembit-access-condition-api/) — The Access Condition API from Aembit — 2 operation(s) for access condition.
+- [Aembit Access Condition v2 API](https://apis.io/apis/aembit/aembit-access-condition-v2-api/) — The Access Condition v2 API from Aembit — 2 operation(s) for access condition v2.
+- [Aembit Access Policy (Deprecated) API](https://apis.io/apis/aembit/aembit-access-policy-deprecated-api/) — The Access Policy (Deprecated) API from Aembit — 4 operation(s) for access policy (deprecated).
+- [Aembit Access Policy v2 API](https://apis.io/apis/aembit/aembit-access-policy-v2-api/) — The Access Policy v2 API from Aembit — 5 operation(s) for access policy v2.
+- [Aembit Agent Controller API](https://apis.io/apis/aembit/aembit-agent-controller-api/) — The Agent Controller API from Aembit — 3 operation(s) for agent controller.
+- [Aembit Audit Log API](https://apis.io/apis/aembit/aembit-audit-log-api/) — The Audit Log API from Aembit — 2 operation(s) for audit log.
+- [Aembit Auth API](https://apis.io/apis/aembit/aembit-auth-api/) — The Auth API from Aembit — 1 operation(s) for auth.
+- [Aembit Client Workload API](https://apis.io/apis/aembit/aembit-client-workload-api/) — The Client Workload API from Aembit — 3 operation(s) for client workload.
+- [Aembit Compliance API](https://apis.io/apis/aembit/aembit-compliance-api/) — The Compliance API from Aembit — 1 operation(s) for compliance.
+- [Aembit Content Security API](https://apis.io/apis/aembit/aembit-content-security-api/) — The Content Security API from Aembit — 2 operation(s) for content security.
+- [Aembit Credential Provider (Deprecated) API](https://apis.io/apis/aembit/aembit-credential-provider-deprecated-api/) — The Credential Provider (Deprecated) API from Aembit — 4 operation(s) for credential provider (deprecated).
+- [Aembit Credential Provider Integration API](https://apis.io/apis/aembit/aembit-credential-provider-integration-api/) — The Credential Provider Integration API from Aembit — 3 operation(s) for credential provider integration.
+- [Aembit Credential Provider v2 API](https://apis.io/apis/aembit/aembit-credential-provider-v2-api/) — The Credential Provider v2 API from Aembit — 4 operation(s) for credential provider v2.
+- [Aembit Credentials API](https://apis.io/apis/aembit/aembit-credentials-api/) — The Credentials API from Aembit — 1 operation(s) for credentials.
+- [Aembit Discovery Integration API](https://apis.io/apis/aembit/aembit-discoveryintegration-api/) — The DiscoveryIntegration API from Aembit — 2 operation(s) for discoveryintegration.
+- [Aembit Discovery Server Workload Draft API](https://apis.io/apis/aembit/aembit-discoveryserverworkloaddraft-api/) — The DiscoveryServerWorkloadDraft API from Aembit — 1 operation(s) for discoveryserverworkloaddraft.
+- [Aembit Health API](https://apis.io/apis/aembit/aembit-health-api/) — The Health API from Aembit — 1 operation(s) for health.
+- [Aembit Integration API](https://apis.io/apis/aembit/aembit-integration-api/) — The Integration API from Aembit — 2 operation(s) for integration.
+- [Aembit Integration v2 API](https://apis.io/apis/aembit/aembit-integration-v2-api/) — The Integration v2 API from Aembit — 2 operation(s) for integration v2.
+- [Aembit Log Stream API](https://apis.io/apis/aembit/aembit-log-stream-api/) — The Log Stream API from Aembit — 2 operation(s) for log stream.
+- [Aembit MFA SignOn Policy API](https://apis.io/apis/aembit/aembit-mfa-signon-policy-api/) — The MFA SignOn Policy API from Aembit — 1 operation(s) for mfa signon policy.
+- [Aembit Policy API](https://apis.io/apis/aembit/aembit-policy-api/) — The Policy API from Aembit — 1 operation(s) for policy.
+- [Aembit Resource Set API](https://apis.io/apis/aembit/aembit-resource-set-api/) — The Resource Set API from Aembit — 2 operation(s) for resource set.
+- [Aembit Role API](https://apis.io/apis/aembit/aembit-role-api/) — The Role API from Aembit — 2 operation(s) for role.
+- [Aembit Routing API](https://apis.io/apis/aembit/aembit-routing-api/) — The Routing API from Aembit — 2 operation(s) for routing.
+- [Aembit Server Workload API](https://apis.io/apis/aembit/aembit-server-workload-api/) — The Server Workload API from Aembit — 2 operation(s) for server workload.
+- [Aembit SignOn Policy API](https://apis.io/apis/aembit/aembit-signon-policy-api/) — The SignOn Policy API from Aembit — 1 operation(s) for signon policy.
+- [Aembit SSO Identity Provider API](https://apis.io/apis/aembit/aembit-sso-identity-provider-api/) — The SSO Identity Provider API from Aembit — 3 operation(s) for sso identity provider.
+- [Aembit SSO SignOn Policy API](https://apis.io/apis/aembit/aembit-sso-signon-policy-api/) — The SSO SignOn Policy API from Aembit — 1 operation(s) for sso signon policy.
+- [Aembit Standalone Certificate Authority API](https://apis.io/apis/aembit/aembit-standalone-certificate-authority-api/) — The Standalone Certificate Authority API from Aembit — 2 operation(s) for standalone certificate authority.
+- [Aembit Standalone TLS Decrypt API](https://apis.io/apis/aembit/aembit-standalone-tls-decrypt-api/) — The Standalone TLS Decrypt API from Aembit — 1 operation(s) for standalone tls decrypt.
+- [Aembit TLS Decrypt API](https://apis.io/apis/aembit/aembit-tls-decrypt-api/) — The TLS Decrypt API from Aembit — 1 operation(s) for tls decrypt.
+- [Aembit Trust Provider API](https://apis.io/apis/aembit/aembit-trust-provider-api/) — The Trust Provider API from Aembit — 2 operation(s) for trust provider.
+- [Aembit Trust Provider Secret API](https://apis.io/apis/aembit/aembit-trust-provider-secret-api/) — The Trust Provider Secret API from Aembit — 2 operation(s) for trust provider secret.
+- [Aembit User API](https://apis.io/apis/aembit/aembit-user-api/) — The User API from Aembit — 3 operation(s) for user.
+- [Aembit Workload Event API](https://apis.io/apis/aembit/aembit-workload-event-api/) — The Workload Event API from Aembit — 2 operation(s) for workload event.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [Aembit Event Surface](https://apis.io/asyncapis/aembit/aembit-event-surface/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [Aembit MCP Server](https://apis.io/servers/aembit/aembit-mcp-server/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Aembit Agentic Access](https://apis.io/agentic-access/aembit/aembit-agentic-access/)
+
+#### Overlays (39)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Aembit Access Authorization Event Api Phrasing Overlay](https://apis.io/overlays/aembit/aembit-access-authorization-event-api-phrasing-overlay/)
+- [Aembit Access Condition Api Phrasing Overlay](https://apis.io/overlays/aembit/aembit-access-condition-api-phrasing-overlay/)
+- [Aembit Access Condition V2 Api Phrasing Overlay](https://apis.io/overlays/aembit/aembit-access-condition-v2-api-phrasing-overlay/)
+- [Aembit Access Policy Deprecated Api Phrasing Overlay](https://apis.io/overlays/aembit/aembit-access-policy-deprecated-api-phrasing-overlay/)
+- [Aembit Access Policy V2 Api Phrasing Overlay](https://apis.io/overlays/aembit/aembit-access-policy-v2-api-phrasing-overlay/)
+- [Aembit Agent Controller Api Phrasing Overlay](https://apis.io/overlays/aembit/aembit-agent-controller-api-phrasing-overlay/)
+- [Aembit Audit Log Api Phrasing Overlay](https://apis.io/overlays/aembit/aembit-audit-log-api-phrasing-overlay/)
+- [Aembit Auth Api Phrasing Overlay](https://apis.io/overlays/aembit/aembit-auth-api-phrasing-overlay/)
+- [Aembit Client Workload Api Phrasing Overlay](https://apis.io/overlays/aembit/aembit-client-workload-api-phrasing-overlay/)
+- [Aembit Cloud Overlay](https://apis.io/overlays/aembit/aembit-cloud-overlay/)
+- [Aembit Compliance Api Phrasing Overlay](https://apis.io/overlays/aembit/aembit-compliance-api-phrasing-overlay/)
+- [Aembit Content Security Api Phrasing Overlay](https://apis.io/overlays/aembit/aembit-content-security-api-phrasing-overlay/)
+- [Aembit Credential Provider Deprecated Api Phrasing Overlay](https://apis.io/overlays/aembit/aembit-credential-provider-deprecated-api-phrasing-overlay/)
+- [Aembit Credential Provider Integration Api Phrasing Overlay](https://apis.io/overlays/aembit/aembit-credential-provider-integration-api-phrasing-overlay/)
+- [Aembit Credential Provider V2 Api Phrasing Overlay](https://apis.io/overlays/aembit/aembit-credential-provider-v2-api-phrasing-overlay/)
+- [Aembit Credentials Api Phrasing Overlay](https://apis.io/overlays/aembit/aembit-credentials-api-phrasing-overlay/)
+- [Aembit Discoveryintegration Api Phrasing Overlay](https://apis.io/overlays/aembit/aembit-discoveryintegration-api-phrasing-overlay/)
+- [Aembit Discoveryserverworkloaddraft Api Phrasing Overlay](https://apis.io/overlays/aembit/aembit-discoveryserverworkloaddraft-api-phrasing-overlay/)
+- [Aembit Edge Overlay](https://apis.io/overlays/aembit/aembit-edge-overlay/)
+- [Aembit Health Api Phrasing Overlay](https://apis.io/overlays/aembit/aembit-health-api-phrasing-overlay/)
+- [Aembit Integration Api Phrasing Overlay](https://apis.io/overlays/aembit/aembit-integration-api-phrasing-overlay/)
+- [Aembit Integration V2 Api Phrasing Overlay](https://apis.io/overlays/aembit/aembit-integration-v2-api-phrasing-overlay/)
+- [Aembit Log Stream Api Phrasing Overlay](https://apis.io/overlays/aembit/aembit-log-stream-api-phrasing-overlay/)
+- [Aembit Mfa Signon Policy Api Phrasing Overlay](https://apis.io/overlays/aembit/aembit-mfa-signon-policy-api-phrasing-overlay/)
+- [Aembit Policy Api Phrasing Overlay](https://apis.io/overlays/aembit/aembit-policy-api-phrasing-overlay/)
+- …and 14 more published on APIs.io
+
+#### Security (4)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Aembit Authentication](https://apis.io/security/aembit/aembit-authentication/)
+- [Aembit Domain Security](https://apis.io/security/aembit/aembit-domain-security/)
+- [Aembit Trust Center](https://apis.io/security/aembit/aembit-trust-center/)
+- [Aembit Vulnerability Disclosure](https://apis.io/security/aembit/aembit-vulnerability-disclosure/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Aembit Plans Pricing](https://apis.io/plans/aembit/aembit-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Aembit Rate Limits](https://apis.io/rate-limits/aembit/aembit-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://aembit.io/)
+- [Documentation](https://docs.aembit.io/)
+- [Getting started](https://docs.aembit.io/get-started/quickstart/)
+- [API reference](https://docs.aembit.io/dev-guide/api/)
+- [Pricing](https://aembit.io/pricing/)
+- [Sign up](https://useast2.aembit.io/signup)
+- [Support](https://support.aembit.io/hc/en-us)
+- [Changelog](https://docs.aembit.io/changelog/)
+- [Blog](https://aembit.io/blog/)
+- [Security](https://docs.aembit.io/get-started/security-posture/security-compliance/)
+- [Compliance](https://docs.aembit.io/get-started/security-posture/security-compliance/)
+- [Trust centre](https://trust.aembit.io/)
+- [Terms of service](https://aembit.io/terms-of-service/)
+- [Privacy policy](https://aembit.io/privacy-policy/)
+- [GitHub](https://github.com/Aembit)
+- [Status](https://status.aembit.io/)
+
+## API Evangelist rating
+
+**Kin Score 72.6** — exemplar · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
 |---|---|
-| Aembit Cloud API — OpenAPI 3.1.1, 165 operations | <https://docs.aembit.io/cloud.yaml> |
-| Aembit Edge API — OpenAPI 3.1.1, 2 operations | <https://docs.aembit.io/edge.yaml> |
-| Aembit MCP Server (hosted, read-only, 3 tools) | <https://docs.aembit.io/ai-guide/mcp/mcp-server/> |
-| Developer guide | <https://docs.aembit.io/dev-guide/> |
-| llms.txt (developer + company) | <https://docs.aembit.io/llms.txt>, <https://aembit.io/llms.txt> |
-| TypeScript Edge SDK | <https://www.npmjs.com/package/@aembit/edge-sdk> |
-| Terraform provider | <https://registry.terraform.io/providers/Aembit/aembit/latest> |
-| CLI | <https://docs.aembit.io/dev-guide/cli/> |
-| Changelog | <https://docs.aembit.io/changelog/> |
-| Status page | <https://status.aembit.io/> |
-| Trust center (SOC 2 Type II, ISO/IEC 27001:2022) | <https://trust.aembit.io/> |
-| Pricing | <https://aembit.io/pricing/> |
+| Discoverability | 68.3 |
+| Contract quality | 60.5 |
+| Contract governance | 18.2 |
+| Operational transparency | 84.2 |
+| Developer ergonomics | 76.8 |
+| Access clarity | 85.5 |
 
-## Notes from this profile
+**Agent readiness 52.7** — agent-ready (gated down from agent-native)
 
-- Both OpenAPI contracts are served from the documentation host at `/cloud.yaml` and `/edge.yaml`,
-  discovered from the Scalar reference page rather than from any conventional `/openapi.json` path.
-- Servers are tenant-templated (`https://{tenant}.aembit.io`); there is no shared multi-tenant host.
-- **No idempotency mechanism** exists on any of the 96 mutating operations, and **no reversal or
-  restore endpoint** exists for the 22 DELETE operations.
-- **No published rate limit.** The Edge API declares `429` on both operations with no `Retry-After`
-  header and no documented number.
-- Deprecation is signalled by tag naming (`Access Policy (Deprecated)`, `Credential Provider
-  (Deprecated)` — 16 operations) but `deprecated: true` is set on **zero** operations, so no code
-  generator or linter surfaces it.
-- **No A2A agent card** on any of seven probed hosts, and **no first-party `/.well-known/` document**.
-  The three `.well-known` 200s found belong to Atlassian Statuspage and SafeBase, not to Aembit.
-- The Python Edge SDK exists in the first-party repository but is **not published to PyPI**.
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | templated |
+| Auth Clarity | served (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | partial |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | yes |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | yes |
+| Agentic Commerce | — |
+| Pagination Ratio | — |
+| Operation Distinctiveness | mostly |
 
-Company surfaced through the API Evangelist harvest backlog (secondary-market source) and
-profiled from Aembit's own public developer surface.
+**Regulatory alignment 35.3** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/aembit/](https://apis.io/providers/aembit/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Aembit: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/aembit/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
